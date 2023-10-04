@@ -1,0 +1,4 @@
+package com.groceriespriceguide.products;
+
+public class ProductController {
+}
