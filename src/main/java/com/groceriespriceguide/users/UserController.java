@@ -1,2 +1,5 @@
-package com.groceriespriceguide.users;public class UserController {
+package com.groceriespriceguide.users;
+
+public class UserController {
+
 }
