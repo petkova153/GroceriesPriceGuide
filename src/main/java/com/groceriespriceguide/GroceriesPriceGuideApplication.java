@@ -9,7 +9,6 @@ public class GroceriesPriceGuideApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(GroceriesPriceGuideApplication.class, args);
-		System.out.println("hi");
 	}
 
 }
