@@ -1,0 +1,21 @@
+<header th:fragment="not-logged-in-header"
+        class="container-fluid text-center bg-green text-white">
+    <h1 class="p-2">Groceries Price Guide</h1>
+    <nav class="m-3 p-2">
+        <a class="btn btn-light" href="/">Home</a>
+        <a class="btn btn-light" href="/register">Register</a>
+        <a class="btn btn-light" href="/login">Log in</a>
+        <a class="btn btn-light" href="/favorites">Favorites</a>
+
+    </nav>
+</header>
+
+
+<header th:fragment="logged-in-header"
+        class="container-fluid text-center bg-dark text-white">
+    <h1 class="p-2">Groceries Price Guide</h1>
+    <nav class="m-3 p-2">
+        <a class="btn btn-light" href="/favorites">Favorites</a>
+        <a class="btn btn-light" href="/logout">Logout</a>
+    </nav>
+</header>
