@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class Scraper {
@@ -33,11 +35,9 @@ public class Scraper {
             if (url.contains("barbora")){
                 parseBarbora(doc, url);
             } else if (url.contains("rimi")) {
-                System.out.println("here");
                 parseRimi(doc,url);
             }
             if (pages > 0) loopThroughPages(doc,url,pages);
-
         }
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -87,12 +87,24 @@ public class Scraper {
             System.out.println("Product: " + extractElWithParser(product,"p.card__name","e\">","</")) ;
             System.out.println("Price: " + extractElWithParser(product,"p.card__price-per","r\">","</"));
             System.out.println("URL: " + shop + extractElement(product,"a.card__url","href"));
+            System.out.println("Category: " + categoryTranslator(url.substring(url.indexOf(".lt/")+3)));
 
-            Elements categories = doc.select("main");
-            for (Element category: categories){
-                System.out.println("Category: " + category.attr("data-gtms-content-category"));
+        }
+    }
+
+    private static String categoryTranslator(String attr) {
+        Map<String, String> catLT_EN = new HashMap<>();
+        catLT_EN.put("darzoves", "Fruits and Vegetables");
+        catLT_EN.put("pieno", "Dairy and eggs");
+        catLT_EN.put("duonos", "Bakery");
+        catLT_EN.put("mesa", "Meat,fish, and ready meals");
+        catLT_EN.put("bakaleja", "Pantry staples");
+        for (Map.Entry<String,String> category: catLT_EN.entrySet()){
+            if (attr.contains(category.getKey())){
+                return category.getValue();
             }
         }
+        return null;
     }
 
     private static void parseBarbora(Document doc, String url) {
@@ -105,7 +117,7 @@ public class Scraper {
             System.out.println("Product: " + extractElement(product,"img","alt")) ;
             System.out.println("Price: " + extractElement(product,"span.b-product-price-current-number","content"));
             System.out.println("URL: " + shop + extractElement(product,"a.b-product--imagelink","href"));
-            System.out.println("Category: " + url.substring(url.indexOf(".lt/")+3));
+            System.out.println("Category: " + categoryTranslator(url.substring(url.indexOf(".lt/")+3)));
         }
     }
 
