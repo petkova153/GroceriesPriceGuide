@@ -1,4 +1,4 @@
-package com.groceriespriceguide.products;
+package com.groceriespriceguide.products.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

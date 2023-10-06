@@ -1,4 +1,5 @@
-package com.groceriespriceguide.scraper;
+package com.groceriespriceguide.scraper.scraper;
+import com.groceriespriceguide.products.entity.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,36 +16,47 @@ import java.util.Map;
 
 @Component
 public class Scraper {
-    public void scrapeProducts() throws InterruptedException {
-        List<String> urlLinks = new ArrayList<>();
-        urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
-        urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
-        for(String url:urlLinks)
-        {
-            scrapeTheLinks(url);
-        }
 
+    public List<Product> scrapeProducts() throws Exception {
+        try{
+            List<String> urlLinks = new ArrayList<>();
+            List<Product> productCompleteList = new ArrayList<>();
+            urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
+            urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
+            for(String url:urlLinks)
+            {
+                productCompleteList =scrapeTheLinks(url);
+            }
+            return productCompleteList;
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
-    private static void scrapeTheLinks(String url) {
+    private List<Product> scrapeTheLinks(String url) throws Exception{
         try{
+            List<Product> productsList = new ArrayList<>();
             String html = setUpHTML(url);
             Document doc = Jsoup.parse(html);
             int pages = getPages(doc,url);
-            System.out.println(pages);
             if (url.contains("barbora")){
-                parseBarbora(doc, url);
+                productsList = parseBarbora(doc, url);
+                return productsList;
             } else if (url.contains("rimi")) {
-                parseRimi(doc,url);
+                productsList = parseRimi(doc,url);
+                return productsList;
             }
             if (pages > 0) loopThroughPages(doc,url,pages);
         }
         catch(Exception e){
             System.out.println(e.getMessage());
         }
+        return null;
     }
 
-    private static String setUpHTML(String url) {
+    private String setUpHTML(String url) {
         try {
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -67,7 +79,7 @@ public class Scraper {
         return null;
     }
 
-    private static void loopThroughPages(Document doc, String url, int pages) {
+    private void loopThroughPages(Document doc, String url, int pages) {
         for (int y = 2; y< pages+1; y++){
             System.out.println(y);
             if (url.contains("barbora")){
@@ -78,21 +90,25 @@ public class Scraper {
         }
     }
 
-    private static void parseRimi(Document doc, String url) {
+    private List<Product> parseRimi(Document doc, String url) {
+        List<Product> productList = new ArrayList<>();
+        Product product = new Product();
         //rimi
         String shop = url.substring(url.indexOf("www."),url.indexOf(".lt")+3);
         Elements products  = doc.select("li.product-grid__item");
-        for (Element product : products){
-            System.out.println("Shop: " + shop);
-            System.out.println("Product: " + extractElWithParser(product,"p.card__name","e\">","</")) ;
-            System.out.println("Price: " + extractElWithParser(product,"p.card__price-per","r\">","</"));
-            System.out.println("URL: " + shop + extractElement(product,"a.card__url","href"));
-            System.out.println("Category: " + categoryTranslator(url.substring(url.indexOf(".lt/")+3)));
-
+        for (Element productEntity : products)
+        {
+            product.setStore(shop);
+            product.setProductName(extractElWithParser(productEntity, "p.card__name", "e\">", "</"));
+            product.setProductPrice(extractElWithParser(productEntity, "p.card__price-per", "r\">", "</"));
+            product.setProductUrl(shop + extractElement(productEntity, "a.card__url", "href"));
+            product.setProductCategory(categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
+            productList.add(product);
         }
+        return productList;
     }
 
-    private static String categoryTranslator(String attr) {
+    private String categoryTranslator(String attr) {
         Map<String, String> catLT_EN = new HashMap<>();
         catLT_EN.put("darzoves", "Fruits and Vegetables");
         catLT_EN.put("pieno", "Dairy and eggs");
@@ -107,21 +123,25 @@ public class Scraper {
         return null;
     }
 
-    private static void parseBarbora(Document doc, String url) {
-        //barbora
-        Elements products  = doc.select("div.b-product--wrap2");
-        String shop = url.substring(url.indexOf("www."),url.indexOf(".lt")+3);
+    private List<Product> parseBarbora(Document doc, String url) {
+        List<Product> productList = new ArrayList<>();
+        Product product = new Product();
+            //barbora
+            Elements products = doc.select("div.b-product--wrap2");
+            String shop = url.substring(url.indexOf("www."), url.indexOf(".lt") + 3);
 
-        for (Element product : products){
-            System.out.println("Shop: " + shop);
-            System.out.println("Product: " + extractElement(product,"img","alt")) ;
-            System.out.println("Price: " + extractElement(product,"span.b-product-price-current-number","content"));
-            System.out.println("URL: " + shop + extractElement(product,"a.b-product--imagelink","href"));
-            System.out.println("Category: " + categoryTranslator(url.substring(url.indexOf(".lt/")+3)));
-        }
+            for (Element productEntity : products) {
+                product.setStore(shop);
+                product.setProductName(extractElement(productEntity, "img", "alt"));
+                product.setProductPrice(extractElement(productEntity, "span.b-product-price-current-number", "content"));
+                product.setProductUrl(shop + extractElement(productEntity, "a.b-product--imagelink", "href"));
+                product.setProductCategory(categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
+                productList.add(product);
+            }
+            return productList;
     }
 
-    private static String extractElement(Element product, String spanEl, String element) {
+    private String extractElement(Element product, String spanEl, String element) {
         Elements spans = product.select(spanEl);
         for (Element span : spans) {
             return span.attr(element);
@@ -129,7 +149,7 @@ public class Scraper {
         return null;
     }
 
-    private static String extractElWithParser(Element product, String spanEl, String string1ToIndex, String string2ToIndex) {
+    private String extractElWithParser(Element product, String spanEl, String string1ToIndex, String string2ToIndex) {
         Elements spans = product.select(spanEl);
         for (Element span : spans) {
             String elementToParse = span.toString();
@@ -138,7 +158,7 @@ public class Scraper {
         return null;
     }
 
-    private static Integer getPages(Document doc, String url) {
+    private Integer getPages(Document doc, String url) {
         try{
             int pageURL = 0;
             Elements categories = null;
@@ -160,7 +180,7 @@ public class Scraper {
         return null;
     }
 
-    private static int parsePagination(Elements pages, int pageURL) {
+    private int parsePagination(Elements pages, int pageURL) {
         for (Element page : pages) {
             String pageNumbers = page.toString();
             pageNumbers = pageNumbers.substring(pageNumbers.indexOf("?page=") + 6, pageNumbers.indexOf("\">"));
