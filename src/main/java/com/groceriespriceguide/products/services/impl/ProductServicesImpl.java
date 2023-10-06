@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 public class ProductServicesImpl implements ProductService {
     private final EntityManager entityManager;
+
     private final ProductRepository productRepository;
     public ProductServicesImpl(final EntityManager entityManager, final ProductRepository productRepository)
     {
@@ -22,7 +23,10 @@ public class ProductServicesImpl implements ProductService {
     //@Override
     @Transactional
     public void persistProduct(final List<Product> dataList) {
-        dataList.forEach(entityManager::merge);
+        //System.out.println(dataList);
+        for (Product product : dataList) {
+            entityManager.persist(product);
+        }
     }
 
     //@Override

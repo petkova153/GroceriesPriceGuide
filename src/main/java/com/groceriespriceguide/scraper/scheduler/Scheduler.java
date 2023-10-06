@@ -24,7 +24,6 @@ public class Scheduler {
         List<Product> allProducts = null;
         try {
             allProducts = scraper.scrapeProducts();
-            System.out.println(allProducts);
         } catch (final Exception e) {
             LOGGER.error("error occurred while scraping data", e);
         }
