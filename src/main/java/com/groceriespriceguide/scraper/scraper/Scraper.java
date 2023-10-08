@@ -20,15 +20,19 @@ public class Scraper {
     public List<Product> scrapeProducts() throws Exception {
         try{
             List<String> urlLinks = new ArrayList<>();
-
+            List<Product> productCompleteList = new ArrayList<>();
             urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
             urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
+            try{
             for(String url:urlLinks)
             {
-                List<Product> productCompleteList =scrapeTheLinks(url);
-                return productCompleteList;
+                List<Product> tempString = scrapeTheLinks(url);
+                if (!tempString.isEmpty())productCompleteList.addAll(tempString);
             }
-            return null;
+            return productCompleteList;}
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -44,12 +48,11 @@ public class Scraper {
             int pages = getPages(doc,url);
             if (url.contains("barbora")){
                 productsList = parseBarbora(doc, url);
-                return productsList;
             } else if (url.contains("rimi")) {
                 productsList = parseRimi(doc,url);
-                return productsList;
             }
-            if (pages > 0) loopThroughPages(doc,url,pages);
+            if (pages > 0) productsList.addAll(loopThroughPages(doc,url,pages));
+            return productsList;
         }
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -80,14 +83,16 @@ public class Scraper {
         return null;
     }
 
-    private void loopThroughPages(Document doc, String url, int pages) {
+    private List<Product> loopThroughPages(Document doc, String url, int pages) {
+        List<Product> pageProductList = new ArrayList<>();
         for (int y = 2; y< pages+1; y++){
             if (url.contains("barbora")){
-                parseBarbora(doc, url + "?page="+y);
+                pageProductList.addAll(parseBarbora(doc, url + "?page="+y));
             } else if (url.contains("rimi")) {
-                parseRimi(doc,url+"?page="+y);
+                pageProductList.addAll(parseRimi(doc,url+"?page="+y));
             }
         }
+        return pageProductList;
     }
 
     private List<Product> parseRimi(Document doc, String url) {
@@ -102,7 +107,19 @@ public class Scraper {
         }
         return productList;
     }
+    private List<Product> parseBarbora(Document doc, String url) {
+        List<Product> productList = new ArrayList<>();
+        //barbora
+        Elements products = doc.select("div.b-product--wrap2");
+        String shop = url.substring(url.indexOf("www."), url.indexOf(".lt") + 3);
 
+        for (Element productEntity : products)
+        {
+            Product product = parseProductBarbora(productEntity,shop,url);
+            productList.add(product);
+        }
+        return productList;
+    }
     private Product parseProductRimi(Element productEntity, String shop, String url) {
         Product product = new Product();
         product.setStore(shop);
@@ -137,19 +154,7 @@ public class Scraper {
         return null;
     }
 
-    private List<Product> parseBarbora(Document doc, String url) {
-        List<Product> productList = new ArrayList<>();
-            //barbora
-            Elements products = doc.select("div.b-product--wrap2");
-            String shop = url.substring(url.indexOf("www."), url.indexOf(".lt") + 3);
 
-        for (Element productEntity : products)
-        {
-            Product product = parseProductBarbora(productEntity,shop,url);
-            productList.add(product);
-        }
-        return productList;
-    }
 
     private String extractElement(Element product, String spanEl, String element) {
         Elements spans = product.select(spanEl);

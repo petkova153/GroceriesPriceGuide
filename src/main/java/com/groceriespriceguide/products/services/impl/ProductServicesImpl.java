@@ -23,7 +23,6 @@ public class ProductServicesImpl implements ProductService {
     //@Override
     @Transactional
     public void persistProduct(final List<Product> dataList) {
-        //System.out.println(dataList);
         for (Product product : dataList) {
             entityManager.persist(product);
         }
