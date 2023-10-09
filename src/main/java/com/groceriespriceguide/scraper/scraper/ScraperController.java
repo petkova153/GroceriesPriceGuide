@@ -15,7 +15,8 @@ public class ScraperController {
         for (Element span : spans) {
             if (element.isEmpty()){
                 String elementToParse = span.toString();
-                return elementToParse.substring(elementToParse.indexOf("price\">")+7,elementToParse.indexOf("</"));
+                elementToParse = elementToParse.strip();
+                return elementToParse.substring(elementToParse.indexOf("e\">")+3,elementToParse.indexOf("</"));
             }
                 else{
             return span.attr(element);}
@@ -43,6 +44,22 @@ public class ScraperController {
             if (attr.contains(category.getKey())){
                 return category.getValue();
             }
+        }
+        return null;
+    }
+
+    public String priceCleaner(String priceString) {
+        try {
+            String subPriceString;
+            if (priceString.contains(",")) {
+                subPriceString = priceString.substring(0, priceString.indexOf(",") + 3);
+            } else {
+                subPriceString = priceString.substring(0, priceString.indexOf(".") + 3);
+            }
+            return subPriceString;
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
         return null;
     }

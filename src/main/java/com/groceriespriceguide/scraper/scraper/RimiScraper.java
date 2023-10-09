@@ -30,7 +30,7 @@ public class RimiScraper {
         Product product = new Product();
         product.setStore(shop);
         product.setProductName(scraperController.extractElWithParser(productEntity, "p.card__name", "e\">", "</"));
-        product.setProductPrice(scraperController.extractElWithParser(productEntity, "p.card__price-per", "r\">", "</"));
+        product.setProductPrice(scraperController.priceCleaner(scraperController.extractElWithParser(productEntity, "p.card__price-per", "r\">", "</")));
         product.setProductUrl(shop + scraperController.extractElement(productEntity, "a.card__url", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));

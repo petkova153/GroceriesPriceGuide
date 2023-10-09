@@ -64,7 +64,7 @@ public class Scraper {
             else if (url.contains("IKI")) {
                 productsList = ikiScraper.parseIKI(doc,url);
             }
-            else if (url.contains("assort")) {
+            else if (url.contains("assorti")) {
                 productsList = assortiScraper.parseIKI(doc,url);
             }
             if (pages > 0) productsList.addAll(loopThroughPages(doc,url,pages));

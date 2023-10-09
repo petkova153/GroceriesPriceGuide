@@ -31,8 +31,8 @@ public class AssortiScraper {
     private Product parseProductIKI(Element productEntity, String shop, String url) {
         Product product = new Product();
         product.setStore(shop);
-        product.setProductName(scraperController.extractElement(productEntity, "img", "alt"));
-        product.setProductPrice(scraperController.extractElement(productEntity, "span.main_price", ""));
+        product.setProductName(scraperController.extractElement(productEntity, "span.product_name", ""));
+        product.setProductPrice(scraperController.priceCleaner(scraperController.extractElement(productEntity, "span.main_price", "")));
         product.setProductUrl(shop + scraperController.extractElement(productEntity, "a", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
