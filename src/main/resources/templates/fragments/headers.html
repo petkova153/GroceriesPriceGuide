@@ -1,4 +1,4 @@
-<header th:fragment="not-logged-in-header"
+<headers th:fragment="not-logged-in-headers"
         class="container-fluid text-center bg-success text-black">
     <h1 class="p-2">Groceries Price Guide</h1>
     <nav class="m-3 p-2">
@@ -8,14 +8,14 @@
         <a class="btn btn-light" href="/favorites">Favorites</a>
 
     </nav>
-</header>
+</headers>
 
 
-<header th:fragment="logged-in-header"
+<headers th:fragment="logged-in-headers"
         class="container-fluid text-center bg-dark text-white">
     <h1 class="p-2">Groceries Price Guide</h1>
     <nav class="m-3 p-2">
         <a class="btn btn-light" href="/favorites">Favorites</a>
         <a class="btn btn-light" href="/logout">Logout</a>
     </nav>
-</header>
+</headers>
