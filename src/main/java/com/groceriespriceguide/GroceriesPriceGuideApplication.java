@@ -11,5 +11,4 @@ public class GroceriesPriceGuideApplication {
 		SpringApplication.run(GroceriesPriceGuideApplication.class, args);
 		System.out.println("hi");
 	}
-
 }
