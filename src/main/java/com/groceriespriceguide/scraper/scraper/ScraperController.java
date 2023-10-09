@@ -13,7 +13,12 @@ public class ScraperController {
     String extractElement(Element product, String spanEl, String element) {
         Elements spans = product.select(spanEl);
         for (Element span : spans) {
-            return span.attr(element);
+            if (element.isEmpty()){
+                String elementToParse = span.toString();
+                return elementToParse.substring(elementToParse.indexOf("price\">")+7,elementToParse.indexOf("</"));
+            }
+                else{
+            return span.attr(element);}
         }
         return null;
     }
