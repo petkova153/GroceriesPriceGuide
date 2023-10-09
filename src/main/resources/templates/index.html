@@ -9,10 +9,14 @@
 <header th:replace="~{fragments/headers.html :: not-logged-in-header}"></header>
 <main class="container">
     <h3>Home Page</h3>
-    <label>Please log in or register to use the app</label>
-    <div>
-      Welcome to Groceries Price Guide
-    </div>
+    <label>Please search for the products</label>
+    <h3>Search</h3>
+    <section>
+        <form method="post" action="/">
+            <div class="input-group m-2">
+                <label class="input-group-text">username</label>
+                <input class="form-control" name="username" type="text"/>
+            </div>
 </main>
 </body>
 </html>
