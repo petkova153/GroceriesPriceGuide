@@ -4,25 +4,32 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
+@Transactional
 @Component
 public class Scraper {
-
+    @Autowired
+    BarboraScraper barboraScraper;
+    @Autowired
+    RimiScraper rimiScraper;
+    @Autowired
+    IkiScraper ikiScraper;
+    @Transactional
     public List<Product> scrapeProducts() throws Exception {
         try{
             List<String> urlLinks = new ArrayList<>();
             List<Product> productCompleteList = new ArrayList<>();
             urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
             urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
+            //urlLinks.add("https://lastmile.lt/chain/category/IKI/Vaisiai-ir-darzoves");
             try{
             for(String url:urlLinks)
             {
@@ -47,9 +54,12 @@ public class Scraper {
             Document doc = Jsoup.parse(html);
             int pages = getPages(doc,url);
             if (url.contains("barbora")){
-                productsList = parseBarbora(doc, url);
+                productsList = barboraScraper.parseBarbora(doc, url);
             } else if (url.contains("rimi")) {
-                productsList = parseRimi(doc,url);
+                productsList = rimiScraper.parseRimi(doc,url);
+            }
+            else if (url.contains("IKI")) {
+                productsList = ikiScraper.parseIKI(doc,url);
             }
             if (pages > 0) productsList.addAll(loopThroughPages(doc,url,pages));
             return productsList;
@@ -87,93 +97,18 @@ public class Scraper {
         List<Product> pageProductList = new ArrayList<>();
         for (int y = 2; y< pages+1; y++){
             if (url.contains("barbora")){
-                pageProductList.addAll(parseBarbora(doc, url + "?page="+y));
+                pageProductList.addAll(barboraScraper.parseBarbora(doc, url + "?page="+y));
             } else if (url.contains("rimi")) {
-                pageProductList.addAll(parseRimi(doc,url+"?page="+y));
+                pageProductList.addAll(rimiScraper.parseRimi(doc,url+"?page="+y));
+            }
+            else if (url.contains("IKI")) {
+                pageProductList.addAll(ikiScraper.parseIKI(doc,url+"?page="+y));
             }
         }
         return pageProductList;
     }
 
-    private List<Product> parseRimi(Document doc, String url) {
-        List<Product> productList = new ArrayList<>();
-        //rimi
-        String shop = url.substring(url.indexOf("www."),url.indexOf(".lt")+3);
-        Elements products  = doc.select("li.product-grid__item");
-        for (Element productEntity : products)
-        {
-            Product product = parseProductRimi(productEntity,shop,url);
-            productList.add(product);
-        }
-        return productList;
-    }
-    private List<Product> parseBarbora(Document doc, String url) {
-        List<Product> productList = new ArrayList<>();
-        //barbora
-        Elements products = doc.select("div.b-product--wrap2");
-        String shop = url.substring(url.indexOf("www."), url.indexOf(".lt") + 3);
 
-        for (Element productEntity : products)
-        {
-            Product product = parseProductBarbora(productEntity,shop,url);
-            productList.add(product);
-        }
-        return productList;
-    }
-    private Product parseProductRimi(Element productEntity, String shop, String url) {
-        Product product = new Product();
-        product.setStore(shop);
-        product.setProductName(extractElWithParser(productEntity, "p.card__name", "e\">", "</"));
-        product.setProductPrice(extractElWithParser(productEntity, "p.card__price-per", "r\">", "</"));
-        product.setProductUrl(shop + extractElement(productEntity, "a.card__url", "href"));
-        product.setPictureUrl(extractElement(productEntity, "img", "src"));
-        product.setProductCategory(categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
-        return product;
-    }
-    private Product parseProductBarbora(Element productEntity, String shop, String url) {
-        Product product = new Product();
-        product.setStore(shop);
-        product.setProductName(extractElement(productEntity, "img", "alt"));
-        product.setProductPrice(extractElement(productEntity, "span.b-product-price-current-number", "content"));
-        product.setProductUrl(shop + extractElement(productEntity, "a.b-product--imagelink", "href"));
-        product.setPictureUrl(extractElement(productEntity, "img", "src"));
-        product.setProductCategory(categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
-        return product;
-    }
-
-    private String categoryTranslator(String attr) {
-        Map<String, String> catLT_EN = new HashMap<>();
-        catLT_EN.put("darzoves", "Fruits and Vegetables");
-        catLT_EN.put("pieno", "Dairy and eggs");
-        catLT_EN.put("duonos", "Bakery");
-        catLT_EN.put("mesa", "Meat,fish, and ready meals");
-        catLT_EN.put("bakaleja", "Pantry staples");
-        for (Map.Entry<String,String> category: catLT_EN.entrySet()){
-            if (attr.contains(category.getKey())){
-                return category.getValue();
-            }
-        }
-        return null;
-    }
-
-
-
-    private String extractElement(Element product, String spanEl, String element) {
-        Elements spans = product.select(spanEl);
-        for (Element span : spans) {
-            return span.attr(element);
-        }
-        return null;
-    }
-
-    private String extractElWithParser(Element product, String spanEl, String string1ToIndex, String string2ToIndex) {
-        Elements spans = product.select(spanEl);
-        for (Element span : spans) {
-            String elementToParse = span.toString();
-            return elementToParse.substring(elementToParse.indexOf(string1ToIndex)+3,elementToParse.indexOf(string2ToIndex));
-        }
-        return null;
-    }
 
     private Integer getPages(Document doc, String url) {
         try{
