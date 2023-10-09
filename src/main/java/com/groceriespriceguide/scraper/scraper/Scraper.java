@@ -126,6 +126,7 @@ public class Scraper {
         product.setProductName(extractElWithParser(productEntity, "p.card__name", "e\">", "</"));
         product.setProductPrice(extractElWithParser(productEntity, "p.card__price-per", "r\">", "</"));
         product.setProductUrl(shop + extractElement(productEntity, "a.card__url", "href"));
+        product.setPictureUrl(extractElement(productEntity, "img", "src"));
         product.setProductCategory(categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
         return product;
     }
@@ -135,6 +136,7 @@ public class Scraper {
         product.setProductName(extractElement(productEntity, "img", "alt"));
         product.setProductPrice(extractElement(productEntity, "span.b-product-price-current-number", "content"));
         product.setProductUrl(shop + extractElement(productEntity, "a.b-product--imagelink", "href"));
+        product.setPictureUrl(extractElement(productEntity, "img", "src"));
         product.setProductCategory(categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
         return product;
     }
