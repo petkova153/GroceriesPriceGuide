@@ -29,13 +29,22 @@ public class AssortiScraper {
 
 
     private Product parseProductIKI(Element productEntity, String shop, String url) {
+        try{
         Product product = new Product();
         product.setStore(shop);
         product.setProductName(scraperController.extractElement(productEntity, "span.product_name", ""));
-        product.setProductPrice(scraperController.priceCleaner(scraperController.extractElement(productEntity, "span.main_price", "")));
+        String tempValuePrice = scraperController.priceCleaner(scraperController.extractElement(productEntity, "span.main_price", ""));
+        if (!tempValuePrice.contains(",")){
+            tempValuePrice = scraperController.extractElWithParser(productEntity, "span.main_price", "Akcija</span>", "<span> €");
+        }
+        product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
         product.setProductUrl(shop + scraperController.extractElement(productEntity, "a", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
-        return product;
+        return product;}
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }

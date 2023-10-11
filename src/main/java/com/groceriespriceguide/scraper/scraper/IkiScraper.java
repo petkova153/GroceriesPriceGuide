@@ -31,7 +31,8 @@ public class IkiScraper {
         Product product = new Product();
         product.setStore(shop);
         product.setProductName(scraperController.extractElement(productEntity, "img", "alt"));
-        product.setProductPrice(scraperController.extractElement(productEntity, "span.b-product-price-current-number", "content"));
+        String tempValuePrice = scraperController.extractElement(productEntity, "span.b-product-price-current-number", "content");
+        product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
         product.setProductUrl(shop + scraperController.extractElement(productEntity, "a", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));

@@ -16,12 +16,13 @@ public class BarboraScraper {
     List<Product> parseBarbora(Document doc, String url) {
         List<Product> productList = new ArrayList<>();
         //barbora
-        Elements products = doc.select("div.b-product--wrap2");
+        Elements products = doc.select("li");
+        System.out.println(doc);
         String shop = url.substring(url.indexOf("www."), url.indexOf(".lt") + 3);
-
         for (Element productEntity : products)
         {
             Product product = parseProductBarbora(productEntity,shop,url);
+
             productList.add(product);
         }
         return productList;
@@ -30,15 +31,21 @@ public class BarboraScraper {
 
 
     private Product parseProductBarbora(Element productEntity, String shop, String url) {
+        try{
         Product product = new Product();
         product.setStore(shop);
+            System.out.println(productEntity.toString());
         product.setProductName(scraperController.extractElement(productEntity, "img", "alt"));
-        product.setProductPrice(scraperController.extractElement(productEntity, "span.b-product-price-current-number", "content"));
+        String tempValuePrice = scraperController.extractElement(productEntity, "span.tw-text-b-paragraph-xs", "");
+        product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
         product.setProductUrl(shop + scraperController.extractElement(productEntity, "a.b-product--imagelink", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
-        System.out.println(scraperController.extractElWithParser(productEntity, "div.b-product-price--extra", "v\">", "</"));
-        return product;
+        return product;}
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
 

@@ -27,11 +27,11 @@ public class Scraper {
     @Transactional
     public List<Product> scrapeProducts() throws Exception {
         try{
-            List<String> urlLinks = new ArrayList<>();
-            List<Product> productCompleteList = new ArrayList<>();
+            final List<String> urlLinks = new ArrayList<>();
+            final List<Product> productCompleteList = new ArrayList<>();
             urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
-            urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
-            urlLinks.add("https://www.assorti.lt/katalogas/maistas/darzoves-ir-vaisiai/");
+            //urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
+            //urlLinks.add("https://www.assorti.lt/katalogas/maistas/darzoves-ir-vaisiai/");
             //urlLinks.add("https://lastmile.lt/chain/category/IKI/Vaisiai-ir-darzoves");
             try{
             for(String url:urlLinks)
@@ -53,7 +53,7 @@ public class Scraper {
     private List<Product> scrapeTheLinks(String url) throws Exception{
         try{
             List<Product> productsList = new ArrayList<>();
-            String html = setUpHTML(url);
+            final String html = setUpHTML(url);
             Document doc = Jsoup.parse(html);
             int pages = getPages(doc,url);
             if (url.contains("barbora")){
@@ -78,15 +78,15 @@ public class Scraper {
 
     private String setUpHTML(String url) {
         try {
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            final URL obj = new URL(url);
+            final HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 // optional request header
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
             int responseCode = con.getResponseCode();
             System.out.println("Response code: " + responseCode);
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
-            StringBuilder response = new StringBuilder();
+            final StringBuilder response = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
@@ -100,7 +100,7 @@ public class Scraper {
     }
 
     private List<Product> loopThroughPages(Document doc, String url, int pages) {
-        List<Product> pageProductList = new ArrayList<>();
+        final List<Product> pageProductList = new ArrayList<>();
         for (int y = 2; y< pages+1; y++){
             if (url.contains("barbora")){
                 pageProductList.addAll(barboraScraper.parseBarbora(doc, url + "?page="+y));
