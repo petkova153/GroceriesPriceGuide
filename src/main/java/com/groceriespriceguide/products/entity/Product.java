@@ -21,6 +21,7 @@ public class Product {
     private Long id;
     private String productName;
     private String productPrice;
+    private String unitOfMeasure;
     private String store;
     private String productCategory;
     private String productUrl;
