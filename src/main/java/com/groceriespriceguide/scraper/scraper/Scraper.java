@@ -1,5 +1,5 @@
 package com.groceriespriceguide.scraper.scraper;
-import com.groceriespriceguide.products.entity.Product;
+import com.groceriespriceguide.entity.Product;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

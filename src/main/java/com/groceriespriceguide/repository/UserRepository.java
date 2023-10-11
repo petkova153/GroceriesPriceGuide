@@ -1,9 +1,10 @@
-package com.groceriespriceguide.users;
+package com.groceriespriceguide.repository;
 
+import com.groceriespriceguide.entity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
+
 
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
 

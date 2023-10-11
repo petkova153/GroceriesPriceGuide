@@ -1,5 +1,8 @@
-package com.groceriespriceguide.users;
+package com.groceriespriceguide.controller;
 
+import com.groceriespriceguide.entity.UserEntity;
+import com.groceriespriceguide.users.UserLoginRequest;
+import com.groceriespriceguide.services.impl.UserServiceImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +17,10 @@ public class UserController {
     // collects user information,
     // checks for validity
     // sends and retrieves service information
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

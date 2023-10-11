@@ -1,6 +1,6 @@
 package com.groceriespriceguide.scraper.scraper;
 
-import com.groceriespriceguide.products.entity.Product;
+import com.groceriespriceguide.entity.Product;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -37,6 +37,7 @@ public class BarboraScraper {
         product.setProductUrl(shop + scraperController.extractElement(productEntity, "a.b-product--imagelink", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
+        System.out.println(scraperController.extractElWithParser(productEntity, "div.b-product-price--extra", "v\">", "</"));
         return product;
     }
 

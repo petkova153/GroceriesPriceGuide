@@ -1,4 +1,4 @@
-package com.groceriespriceguide.products.entity;
+package com.groceriespriceguide.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,17 +14,26 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Data
 @Entity
-public class Product {
+
+public class UserEntity {
+
+    // (id,
+    // name,
+    // city,
+    // email,
+    // last Loge In,
+    // last Updated,
+    // Products? maybe this will be some list? but it should be in product class..
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String productName;
-    private String productPrice;
-    private String store;
-    private String productCategory;
-    private String productUrl;
-    private String pictureUrl;
-    private Timestamp lastUpdated;
 
+    private Long id;
+    private String username;
+    private String password;
+    private String email;
+    private String city;
+    private Timestamp lastUpdated;
+    private Timestamp createdAt;
+    private Timestamp lastLoggedIn;
 }

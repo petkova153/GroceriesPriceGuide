@@ -1,7 +1,7 @@
 package com.groceriespriceguide.scraper.scheduler;
 
-import com.groceriespriceguide.products.entity.Product;
-import com.groceriespriceguide.products.services.ProductService;
+import com.groceriespriceguide.entity.Product;
+import com.groceriespriceguide.services.ProductService;
 import com.groceriespriceguide.scraper.scraper.Scraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
