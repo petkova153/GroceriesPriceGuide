@@ -1,7 +1,6 @@
-package com.groceriespriceguide.products.services;
+package com.groceriespriceguide.services;
 
-import com.groceriespriceguide.products.entity.Product;
-import com.groceriespriceguide.products.repository.ProductRepository;
+import com.groceriespriceguide.entity.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

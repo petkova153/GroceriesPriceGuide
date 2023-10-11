@@ -1,8 +1,6 @@
-package com.groceriespriceguide.products.controller;
+package com.groceriespriceguide.controller;
 
-import com.groceriespriceguide.products.services.ProductService;
-import com.groceriespriceguide.scraper.scraper.Scraper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.groceriespriceguide.services.ProductService;
 import org.springframework.stereotype.Controller;
 
 @Controller
