@@ -22,6 +22,8 @@ public class Scraper {
     RimiScraper rimiScraper;
     @Autowired
     IkiScraper ikiScraper;
+    @Autowired
+    AssortiScraper assortiScraper;
     @Transactional
     public List<Product> scrapeProducts() throws Exception {
         try{
@@ -29,6 +31,7 @@ public class Scraper {
             List<Product> productCompleteList = new ArrayList<>();
             urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
             urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
+            urlLinks.add("https://www.assorti.lt/katalogas/maistas/darzoves-ir-vaisiai/");
             //urlLinks.add("https://lastmile.lt/chain/category/IKI/Vaisiai-ir-darzoves");
             try{
             for(String url:urlLinks)
@@ -60,6 +63,9 @@ public class Scraper {
             }
             else if (url.contains("IKI")) {
                 productsList = ikiScraper.parseIKI(doc,url);
+            }
+            else if (url.contains("assorti")) {
+                productsList = assortiScraper.parseIKI(doc,url);
             }
             if (pages > 0) productsList.addAll(loopThroughPages(doc,url,pages));
             return productsList;
@@ -104,6 +110,9 @@ public class Scraper {
             else if (url.contains("IKI")) {
                 pageProductList.addAll(ikiScraper.parseIKI(doc,url+"?page="+y));
             }
+            else if (url.contains("assorti")) {
+                pageProductList.addAll(assortiScraper.parseIKI(doc,url+"?page="+y));
+            }
         }
         return pageProductList;
     }
@@ -114,7 +123,7 @@ public class Scraper {
         try{
             int pageURL = 0;
             Elements categories = null;
-            if (url.contains("barbora")){categories = doc.select("ul.pagination");}
+            if (url.contains("barbora")||url.contains("assorti")){categories = doc.select("ul.pagination");}
             else if(url.contains("rimi")){categories = doc.select("ul.pagination__list");}
             if (categories != null){
                 for (Element category : categories) {

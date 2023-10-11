@@ -9,29 +9,31 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Component
-public class RimiScraper {
+public class AssortiScraper {
     @Autowired
     ScraperController scraperController;
-    Scraper scraper;
-    List<Product> parseRimi(Document doc, String url) {
+    List<Product> parseIKI(Document doc, String url) {
         List<Product> productList = new ArrayList<>();
         //rimi
         String shop = url.substring(url.indexOf("www."),url.indexOf(".lt")+3);
-        Elements products  = doc.select("li.product-grid__item");
+        Elements products  = doc.select("div.product_element");
         for (Element productEntity : products)
         {
-            Product product = parseProductRimi(productEntity,shop,url);
+            Product product = parseProductIKI(productEntity,shop,url);
             productList.add(product);
         }
         return productList;
     }
-    private Product parseProductRimi(Element productEntity, String shop, String url) {
+
+
+    private Product parseProductIKI(Element productEntity, String shop, String url) {
         Product product = new Product();
         product.setStore(shop);
-        product.setProductName(scraperController.extractElWithParser(productEntity, "p.card__name", "e\">", "</"));
-        product.setProductPrice(scraperController.priceCleaner(scraperController.extractElWithParser(productEntity, "p.card__price-per", "r\">", "</")));
-        product.setProductUrl(shop + scraperController.extractElement(productEntity, "a.card__url", "href"));
+        product.setProductName(scraperController.extractElement(productEntity, "span.product_name", ""));
+        product.setProductPrice(scraperController.priceCleaner(scraperController.extractElement(productEntity, "span.main_price", "")));
+        product.setProductUrl(shop + scraperController.extractElement(productEntity, "a", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
         return product;
