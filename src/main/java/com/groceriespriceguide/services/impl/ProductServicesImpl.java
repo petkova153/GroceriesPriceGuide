@@ -30,33 +30,33 @@ public class ProductServicesImpl implements ProductService {
         }
     }
 
-    //@Override
+    @Override
     public List<Product> getProductData() {
         return productRepository.findAll();
     }
-//
-//    public Product findProductById(Long id) throws Exception{
-//        for (Product product:productRepository.findAll()){
-//            if (product.getId().equals(id))
-//                return productRepository.findByProductID(id).get();
-//        }
-//        throw new Exception("Product cannot be found");
-//    }
-//
-//    public Product findProductByName(String name){
-//        return productRepository.findByProductName(name).get(0);
-//    }
-//
-//    public Optional getProductByURL(String productURL){
-//        return productRepository.findByProductUrl(productURL);
-//    }
-//
-//    public List<Product> searchProductByKeywordInCertainCategoryAndStore(String keywrd, String category, String store1, String store2, String store3){
-//        return productRepository.findByKeywordInSpecificCategoryAndStores(keywrd,category,store1,store2,store3);
-//    }
-//
-//    public List<Product> getProductsInCategory(String category){
-//        return productRepository.findProductByProductCategory(category);
-//    }
+
+    public Product findProductById(Long id) throws Exception{
+        for (Product product:productRepository.findAll()){
+            if (product.getProductID().equals(id))
+                return productRepository.findByProductID(id).get();
+        }
+        throw new Exception("Product cannot be found");
+    }
+
+    public Product findProductByName(String name){
+        return productRepository.findByProductName(name).get(0);
+    }
+
+    public Optional getProductByURL(String productURL){
+        return productRepository.findByProductUrl(productURL);
+    }
+
+    public List<Product> searchProductByKeywordInCertainCategoryAndStore(String keywrd, String category, String store1, String store2, String store3){
+        return productRepository.findByKeywordInSpecificCategoryAndStores(keywrd,category,store1,store2,store3);
+    }
+
+    public List<Product> getProductsInCategory(String category){
+        return productRepository.findProductByProductCategory(category);
+    }
 
 }
