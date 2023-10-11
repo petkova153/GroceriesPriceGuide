@@ -1,20 +1,14 @@
-package com.groceriespriceguide.products.services;
+package com.groceriespriceguide.services;
 
-import com.groceriespriceguide.products.entity.Product;
-import com.groceriespriceguide.products.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.groceriespriceguide.entity.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
 public interface ProductService {
-
-
     @Transactional
     public void persistProduct(List<Product> dataList);
 
     List<Product> getProductData();
-
-
 }
