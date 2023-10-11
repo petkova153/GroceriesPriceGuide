@@ -30,11 +30,9 @@ public class UserEntity {
 
     private Long id;
     private String username;
+    private String password;
     private String email;
     private String city;
-    private String favouriteProduct1;
-    private String favouriteProduct2;
-    private String favouriteProduct3;
     private Timestamp lastUpdated;
     private Timestamp createdAt;
     private Timestamp lastLoggedIn;
