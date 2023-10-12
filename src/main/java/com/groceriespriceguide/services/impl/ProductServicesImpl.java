@@ -26,7 +26,8 @@ public class ProductServicesImpl implements ProductService {
     public void persistProduct(final List<Product> dataList) {
         //System.out.println(dataList);
         for (Product product : dataList) {
-            entityManager.persist(product);
+            System.out.println(product);
+            if (product != null) entityManager.persist(product);
         }
     }
 

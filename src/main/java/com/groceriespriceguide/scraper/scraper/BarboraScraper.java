@@ -1,9 +1,8 @@
 package com.groceriespriceguide.scraper.scraper;
 
 import com.groceriespriceguide.entity.Product;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import com.microsoft.playwright.ElementHandle;
+import com.microsoft.playwright.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +12,15 @@ import java.util.List;
 public class BarboraScraper {
     @Autowired
     ScraperController scraperController;
-    List<Product> parseBarbora(Document doc, String url) {
+    List<Product> parseBarbora(Page doc) {
         List<Product> productList = new ArrayList<>();
+        final String url = doc.url();
         //barbora
-        Elements products = doc.select("li");
-        System.out.println(doc);
+        List<ElementHandle> products = doc.querySelectorAll("li");
+        System.out.println("here");
+        System.out.println(products);
         String shop = url.substring(url.indexOf("www."), url.indexOf(".lt") + 3);
-        for (Element productEntity : products)
+        for (ElementHandle productEntity : products)
         {
             Product product = parseProductBarbora(productEntity,shop,url);
 
@@ -30,7 +31,7 @@ public class BarboraScraper {
 
 
 
-    private Product parseProductBarbora(Element productEntity, String shop, String url) {
+    private Product parseProductBarbora(ElementHandle productEntity, String shop, String url) {
         try{
         Product product = new Product();
         product.setStore(shop);

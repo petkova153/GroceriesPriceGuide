@@ -1,36 +1,34 @@
 package com.groceriespriceguide.scraper.scraper;
 
 import ch.qos.logback.core.joran.conditional.ElseAction;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.jsoup.select.Evaluator;
-import org.jsoup.select.QueryParser;
+import com.microsoft.playwright.ElementHandle;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
 public class ScraperController {
 
-    String extractElement(Element product, String spanEl, String element) {
-        final Elements spans = product.select(spanEl);
-        for (Element span : spans) {
+    String extractElement(ElementHandle product, String spanEl, String element) {
+        final List<ElementHandle> spans = product.querySelectorAll(spanEl);
+        for (ElementHandle span : spans) {
             if (element.isEmpty()){
-                String elementToParse = span.toString();
+                String elementToParse = span.evaluate("el => el.outerHTML", "*").toString();
                 elementToParse = elementToParse.strip();
                 return elementToParse.substring(elementToParse.indexOf("e\">")+3,elementToParse.indexOf("</"));
             }
                 else{
-            return span.attr(element);}
+            return span.getAttribute(element);}
         }
         return null;
     }
 
-    String extractElWithParser(Element product, String spanEl, String string1ToIndex, String string2ToIndex) {
-        final Elements spans = product.select(spanEl);
-        for (Element span : spans) {
-            String elementToParse = span.toString();
+    String extractElWithParser(ElementHandle product, String spanEl, String string1ToIndex, String string2ToIndex) {
+        final List<ElementHandle> spans = product.querySelectorAll(spanEl);
+        for (ElementHandle span : spans) {
+            String elementToParse = span.evaluate("el => el.outerHTML", "*").toString();
             return elementToParse.substring(elementToParse.indexOf(string1ToIndex)+string1ToIndex.length(),
                     elementToParse.indexOf(string2ToIndex));
         }
@@ -68,19 +66,19 @@ public class ScraperController {
         return null;
     }
 
-    String extractNthElement(Element product, String spanEl, int nthEl) {
-        final Elements spans = product.select(spanEl);
+    String extractNthElement(ElementHandle product, String spanEl, int nthEl) {
+        final List<ElementHandle> spans = product.querySelectorAll(spanEl);
         int counter = 0;
-        for (Element span : spans) {
-            final Elements subSpans = span.getAllElements();
-            for (Element e : subSpans)
+        for (ElementHandle span : spans) {
+            final List<ElementHandle> subSpans = span.querySelectorAll("*");
+            for (ElementHandle e : subSpans)
             {
                 if (counter <= nthEl) {
                     System.out.println("here" + counter);
                     counter++;
-                    System.out.println(e.toString());
+                    System.out.println(e.evaluate("el => el.outerHTML", "*").toString());
                 } else {
-                    return e.toString();
+                    return e.evaluate("el => el.outerHTML", "*").toString();
                 }
             }
         }
