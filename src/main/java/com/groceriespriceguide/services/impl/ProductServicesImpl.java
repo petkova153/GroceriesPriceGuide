@@ -4,6 +4,7 @@ import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.repository.ProductRepository;
 import com.groceriespriceguide.services.ProductService;
 import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,7 @@ public class ProductServicesImpl implements ProductService {
     public List<Product> getProductsInCategory(String category){
         return productRepository.findProductByProductCategory(category);
     }
+
 
     public void addOrUpdateProduct(Product newProduct){
         Optional<Product> existingProduct = productRepository.findByProductUrl(newProduct.getProductUrl());
