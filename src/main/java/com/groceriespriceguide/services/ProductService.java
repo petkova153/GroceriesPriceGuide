@@ -19,5 +19,7 @@ public interface ProductService {
     List<Product> searchProductByKeywordInCertainCategoryAndStore(String keywrd, String category, String store1, String store2, String store3);
     List<Product> getProductsInCategory(String category);
     public void addOrUpdateProduct(Product newProduct);
+    String getCreationTimestamp(Product product);
+    String getLastUpdatedTimestamp(Product product);
 
 }
