@@ -4,9 +4,12 @@ import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.repository.ProductRepository;
 import com.groceriespriceguide.services.ProductService;
 import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +62,7 @@ public class ProductServicesImpl implements ProductService {
         return productRepository.findProductByProductCategory(category);
     }
 
+
     public void addOrUpdateProduct(Product newProduct){
         Optional<Product> existingProduct = productRepository.findByProductUrl(newProduct.getProductUrl());
         if(existingProduct.isPresent()){
@@ -68,6 +72,22 @@ public class ProductServicesImpl implements ProductService {
         } else {
             productRepository.save(newProduct);
         }
+    }
+
+    private String dateFormatter(Timestamp timestamp){
+        if (timestamp != null){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+            return dateFormat.format(timestamp);
+        }
+        return "Date not available.";
+
+    }
+
+    public String getCreationTimestamp(Product product){
+        return dateFormatter(product.getCreatedAT());
+    }
+    public String getLastUpdatedTimestamp(Product product){
+        return dateFormatter(product.getLastUpdated());
     }
 
 }

@@ -27,5 +27,6 @@ public class Product {
     private String productUrl;
     private String pictureUrl;
     private Timestamp lastUpdated;
+    private Timestamp createdAT;
 
 }
