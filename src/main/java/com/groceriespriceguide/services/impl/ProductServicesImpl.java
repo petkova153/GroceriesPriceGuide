@@ -59,4 +59,15 @@ public class ProductServicesImpl implements ProductService {
         return productRepository.findProductByProductCategory(category);
     }
 
+    public void addOrUpdateProduct(Product newProduct){
+        Optional<Product> existingProduct = productRepository.findByProductUrl(newProduct.getProductUrl());
+        if(existingProduct.isPresent()){
+            Product productToUpdate = existingProduct.get();
+            productToUpdate.setProductPrice(newProduct.getProductPrice());
+            productRepository.save(productToUpdate);
+        } else {
+            productRepository.save(newProduct);
+        }
+    }
+
 }
