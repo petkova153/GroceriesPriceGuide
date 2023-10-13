@@ -34,7 +34,7 @@ public class AssortiScraper {
         product.setStore(shop);
         product.setProductName(scraperController.extractElement(productEntity, "span.product_name", ""));
         final String tempPrice = scraperController.priceCleaner(
-                scraperController.extractElement(productEntity, "span.main_price", ""));
+                scraperController.extractTextContent(productEntity, "span.main_price"));
         product.setProductPrice(Double.parseDouble(tempPrice.replace(",",".")));
         product.setProductUrl(scraperController.extractElement(productEntity, "a", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));

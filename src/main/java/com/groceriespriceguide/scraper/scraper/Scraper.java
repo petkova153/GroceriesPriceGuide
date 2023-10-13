@@ -4,11 +4,6 @@ import com.microsoft.playwright.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 @Transactional
 @Component
@@ -26,8 +21,6 @@ public class Scraper {
         try (Playwright playwright = Playwright.create())
         {
             BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions();
-//            ChromeOptions options = new ChromeOptions();
-//            options.addArguments("--headless"); // Enable headless mode
             final List<String> urlLinks = new ArrayList<>();
             final List<Product> productCompleteList = new ArrayList<>();
             //urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
@@ -62,14 +55,12 @@ public class Scraper {
             List<Product> productsList = new ArrayList<>();
             int pages = getPages(page);
             String url = page.url();
-            System.out.println(url);
             if (url.contains("barbora")){
                 productsList = barboraScraper.parseBarbora(page);
             } else if (url.contains("rimi")) {
                 productsList = rimiScraper.parseRimi(page);
             }
             else if (url.contains("IKI")) {
-                System.out.println("here");
                 productsList = ikiScraper.parseIKI(page);
             }
             else if (url.contains("assorti")) {
@@ -79,29 +70,6 @@ public class Scraper {
             return productsList;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
-    private String setUpHTML(String url) {
-        try {
-            final URL obj = new URL(url);
-            final HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-// optional request header
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            int responseCode = con.getResponseCode();
-            System.out.println("Response code: " + responseCode);
-            final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            final StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            return response.toString();
-        }
-        catch (Exception e){
             System.out.println(e.getMessage());
         }
         return null;
@@ -131,15 +99,15 @@ public class Scraper {
         return pageProductList;
     }
 
-
-
     private Integer getPages(Page page) {
         try{
             int pageURL = 0;
             ElementHandle categories = null;
             String url = page.url();
-            if (url.contains("barbora")||url.contains("assorti")){categories = page.querySelector("ul.pagination");}
-            else if(url.contains("rimi")){categories = page.querySelector("ul.pagination__list");
+            if (url.contains("barbora")||url.contains("assorti")){
+                categories = page.querySelector("ul.pagination");
+            }else if(url.contains("rimi")){
+                categories = page.querySelector("ul.pagination__list");
             }
             if (categories != null){
                 List<ElementHandle> pages = categories.querySelectorAll("a");
@@ -156,8 +124,7 @@ public class Scraper {
 
     private int parsePagination(List<ElementHandle> pages, int pageURL) {
         for (ElementHandle page : pages) {
-            String pageNumbers = page.evaluate("el => el.outerHTML", "*").toString();
-            pageNumbers = pageNumbers.substring(pageNumbers.indexOf("?page=") + 6, pageNumbers.indexOf("\">"));
+            String pageNumbers = page.innerText();
             if (pageNumbers.length() < 3) {
                 try {
                     int pageNumber = Integer.parseInt(pageNumbers);

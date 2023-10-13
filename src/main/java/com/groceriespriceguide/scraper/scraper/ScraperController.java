@@ -25,6 +25,14 @@ public class ScraperController {
         return null;
     }
 
+    String extractTextContent(ElementHandle product, String spanEl) {
+        final List<ElementHandle> spans = product.querySelectorAll(spanEl);
+        for (ElementHandle span : spans) {
+            return span.textContent();
+        }
+        return null;
+    }
+
     String extractElWithParser(ElementHandle product, String spanEl, String string1ToIndex, String string2ToIndex) {
         final List<ElementHandle> spans = product.querySelectorAll(spanEl);
         for (ElementHandle span : spans) {
@@ -58,6 +66,7 @@ public class ScraperController {
             } else {
                 subPriceString = priceString.substring(0, priceString.indexOf(".") + 3);
             }
+            if(subPriceString.contains("Akcija ")) return subPriceString.replace("Akcija ", "");
             return subPriceString;
         }
         catch (Exception e){
@@ -74,7 +83,6 @@ public class ScraperController {
             for (ElementHandle e : subSpans)
             {
                 if (counter <= nthEl) {
-                    System.out.println("here" + counter);
                     counter++;
                     System.out.println(e.evaluate("el => el.outerHTML", "*").toString());
                 } else {
