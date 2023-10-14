@@ -15,10 +15,10 @@ public interface ProductService {
     List<Product> getProductData();
     Product findProductById(Long id)throws Exception;
     Product findProductByName(String name);
-    Optional getProductByURL(String productURL);
+    Product getProductByURL(String productURL);
     List<Product> searchProductByKeywordInCertainCategoryAndStore(String keywrd, String category, String store1, String store2, String store3);
     List<Product> getProductsInCategory(String category);
-    public void addOrUpdateProduct(Product newProduct);
+    Product updateExistingProduct(Product newProduct);
     String getCreationTimestamp(Product product);
     String getLastUpdatedTimestamp(Product product);
 

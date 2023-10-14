@@ -50,7 +50,7 @@ public class ProductServicesImpl implements ProductService {
         return productRepository.findByProductName(name).get(0);
     }
 
-    public Optional getProductByURL(String productURL){
+    public Product getProductByURL(String productURL){
         return productRepository.findByProductUrl(productURL);
     }
 
@@ -63,15 +63,9 @@ public class ProductServicesImpl implements ProductService {
     }
 
 
-    public void addOrUpdateProduct(Product newProduct){
-        Optional<Product> existingProduct = productRepository.findByProductUrl(newProduct.getProductUrl());
-        if(existingProduct.isPresent()){
-            Product productToUpdate = existingProduct.get();
-            productToUpdate.setProductPrice(newProduct.getProductPrice());
-            productRepository.save(productToUpdate);
-        } else {
-            productRepository.save(newProduct);
-        }
+    public Product updateExistingProduct(Product updatedProduct){
+            return productRepository.save(updatedProduct);
+
     }
 
     private String dateFormatter(Timestamp timestamp){
