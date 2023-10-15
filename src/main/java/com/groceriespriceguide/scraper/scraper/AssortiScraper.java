@@ -22,7 +22,7 @@ public class AssortiScraper {
         for (ElementHandle productEntity : products)
         {
             Product product = parseProductAssorti(productEntity,shop,url);
-            productList.add(product);
+            if (product != null) productList.add(product);
         }
         return productList;
     }

@@ -22,7 +22,7 @@ public class RimiScraper {
         for (ElementHandle productEntity : products)
         {
             Product product = parseProductRimi(productEntity,shop,url);
-            productList.add(product);
+            if (product != null) productList.add(product);
         }
         return productList;
     }
@@ -33,7 +33,7 @@ public class RimiScraper {
         product.setProductName(scraperController.extractElWithParser(productEntity, "p.card__name", "e\">", "</"));
         String tempValuePrice = scraperController.extractElWithParser(productEntity, "div.price-tag", "an>", "</") +
                 "." + scraperController.extractElWithParser(productEntity, "sup", "up>", "</");
-        product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
+        if (!tempValuePrice.contains("null")) product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
         product.setProductUrl(shop + scraperController.extractElement(productEntity, "a.card__url", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));

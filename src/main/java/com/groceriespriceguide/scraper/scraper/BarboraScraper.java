@@ -22,7 +22,7 @@ public class BarboraScraper {
         {
             Product product = parseProductBarbora(productEntity,shop,url);
 
-            productList.add(product);
+            if (product != null) productList.add(product);
         }
         return productList;
     }
@@ -39,7 +39,7 @@ public class BarboraScraper {
             product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
         String tempValuePrice = scraperController.extractElWithParser(productEntity, "//span[contains(@class, 'tw-mr-0.5')][contains(@class, 'tw-text-b-price-sm')][contains(@class, 'tw-font-semibold')][contains(@class, 'lg:tw-text-b-price-xl')]", ">","</") +
                 "." + scraperController.extractElWithParser(productEntity, "//span[contains(@class, 'tw-text-b-price-xs')][contains(@class, 'tw-font-semibold')][contains(@class, 'lg:tw-text-b-price-lg')]", ">","</");
-        product.setProductPrice(Double.parseDouble(tempValuePrice));
+        if (!tempValuePrice.contains("null")) product.setProductPrice(Double.parseDouble(tempValuePrice));
         return product;}
         catch (Exception e){
             System.out.println(e.getMessage());

@@ -22,7 +22,7 @@ public class IkiScraper {
         {
             System.out.println(productEntity.querySelectorAll("li.product-grid__item"));
             Product product = parseProductIKI(productEntity,shop,url);
-            productList.add(product);
+            if (product != null) productList.add(product);
         }
         return productList;
     }
@@ -34,8 +34,7 @@ public class IkiScraper {
         product.setProductName(scraperController.extractElement(productEntity, "img", "alt"));
         System.out.println(product.getProductName());
         String tempValuePrice = scraperController.priceCleaner(scraperController.extractElement(productEntity, "span.main_price", ""));
-        System.out.println(tempValuePrice);
-        product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
+        if (!tempValuePrice.contains("null")) product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
         product.setProductUrl(shop + scraperController.extractElement(productEntity, "a", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
