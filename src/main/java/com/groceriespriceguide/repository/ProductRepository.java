@@ -13,7 +13,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAll();
     List<Product> findByProductName(String productName);
     Optional <Product> findByProductID(Long id);
-    Optional<Product> findByProductUrl(String productUrl);
+    Product findByProductUrl(String productUrl);
 
     @Query("SELECT p FROM Product p WHERE p.productName LIKE %:keyword% AND (p.productCategory = :category1) AND (p.store = :store1 OR p.store = :store2 OR p.store=:store3)")
     List<Product> findByKeywordInSpecificCategoryAndStores(@Param("keyword") String keyword,

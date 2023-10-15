@@ -16,9 +16,7 @@ public class BarboraScraper {
         List<Product> productList = new ArrayList<>();
         final String url = doc.url();
         //barbora
-        List<ElementHandle> products = doc.querySelectorAll("li");
-        System.out.println("here");
-        System.out.println(products);
+        List<ElementHandle> products = doc.querySelectorAll("li[data-testid]");
         String shop = url.substring(url.indexOf("www."), url.indexOf(".lt") + 3);
         for (ElementHandle productEntity : products)
         {
@@ -35,13 +33,13 @@ public class BarboraScraper {
         try{
         Product product = new Product();
         product.setStore(shop);
-            System.out.println(productEntity.toString());
         product.setProductName(scraperController.extractElement(productEntity, "img", "alt"));
-        String tempValuePrice = scraperController.extractElement(productEntity, "span.tw-text-b-paragraph-xs", "");
-        product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
-        product.setProductUrl(shop + scraperController.extractElement(productEntity, "a.b-product--imagelink", "href"));
-        product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
-        product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
+            product.setProductUrl(shop + scraperController.extractElement(productEntity, "a", "href"));
+            product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
+            product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
+        String tempValuePrice = scraperController.extractElWithParser(productEntity, "//span[contains(@class, 'tw-mr-0.5')][contains(@class, 'tw-text-b-price-sm')][contains(@class, 'tw-font-semibold')][contains(@class, 'lg:tw-text-b-price-xl')]", ">","</") +
+                "." + scraperController.extractElWithParser(productEntity, "//span[contains(@class, 'tw-text-b-price-xs')][contains(@class, 'tw-font-semibold')][contains(@class, 'lg:tw-text-b-price-lg')]", ">","</");
+        product.setProductPrice(Double.parseDouble(tempValuePrice));
         return product;}
         catch (Exception e){
             System.out.println(e.getMessage());

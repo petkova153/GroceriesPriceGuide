@@ -26,9 +26,14 @@ public class ScraperController {
     }
 
     String extractTextContent(ElementHandle product, String spanEl) {
-        final List<ElementHandle> spans = product.querySelectorAll(spanEl);
-        for (ElementHandle span : spans) {
-            return span.textContent();
+        try {
+            final List<ElementHandle> spans = product.querySelectorAll(spanEl);
+            for (ElementHandle span : spans) {
+                return span.textContent();
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -75,6 +80,9 @@ public class ScraperController {
         return null;
     }
 
+    String priceSleector(ElementHandle product, String spanEl){
+        return null;
+    }
     String extractNthElement(ElementHandle product, String spanEl, int nthEl) {
         final List<ElementHandle> spans = product.querySelectorAll(spanEl);
         int counter = 0;
