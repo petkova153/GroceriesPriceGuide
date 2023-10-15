@@ -88,6 +88,6 @@ public class ProductServicesImpl implements ProductService {
     }
     public String getLastUpdatedTimestamp(Product product){
         return dateFormatter(product.getLastUpdated());
-    }
+    }  
 
 }
