@@ -18,7 +18,7 @@ public class Favorites {
     @OneToOne
     private Product product;
     @OneToOne
-    private User user;
+    private UserEntity user;
 
 
 }
