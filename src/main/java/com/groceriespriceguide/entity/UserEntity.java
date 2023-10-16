@@ -1,14 +1,15 @@
 package com.groceriespriceguide.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,4 +37,7 @@ public class UserEntity {
     private Timestamp lastUpdated;
     private Timestamp createdAt;
     private Timestamp lastLoggedIn;
+//    @ManyToMany(mappedBy = "favoredBy")
+//    private Set<Favorites> favorites;
+
 }

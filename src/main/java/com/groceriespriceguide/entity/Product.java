@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +29,9 @@ public class Product {
     private Timestamp lastUpdated;
     private Timestamp createdAT;
 
+//    @ManyToMany(mappedBy = "favorites")
+//    private Set<UserEntity> users;
+
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+//    private List<Favorites> favoritesList;
 }
