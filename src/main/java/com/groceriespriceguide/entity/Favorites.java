@@ -10,6 +10,7 @@ import org.apache.catalina.User;
 @NoArgsConstructor
 @Data
 @Table
+@Entity
 public class Favorites {
 
     @Id
@@ -18,6 +19,7 @@ public class Favorites {
     @OneToOne
     private Product product;
     @OneToOne
+    @JoinColumn(name="user_id", unique = true)
     private UserEntity user;
 
 
