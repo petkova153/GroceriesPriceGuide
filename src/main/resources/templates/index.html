@@ -16,6 +16,8 @@
     </nav>
 </head>
 <body>
+<div class = "cards">
+<form onsubmit="return handleData()" method="post" action="/">
 <div class="cards">
     <div id="card1" class="card">
         <img class="card-icon chicken" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Chicken image">
@@ -66,7 +68,9 @@
         </div>
     </div>
 </div>
-
+</form>
+<div th:include="~{fragments/product-list :: product-list}"></div>
+</div>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
 <!--<title>Image As Checkbox</title>-->
 <!--&lt;!&ndash; Font Awesome Icons &ndash;&gt;-->

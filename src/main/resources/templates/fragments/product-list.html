@@ -1,0 +1,16 @@
+<div th:fragment="product-list">
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Store</th>
+    </tr>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.productName}">Name</td>
+        <td th:text="${product.productCategory}">Category</td>
+        <td th:text="${product.productPrice}">Price</td>
+        <td th:text="${product.store}">Store</td>
+    </tr>
+</table>
+</div>>
