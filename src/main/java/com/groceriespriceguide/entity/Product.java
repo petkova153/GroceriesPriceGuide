@@ -13,7 +13,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Entity
-public class Product {
+public class
+Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,22 +1,24 @@
-<headers th:fragment="not-logged-in-headers"
+<!--<headers th:fragment="not-logged-in-headers"-->
+<header th:fragments="not-logged-header">
         class="container-fluid text-center bg-success text-black">
-    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">
+<!--    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">-->
     <h1 class="p-2">Groceries Price Guide</h1>
     <nav class="m-3 p-2">
         <a class="btn btn-light" href="/">Home</a>
         <a class="btn btn-light" href="/register">Register</a>
         <a class="btn btn-light" href="/login">Log in</a>
-        <a class="btn btn-light" href="/favorites">Favorites</a>
+        <a class="btn btn-light" href="/favourites">Favourites</a>
 
     </nav>
-</headers>
+</header>
 
 
-<headers th:fragment="logged-in-headers"
+
+<header th:fragments="logged-in-headers">
         class="container-fluid text-center bg-dark text-white">
     <h1 class="p-2">Groceries Price Guide</h1>
     <nav class="m-3 p-2">
-        <a class="btn btn-light" href="/favorites">Favorites</a>
+        <a class="btn btn-light" href="/favourites">Favourites</a>
         <a class="btn btn-light" href="/logout">Logout</a>
     </nav>
-</headers>
+</header>
