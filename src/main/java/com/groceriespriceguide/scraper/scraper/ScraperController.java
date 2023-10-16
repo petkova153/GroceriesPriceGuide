@@ -1,40 +1,55 @@
 package com.groceriespriceguide.scraper.scraper;
 
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import ch.qos.logback.core.joran.conditional.ElseAction;
+import com.microsoft.playwright.ElementHandle;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
 public class ScraperController {
 
-    String extractElement(Element product, String spanEl, String element) {
-        Elements spans = product.select(spanEl);
-        for (Element span : spans) {
+    String extractElement(ElementHandle product, String spanEl, String element) {
+        final List<ElementHandle> spans = product.querySelectorAll(spanEl);
+        for (ElementHandle span : spans) {
             if (element.isEmpty()){
-                String elementToParse = span.toString();
+                String elementToParse = span.evaluate("el => el.outerHTML", "*").toString();
                 elementToParse = elementToParse.strip();
                 return elementToParse.substring(elementToParse.indexOf("e\">")+3,elementToParse.indexOf("</"));
             }
                 else{
-            return span.attr(element);}
+            return span.getAttribute(element);}
         }
         return null;
     }
 
-    String extractElWithParser(Element product, String spanEl, String string1ToIndex, String string2ToIndex) {
-        Elements spans = product.select(spanEl);
-        for (Element span : spans) {
-            String elementToParse = span.toString();
-            return elementToParse.substring(elementToParse.indexOf(string1ToIndex)+3,elementToParse.indexOf(string2ToIndex));
+    String extractTextContent(ElementHandle product, String spanEl) {
+        try {
+            final List<ElementHandle> spans = product.querySelectorAll(spanEl);
+            for (ElementHandle span : spans) {
+                return span.textContent();
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    String extractElWithParser(ElementHandle product, String spanEl, String string1ToIndex, String string2ToIndex) {
+        final List<ElementHandle> spans = product.querySelectorAll(spanEl);
+        for (ElementHandle span : spans) {
+            String elementToParse = span.evaluate("el => el.outerHTML", "*").toString();
+            return elementToParse.substring(elementToParse.indexOf(string1ToIndex)+string1ToIndex.length(),
+                    elementToParse.indexOf(string2ToIndex));
         }
         return null;
     }
 
     String categoryTranslator(String attr) {
-        Map<String, String> catLT_EN = new HashMap<>();
+        final Map<String, String> catLT_EN = new HashMap<>();
         catLT_EN.put("darzoves", "Fruits and Vegetables");
         catLT_EN.put("pieno", "Dairy and eggs");
         catLT_EN.put("duonos", "Bakery");
@@ -50,12 +65,13 @@ public class ScraperController {
 
     public String priceCleaner(String priceString) {
         try {
-            String subPriceString;
+            final String subPriceString;
             if (priceString.contains(",")) {
                 subPriceString = priceString.substring(0, priceString.indexOf(",") + 3);
             } else {
                 subPriceString = priceString.substring(0, priceString.indexOf(".") + 3);
             }
+            if(subPriceString.contains("Akcija ")) return subPriceString.replace("Akcija ", "");
             return subPriceString;
         }
         catch (Exception e){
@@ -63,4 +79,26 @@ public class ScraperController {
         }
         return null;
     }
+
+    String priceSleector(ElementHandle product, String spanEl){
+        return null;
+    }
+    String extractNthElement(ElementHandle product, String spanEl, int nthEl) {
+        final List<ElementHandle> spans = product.querySelectorAll(spanEl);
+        int counter = 0;
+        for (ElementHandle span : spans) {
+            final List<ElementHandle> subSpans = span.querySelectorAll("*");
+            for (ElementHandle e : subSpans)
+            {
+                if (counter <= nthEl) {
+                    counter++;
+                    System.out.println(e.evaluate("el => el.outerHTML", "*").toString());
+                } else {
+                    return e.evaluate("el => el.outerHTML", "*").toString();
+                }
+            }
+        }
+        return null;
+    }
+
 }
