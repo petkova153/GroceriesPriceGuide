@@ -30,6 +30,8 @@ public class FavoritesServiceImp implements FavoriteService {
         this.productService = productService;
         this.favoritesRepository= favoritesRepository;
     }
+    //Have to add functionality to check if a product has already been added to favorites.
+
     public void addToFaves(Long productID, Long userID) throws Exception {
         Product product = productService.findProductById(productID);
 
@@ -40,7 +42,8 @@ public class FavoritesServiceImp implements FavoriteService {
             favorites.setProduct(product);
 
             favoritesRepository.save(favorites);
-        } else throw new Exception("Couldn't save to favorites");
+        } else throw new Exception("Couldn't save products to favorites");
+
 
     }
 
