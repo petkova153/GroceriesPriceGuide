@@ -1,57 +1,72 @@
 package com.groceriespriceguide.scraper.scraper;
-import com.groceriespriceguide.products.entity.Product;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import com.groceriespriceguide.entity.Product;
+import com.microsoft.playwright.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import org.springframework.transaction.annotation.Transactional;
+import java.util.*;
+@Transactional
 @Component
 public class Scraper {
-
+    @Autowired
+    BarboraScraper barboraScraper;
+    @Autowired
+    RimiScraper rimiScraper;
+    @Autowired
+    IkiScraper ikiScraper;
+    @Autowired
+    AssortiScraper assortiScraper;
+    @Transactional
     public List<Product> scrapeProducts() throws Exception {
-        try{
-            List<String> urlLinks = new ArrayList<>();
-            List<Product> productCompleteList = new ArrayList<>();
-            urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
+        try (Playwright playwright = Playwright.create())
+        {
+            BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions();
+            final List<String> urlLinks = new ArrayList<>();
+            final List<Product> productCompleteList = new ArrayList<>();
+            //urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
             urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
-            try{
+            //urlLinks.add("https://www.assorti.lt/katalogas/maistas/darzoves-ir-vaisiai/");
+            //urlLinks.add("https://lastmile.lt/chain/category/IKI/Darzoves");
+
             for(String url:urlLinks)
             {
-                List<Product> tempString = scrapeTheLinks(url);
-                if (!tempString.isEmpty())productCompleteList.addAll(tempString);
+                Browser browser = playwright.chromium().launch(launchOptions);
+                Page page = browser.newPage();
+                page.navigate(url);
+                page.waitForLoadState();
+                try{
+                List<Product> tempString = scrapeTheLinks(page);
+                if (!tempString.isEmpty()) {
+                    productCompleteList.addAll(tempString);
+                }
+                browser.close();
+                return productCompleteList;
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
             }
-            return productCompleteList;}
-            catch (Exception e){
-                System.out.println(e.getMessage());
             }
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        return null;
+            return null;
     }
 
-    private List<Product> scrapeTheLinks(String url) throws Exception{
+    private List<Product> scrapeTheLinks(Page page) throws Exception{
         try{
             List<Product> productsList = new ArrayList<>();
-            String html = setUpHTML(url);
-            Document doc = Jsoup.parse(html);
-            int pages = getPages(doc,url);
+            int pages = getPages(page);
+            String url = page.url();
             if (url.contains("barbora")){
-                productsList = parseBarbora(doc, url);
+                productsList = barboraScraper.parseBarbora(page);
             } else if (url.contains("rimi")) {
-                productsList = parseRimi(doc,url);
+                productsList = rimiScraper.parseRimi(page);
             }
-            if (pages > 0) productsList.addAll(loopThroughPages(doc,url,pages));
+            else if (url.contains("IKI")) {
+                productsList = ikiScraper.parseIKI(page);
+            }
+            else if (url.contains("assorti")) {
+                productsList = assortiScraper.parseAssorti(page);
+            }
+            if (pages > 0) productsList.addAll(loopThroughPages(page,pages));
             return productsList;
         }
         catch(Exception e){
@@ -60,133 +75,43 @@ public class Scraper {
         return null;
     }
 
-    private String setUpHTML(String url) {
-        try {
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-// optional request header
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            int responseCode = con.getResponseCode();
-            System.out.println("Response code: " + responseCode);
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+    private List<Product> loopThroughPages(Page page, int pages) {
+        final List<Product> pageProductList = new ArrayList<>();
+        for (int y = 2; y <= pages; y++) {
+            String newPageUrl = page.url() + "?page=" + y;
+            BrowserContext newContext = page.context().browser().newContext();
+            Page newPage = newContext.newPage();
+            newPage.navigate(newPageUrl);
+            if (newPageUrl.contains("barbora")) {
+                pageProductList.addAll(barboraScraper.parseBarbora(newPage));
+            } else if (page.url().contains("rimi")) {
+                pageProductList.addAll(rimiScraper.parseRimi(newPage));
+            } else if (page.url().contains("iki")) {
+                System.out.println("here");
+                pageProductList.addAll(ikiScraper.parseIKI(newPage));
+            } else if (page.url().contains("assorti")) {
+                pageProductList.addAll(assortiScraper.parseAssorti(newPage));
             }
-            in.close();
-            return response.toString();
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
 
-    private List<Product> loopThroughPages(Document doc, String url, int pages) {
-        List<Product> pageProductList = new ArrayList<>();
-        for (int y = 2; y< pages+1; y++){
-            if (url.contains("barbora")){
-                pageProductList.addAll(parseBarbora(doc, url + "?page="+y));
-            } else if (url.contains("rimi")) {
-                pageProductList.addAll(parseRimi(doc,url+"?page="+y));
-            }
+            // Navigate to the next page
+            newContext.close();
         }
         return pageProductList;
     }
 
-    private List<Product> parseRimi(Document doc, String url) {
-        List<Product> productList = new ArrayList<>();
-        //rimi
-        String shop = url.substring(url.indexOf("www."),url.indexOf(".lt")+3);
-        Elements products  = doc.select("li.product-grid__item");
-        for (Element productEntity : products)
-        {
-            Product product = parseProductRimi(productEntity,shop,url);
-            productList.add(product);
-        }
-        return productList;
-    }
-    private List<Product> parseBarbora(Document doc, String url) {
-        List<Product> productList = new ArrayList<>();
-        //barbora
-        Elements products = doc.select("div.b-product--wrap2");
-        String shop = url.substring(url.indexOf("www."), url.indexOf(".lt") + 3);
-
-        for (Element productEntity : products)
-        {
-            Product product = parseProductBarbora(productEntity,shop,url);
-            productList.add(product);
-        }
-        return productList;
-    }
-    private Product parseProductRimi(Element productEntity, String shop, String url) {
-        Product product = new Product();
-        product.setStore(shop);
-        product.setProductName(extractElWithParser(productEntity, "p.card__name", "e\">", "</"));
-        product.setProductPrice(extractElWithParser(productEntity, "p.card__price-per", "r\">", "</"));
-        product.setProductUrl(shop + extractElement(productEntity, "a.card__url", "href"));
-        product.setPictureUrl(extractElement(productEntity, "img", "src"));
-        product.setProductCategory(categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
-        return product;
-    }
-    private Product parseProductBarbora(Element productEntity, String shop, String url) {
-        Product product = new Product();
-        product.setStore(shop);
-        product.setProductName(extractElement(productEntity, "img", "alt"));
-        product.setProductPrice(extractElement(productEntity, "span.b-product-price-current-number", "content"));
-        product.setProductUrl(shop + extractElement(productEntity, "a.b-product--imagelink", "href"));
-        product.setPictureUrl(extractElement(productEntity, "img", "src"));
-        product.setProductCategory(categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
-        return product;
-    }
-
-    private String categoryTranslator(String attr) {
-        Map<String, String> catLT_EN = new HashMap<>();
-        catLT_EN.put("darzoves", "Fruits and Vegetables");
-        catLT_EN.put("pieno", "Dairy and eggs");
-        catLT_EN.put("duonos", "Bakery");
-        catLT_EN.put("mesa", "Meat,fish, and ready meals");
-        catLT_EN.put("bakaleja", "Pantry staples");
-        for (Map.Entry<String,String> category: catLT_EN.entrySet()){
-            if (attr.contains(category.getKey())){
-                return category.getValue();
-            }
-        }
-        return null;
-    }
-
-
-
-    private String extractElement(Element product, String spanEl, String element) {
-        Elements spans = product.select(spanEl);
-        for (Element span : spans) {
-            return span.attr(element);
-        }
-        return null;
-    }
-
-    private String extractElWithParser(Element product, String spanEl, String string1ToIndex, String string2ToIndex) {
-        Elements spans = product.select(spanEl);
-        for (Element span : spans) {
-            String elementToParse = span.toString();
-            return elementToParse.substring(elementToParse.indexOf(string1ToIndex)+3,elementToParse.indexOf(string2ToIndex));
-        }
-        return null;
-    }
-
-    private Integer getPages(Document doc, String url) {
+    private Integer getPages(Page page) {
         try{
             int pageURL = 0;
-            Elements categories = null;
-            if (url.contains("barbora")){categories = doc.select("ul.pagination");}
-            else if(url.contains("rimi")){categories = doc.select("ul.pagination__list");}
+            ElementHandle categories = null;
+            String url = page.url();
+            if (url.contains("barbora")||url.contains("assorti")){
+                categories = page.querySelector("ul.pagination");
+            }else if(url.contains("rimi")){
+                categories = page.querySelector("ul.pagination__list");
+            }
             if (categories != null){
-                for (Element category : categories) {
-                    Elements pages = category.select("a");
-                    pageURL = parsePagination(pages,pageURL);
-                    break;
-                }
+                List<ElementHandle> pages = categories.querySelectorAll("a");
+                pageURL = parsePagination(pages, pageURL);
             }
             return pageURL;
         }
@@ -197,10 +122,9 @@ public class Scraper {
         return null;
     }
 
-    private int parsePagination(Elements pages, int pageURL) {
-        for (Element page : pages) {
-            String pageNumbers = page.toString();
-            pageNumbers = pageNumbers.substring(pageNumbers.indexOf("?page=") + 6, pageNumbers.indexOf("\">"));
+    private int parsePagination(List<ElementHandle> pages, int pageURL) {
+        for (ElementHandle page : pages) {
+            String pageNumbers = page.innerText();
             if (pageNumbers.length() < 3) {
                 try {
                     int pageNumber = Integer.parseInt(pageNumbers);

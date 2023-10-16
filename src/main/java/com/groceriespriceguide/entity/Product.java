@@ -1,9 +1,6 @@
-package com.groceriespriceguide.products.entity;
+package com.groceriespriceguide.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,13 +16,16 @@ Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long productID;
     private String productName;
-    private String productPrice;
+    private Double productPrice;
+    private String unitOfMeasure;
     private String store;
     private String productCategory;
+    @Column(unique = true)
     private String productUrl;
     private String pictureUrl;
     private Timestamp lastUpdated;
+    private Timestamp createdAT;
 
 }
