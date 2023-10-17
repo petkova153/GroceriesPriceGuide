@@ -82,6 +82,14 @@
 .checkbox-input:checked + .checkbox-label::after {
     opacity: 1;
 }
+
+/* Apply styles to the scrollable box */
+.scrollable-box {
+    height: 200px;
+    overflow-y: auto !important;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
 /*.cards {*/
 /*    display: flex;*/
 /*    justify-content: space-between;*/
