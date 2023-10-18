@@ -1,7 +1,8 @@
-<!--<headers th:fragment="not-logged-in-headers"-->
-<header th:fragments="not-logged-header">
-        class="container-fluid text-center bg-success text-black">
-<!--    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">-->
+
+<header th:fragment="topSection"
+        class="container-fluid bg-success text-black p3 mb3 text-center">
+<!--        class="container-fluid text-center bg-success text-black">-->
+    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">
     <h1 class="p-2">Groceries Price Guide</h1>
     <nav class="m-3 p-2">
         <a class="btn btn-light" href="/">Home</a>
@@ -13,9 +14,22 @@
 </header>
 
 
+<header th:fragment="topSection1"
+        class="container-fluid bg-success text-black p3 mb3 text-center">
+    <!--        class="container-fluid text-center bg-success text-black">-->
+    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">
+    <h1 class="p-2">Groceries Price Guide</h1>
+    <nav class="m-3 p-2">
+        <a class="btn btn-light" href="/">Home</a>
+        <a class="btn btn-light" href="/login">Log in</a>
+        <a class="btn btn-light" href="/favourites">Favourites</a>
 
-<header th:fragments="logged-in-headers">
-        class="container-fluid text-center bg-dark text-white">
+    </nav>
+</header>
+
+
+<header th:fragment="topSection1">
+    class="container-fluid bg-success text-black p3 mb3 text-center">
     <h1 class="p-2">Groceries Price Guide</h1>
     <nav class="m-3 p-2">
         <a class="btn btn-light" href="/favourites">Favourites</a>
