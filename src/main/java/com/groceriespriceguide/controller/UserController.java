@@ -62,7 +62,6 @@ public class UserController {
             return "redirect:/login?status=LOGIN_FAILED&error=" + exception.getMessage();
         }
     }
-
     @GetMapping("/logout")
     public String handleLogout(
             @CookieValue(value = "loggedInUserId", defaultValue = "")

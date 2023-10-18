@@ -17,7 +17,7 @@ public class BarboraScraper {
         final String url = doc.url();
         //barbora
         List<ElementHandle> products = doc.querySelectorAll("li[data-testid]");
-        String shop = url.substring(url.indexOf("www."), url.indexOf(".lt") + 3);
+        String shop = url.substring(url.indexOf("www.")+4, url.indexOf(".lt"));
         for (ElementHandle productEntity : products)
         {
             Product product = parseProductBarbora(productEntity,shop,url);
