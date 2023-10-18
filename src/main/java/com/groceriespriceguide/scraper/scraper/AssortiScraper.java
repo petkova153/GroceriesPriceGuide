@@ -17,7 +17,7 @@ public class AssortiScraper {
         List<Product> productList = new ArrayList<>();
         final String url = page.url();
         //rimi
-        String shop = url.substring(url.indexOf("www."),url.indexOf(".lt")+3);
+        String shop = url.substring(url.indexOf("www.")+4,url.indexOf(".lt"));
         List<ElementHandle> products  = page.querySelectorAll("div.product_element");
         for (ElementHandle productEntity : products)
         {

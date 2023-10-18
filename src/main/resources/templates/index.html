@@ -17,9 +17,16 @@
     </nav>
 </head>
 <body>
-<div class = "cards">
-<form onsubmit="return handleData()" method="post" action="/">
-<div class="cards">
+<div class = "cards" id="search-panel">
+<form th:action="@{/search}" method="post">
+    <div>
+        <label>Select Stores:</label>
+        <button type="button" th:onclick="toggleFilter('assorti')">Assorti</button>
+        <button type="button" th:onclick="toggleFilter('rimi')">Rimi</button>
+        <button type="button" th:onclick="toggleFilter('barbora')">Barbora</button>
+    </div>
+<div class="cards" >
+    <label>Select Categories:</label>
     <div id="card1" class="card">
         <img class="card-icon chicken" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Chicken image">
         Chicken
@@ -58,14 +65,6 @@
         <div class="checkbox-inner">
             <input id="bacon-checkbox" class="checkbox-input" type="checkbox">
             <label class="checkbox-label" for="bacon-checkbox"></label>
-        </div>
-    </div>
-    <div id="card6" class="card">
-        <img class="card-icon no-meat" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="No meat image">
-        No meat
-        <div class="checkbox-inner">
-            <input id="no-meat-checkbox" class="checkbox-input" type="checkbox">
-            <label class="checkbox-label" for="no-meat-checkbox"></label>
         </div>
     </div>
 </div>
