@@ -1,3 +1,4 @@
+
 body {
     margin: 0;
     padding: 0;
@@ -20,8 +21,8 @@ body::before {
 
 .form {
     position: absolute;
-    top: 50%;
-    left: 25%;
+    top: 90%;
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 350px;
     min-height: 400px;
@@ -57,7 +58,7 @@ body::before {
 
 .form .input-box input:focus,
 .form .input-box input:valid {
-    border-bottom-color: #03a9f4;
+    border-bottom-color: #777;
 }
 
 .form .input-box .fa {

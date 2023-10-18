@@ -57,7 +57,7 @@ body::before {
 
 .form .input-box input:focus,
 .form .input-box input:valid {
-    border-bottom-color: #03a9f4;
+    border-bottom-color: #777;
 }
 
 .form .input-box .fa {
