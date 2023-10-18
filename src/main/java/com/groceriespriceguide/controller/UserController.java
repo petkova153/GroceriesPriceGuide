@@ -57,12 +57,11 @@ public class UserController {
             Cookie cookie = new Cookie("loggedInUserId", user.getId().toString());
             cookie.setMaxAge(200_000);
             response.addCookie(cookie);
-            return "redirect:/favourites";
+            return "redirect:/favorites";
         } catch (Exception exception) {
             return "redirect:/login?status=LOGIN_FAILED&error=" + exception.getMessage();
         }
     }
-
     @GetMapping("/logout")
     public String handleLogout(
             @CookieValue(value = "loggedInUserId", defaultValue = "")

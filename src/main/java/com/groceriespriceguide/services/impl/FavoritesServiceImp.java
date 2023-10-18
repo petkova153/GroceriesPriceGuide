@@ -13,7 +13,9 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FavoritesServiceImp implements FavoriteService {
@@ -30,21 +32,44 @@ public class FavoritesServiceImp implements FavoriteService {
         this.productService = productService;
         this.favoritesRepository= favoritesRepository;
     }
-    //Have to add functionality to check if a product has already been added to favorites.
+
+    public List<Favorites> getFavoriteProductsForUser(UserEntity user){
+        return favoritesRepository.findByUser(user);
+    }
+    public List<Favorites> findByUserAndProduct(UserEntity user, Product product){
+        return favoritesRepository.findByUserAndProduct(user, product);
+    }
+
 
     public void addToFaves(Long productID, Long userID) throws Exception {
         Product product = productService.findProductById(productID);
 
-        UserEntity user=userService.getUserById(userID);
+        UserEntity user = userService.getUserById(userID);
 
-        if (product != null && user != null){
-            Favorites favorites = new Favorites();
-            favorites.setProduct(product);
-
-            favoritesRepository.save(favorites);
+        if (product != null && user != null) {
+            List<Favorites> existingFavorites = favoritesRepository.findByUserAndProduct(user, product);
+            if (existingFavorites.isEmpty()) {
+                Favorites favorites = new Favorites();
+                favorites.setProduct(product);
+                favorites.setUser(user);
+                favoritesRepository.save(favorites);
+            } else {
+                throw new Exception("Product already exists in Favorites");
+            }
         } else throw new Exception("Couldn't save products to favorites");
+    }
 
-
+    public void removeFromFavorites(Favorites favoriteToRemove) throws Exception{
+        Optional<Favorites> existingFavorites = favoritesRepository.findById(favoriteToRemove.getFavoritesId());
+        if (existingFavorites.isPresent()){
+            favoritesRepository.delete(existingFavorites.get());
+        }  else {
+            throw new Exception("Favorite entry not found");
+        }
+    }
+    public void deleteAllFavorites(UserEntity user){
+        List<Favorites> userFaves = favoritesRepository.findByUser(user);
+        favoritesRepository.deleteAll();
     }
 
 }
