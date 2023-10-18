@@ -14,37 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body>
-<header th:replace="~{fragments/headers.html :: topSection}"></header>
-<div class="filter-container">
-    <form th:action="@{/search}" method="post" class="filter-group">
-        <div class="filter-group">
-            <label>Select Stores:</label>
-            <button type="button" th:onclick="toggleFilter('rimi')">Rimi</button>
-            <button type="button" th:onclick="toggleFilter('assorti')">Assorti</button>
-            <button type="button" th:onclick="toggleFilter('barbora')">Barbora</button>
+<header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
 
-            <label>Select Categories:</label>
-            <button type="button" th:onclick="toggleFilter('category1')"> Fruits and veggies
-            </button>
-            <button type="button" th:onclick="toggleFilter('category2')">
-                Dairy and eggs
-            </button>
-            <button type="button" th:onclick="toggleFilter('category2')">
-                Bakery
-            </button>
-            <button type="button" th:onclick="toggleFilter('category2')">
-                Meat,fish, and ready meals
-            </button>
-            <button type="button" th:onclick="toggleFilter('category2')">
-                Pantry staples
-            </button>
-            <input type="text" name="query" placeholder="Search by product name">
-            <button type="submit">Filter</button>
-        </div>
-    </form>
-</div>
-<div id="main-panel">
-    <h2>All Products</h2>
-</div>
 </body>
 </html>
