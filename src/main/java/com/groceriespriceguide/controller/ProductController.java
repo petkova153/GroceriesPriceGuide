@@ -4,8 +4,11 @@ import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.entity.Search;
 import com.groceriespriceguide.repository.ProductRepository;
 import com.groceriespriceguide.services.ProductService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +24,14 @@ public class ProductController {
         this.productService = productService;
         this.productRepository = productRepository;
     }
-    @GetMapping("/")
-    public String listBooks(Model model) {
+
+    @GetMapping("/products")
+    public String listProducts(Model model) {
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
-        return "index"; // Thymeleaf view name
+        return "products"; // Thymeleaf view name
     }
-
+    
     ////Searching and Filtering good stuff////
 
     @GetMapping("/search")
@@ -63,6 +67,7 @@ public class ProductController {
 
         return "search";
     }
+
 
 
 
