@@ -17,58 +17,29 @@
 <header th:replace="~{fragments/headers.html :: topSection}"></header>
 <div class="filter-container">
     <form th:action="@{/search}" method="post" class="filter-group">
-        <div>
+        <div class="filter-group">
             <label>Select Stores:</label>
             <button type="button" th:onclick="toggleFilter('rimi')">Rimi</button>
             <button type="button" th:onclick="toggleFilter('assorti')">Assorti</button>
             <button type="button" th:onclick="toggleFilter('barbora')">Barbora</button>
-        </div>
-        <div class="filter-group">
+
             <label>Select Categories:</label>
-            <div id="card1" class="card" th:onclick="toggleFilter('Fruits and vegies')">
-                <img class="card-icon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Chicken image">
-                Fruits and vegies
-                <div class="checkbox-inner">
-                    <input id="chicken-checkbox" class="checkbox-input" type="checkbox">
-                    <label class="checkbox-label" for="chicken-checkbox"></label>
-                </div>
-            </div>
-            <div id="card2" class="card" th:onclick="toggleFilter('Dairy and eggs')">
-                <img class="card-icon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Pork image">
-                Dairy and eggs
-                <div class="checkbox-inner">
-                    <input id="pork-checkbox" class="checkbox-input" type="checkbox">
-                    <label class="checkbox-label" for="pork-checkbox"></label>
-                </div>
-            </div>
-            <div id="card3" class="card" th:onclick="toggleFilter('Bakery')">
-                <img class="card-icon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Beef image">
-                Bakery
-                <div class="checkbox-inner">
-                    <input id="beef-checkbox" class="checkbox-input" type="checkbox">
-                    <label class="checkbox-label" for="beef-checkbox"></label>
-                </div>
-            </div>
-            <div id="card4" class="card" th:onclick="toggleFilter('Meat,fish, and ready meals')">
-                <img class="card-icon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Fish image">
-                Meat,fish, and ready meals
-                <div class="checkbox-inner">
-                    <input id="fish-checkbox" class="checkbox-input" type="checkbox">
-                    <label class="checkbox-label" for="fish-checkbox"></label>
-                </div>
-            </div>
-            <div id="card5" class="card" th:onclick="toggleFilter('Pantry staples')">
-                <img class="card-icon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Bacon image">
+            <button type="button" th:onclick="toggleFilter('category1')"> Fruits and veggies
+            </button>
+            <button type="button" th:onclick="toggleFilter('category2')">
+                 Dairy and eggs
+            </button>
+            <button type="button" th:onclick="toggleFilter('category2')">
+                 Bakery
+            </button>
+            <button type="button" th:onclick="toggleFilter('category2')">
+                 Meat,fish, and ready meals
+            </button>
+            <button type="button" th:onclick="toggleFilter('category2')">
                 Pantry staples
-                <div class="checkbox-inner">
-                    <input id="bacon-checkbox" class="checkbox-input" type="checkbox">
-                    <label class="checkbox-label" for="bacon-checkbox"></label>
-                </div>
-            </div>
-            <div class="filter-group">
-                <input type="text" name="query" placeholder="Search by product name">
-                <button type="submit">Filter</button>
-            </div>
+            </button>
+            <input type="text" name="query" placeholder="Search by product name">
+            <button type="submit">Filter</button>
         </div>
     </form>
 </div>
@@ -107,6 +78,5 @@
         document.querySelector('input[name="productCategory"]').value = selectedCategories.join(',');
     });
 </script>
-
 </body>
 </html>

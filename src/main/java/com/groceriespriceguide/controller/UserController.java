@@ -51,11 +51,12 @@ public class UserController {
         try {
             UserEntity user = this.userService.verifyUser(userLoginRequest.getUsername(),
                     userLoginRequest.getPassword());
+            System.out.println(user);
             if (user == null) throw new Exception
                     ("Please try again, your login details did not match");
             // creates a cookie and saves user id for the session
             Cookie cookie = new Cookie("loggedInUserId", user.getId().toString());
-            cookie.setMaxAge(200_000);
+            cookie.setMaxAge(20000000);
             response.addCookie(cookie);
             return "redirect:/favorites";
         } catch (Exception exception) {

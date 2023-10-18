@@ -15,14 +15,14 @@
 <!--    </nav>-->
 </head>
 <body>
-<header th:replace="fragments/headers.html::topSection1"></header>
+<header th:replace="fragments/headers.html::topSection"></header>
 <title>Please register</title>
 <div class="form">
     <form method="post" action="/login" th:object="${loginRequest}">
         <h2>Login</h2>
         <div class="input-box">
             <i class="fa fa-user" aria-hidden="true"></i>
-            <input type="text" name="Login" placeholder="Login" required>
+            <input type="text" name="username" placeholder="Username" required>
         </div>
         <div class="input-box">
             <i class="fa fa-unlock-alt" aria-hidden="true"></i>
