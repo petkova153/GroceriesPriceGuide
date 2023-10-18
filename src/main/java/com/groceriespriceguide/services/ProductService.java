@@ -21,5 +21,8 @@ public interface ProductService {
     Product updateExistingProduct(Product newProduct);
     String getCreationTimestamp(Product product);
     String getLastUpdatedTimestamp(Product product);
+    List<Product> findProductsByStore(String store);
+    ////
+    List<Product> searchProducts(String keyword, List<String> stores, List<String> categories);
 
 }

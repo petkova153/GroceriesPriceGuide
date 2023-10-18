@@ -1,10 +1,12 @@
 package com.groceriespriceguide.services.impl;
 
 import com.groceriespriceguide.entity.Product;
+import com.groceriespriceguide.entity.ProductFiltering;
 import com.groceriespriceguide.repository.ProductRepository;
 import com.groceriespriceguide.services.ProductService;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,5 +85,16 @@ public class ProductServicesImpl implements ProductService {
     public String getLastUpdatedTimestamp(Product product){
         return dateFormatter(product.getLastUpdated());
     }  
+
+    public List<Product> findProductsByStore(String store){
+        return productRepository.findProductByStore(store);
+    }
+
+   ///////////////// Searching products is so fuuuun//////////////////////////////
+    public List<Product> searchProducts(String keyword, List<String> stores, List<String> categories) {
+        Specification<Product> spec = ProductFiltering.filterProducts(keyword, stores, categories);
+        return productRepository.findAll(spec);
+    }
+
 
 }
