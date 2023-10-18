@@ -8,160 +8,60 @@
 <!--    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">-->
     <link href="/css/style.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <h1 class="p-2">Groceries Price Guide</h1>
-    <nav class="m-3 p-2">
-        <a class="btn btn-light" href="/">Home</a>
-        <a class="btn btn-light" href="/register">Register</a>
-        <a class="btn btn-light" href="/login">Log in</a>
-        <a class="btn btn-light" href="/favourites">Favourites</a>
-    </nav>
 </head>
 <body>
-<div class = "cards">
+<header th:replace="~{fragments/headers.html :: topSection}"></header>
 <form onsubmit="return handleData()" method="post" action="/">
-<div class="cards">
-    <div id="card1" class="card">
-        <img class="card-icon chicken" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Chicken image">
-        Chicken
-        <div class="checkbox-inner">
-            <input id="chicken-checkbox" class="checkbox-input" type="checkbox">
-            <label class="checkbox-label" for="chicken-checkbox"></label>
+<div class="filter-container">
+    <div class="cards">
+        <div id="card1" class="card">
+            <img class="card-icon chicken" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Chicken image">
+            Chicken
+            <div class="checkbox-inner">
+                <input id="chicken-checkbox" class="checkbox-input" type="checkbox">
+                <label class="checkbox-label" for="chicken-checkbox"></label>
+            </div>
         </div>
-    </div>
-    <div id="card2" class="card">
-        <img class="card-icon pork" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Pork image">
-        Pork
-        <div class="checkbox-inner">
-            <input id="pork-checkbox" class="checkbox-input" type="checkbox">
-            <label class="checkbox-label" for="pork-checkbox"></label>
+        <div id="card2" class="card">
+            <img class="card-icon pork" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Pork image">
+            Pork
+            <div class="checkbox-inner">
+                <input id="pork-checkbox" class="checkbox-input" type="checkbox">
+                <label class="checkbox-label" for="pork-checkbox"></label>
+            </div>
         </div>
-    </div>
-    <div id="card3" class="card">
-        <img class="card-icon beef" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Beef image">
-        Beef
-        <div class="checkbox-inner">
-            <input id="beef-checkbox" class="checkbox-input" type="checkbox">
-            <label class="checkbox-label" for="beef-checkbox"></label>
+        <div id="card3" class="card">
+            <img class="card-icon beef" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Beef image">
+            Beef
+            <div class="checkbox-inner">
+                <input id="beef-checkbox" class="checkbox-input" type="checkbox">
+                <label class="checkbox-label" for="beef-checkbox"></label>
+            </div>
         </div>
-    </div>
-    <div id="card4" class="card">
-        <img class="card-icon fish" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Fish image">
-        Fish
-        <div class="checkbox-inner">
-            <input id="fish-checkbox" class="checkbox-input" type="checkbox">
-            <label class="checkbox-label" for="fish-checkbox"></label>
+        <div id="card4" class="card">
+            <img class="card-icon fish" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Fish image">
+            Fish
+            <div class="checkbox-inner">
+                <input id="fish-checkbox" class="checkbox-input" type="checkbox">
+                <label class="checkbox-label" for="fish-checkbox"></label>
+            </div>
         </div>
-    </div>
-    <div id="card5" class="card">
-        <img class="card-icon bacon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Bacon image">
-        Bacon
-        <div class="checkbox-inner">
-            <input id="bacon-checkbox" class="checkbox-input" type="checkbox">
-            <label class="checkbox-label" for="bacon-checkbox"></label>
-        </div>
-    </div>
-    <div id="card6" class="card">
-        <img class="card-icon no-meat" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="No meat image">
-        No meat
-        <div class="checkbox-inner">
-            <input id="no-meat-checkbox" class="checkbox-input" type="checkbox">
-            <label class="checkbox-label" for="no-meat-checkbox"></label>
+        <div id="card5" class="card">
+            <img class="card-icon bacon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Bacon image">
+            Bacon
+            <div class="checkbox-inner">
+                <input id="bacon-checkbox" class="checkbox-input" type="checkbox">
+                <label class="checkbox-label" for="bacon-checkbox"></label>
+            </div>
         </div>
     </div>
 </div>
 </form>
-<div th:include="~{fragments/product-list :: product-list}"></div>
 </div>
-<!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
-<!--<title>Image As Checkbox</title>-->
-<!--&lt;!&ndash; Font Awesome Icons &ndash;&gt;-->
-<!--<link-->
-<!--        rel="stylesheet"-->
-<!--        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"-->
-<!--/>-->
-<!--&lt;!&ndash; Stylesheet &ndash;&gt;-->
-<!--<link rel="stylesheet" href="style.css" />-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="wrapper">-->
-<!--    <div class="container">-->
-<!--        <input type="checkbox" id="dessert-1" />-->
-<!--        <label for="dessert-1">-->
-<!--            <img src="dessert-01.png" />-->
-<!--        </label>-->
-<!--    </div>-->
-<!--    <div class="container">-->
-<!--        <input type="checkbox" id="dessert-2" />-->
-<!--        <label for="dessert-2">-->
-<!--            <img src="dessert-02.png" />-->
-<!--        </label>-->
-<!--    </div>-->
-<!--    <div class="container">-->
-<!--        <input type="checkbox" id="dessert-3" />-->
-<!--        <label for="dessert-3">-->
-<!--            <img src="dessert-03.png" />-->
-<!--        </label>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
+
 </body>
 </html>
-<!--<headers th:replace="~{fragments/headers.html :: not-logged-headers}"></headers>-->
-<!--<header th: replace="~{fragment/headers.html :: not-logged-in-headers}"></header>-->
-<!--<div class="cards">-->
-<!--    <div id="card1" class="card">-->
-<!--        <img class="card-icon chicken" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Chicken image">-->
-<!--        Meat and chicken-->
-<!--        <div class="checkbox-inner">-->
-<!--            <input id="chicken-checkbox" class="checkbox-input" type="checkbox">-->
-<!--            <label class="checkbox-label" for="chicken-checkbox"></label>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div id="card2" class="card">-->
-<!--        <img class="card-icon pork" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Pork image">-->
-<!--        Fresh fish-->
-<!--        <div class="checkbox-inner">-->
-<!--            <input id="pork-checkbox" class="checkbox-input" type="checkbox">-->
-<!--            <label class="checkbox-label" for="pork-checkbox"></label>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div id="card3" class="card">-->
-<!--        <img class="card-icon beef" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Beef image">-->
-<!--        Bakery-->
-<!--        <div class="checkbox-inner">-->
-<!--            <input id="beef-checkbox" class="checkbox-input" type="checkbox">-->
-<!--            <label class="checkbox-label" for="beef-checkbox"></label>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div id="card4" class="card">-->
-<!--        <img class="card-icon fish" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Fish image">-->
-<!--        Diary-->
-<!--        <div class="checkbox-inner">-->
-<!--            <input id="fish-checkbox" class="checkbox-input" type="checkbox">-->
-<!--            <label class="checkbox-label" for="fish-checkbox"></label>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div id="card5" class="card">-->
-<!--        <img class="card-icon bacon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Bacon image">-->
-<!--        Bakaley-->
-<!--        <div class="checkbox-inner">-->
-<!--            <input id="bacon-checkbox" class="checkbox-input" type="checkbox">-->
-<!--            <label class="checkbox-label" for="bacon-checkbox"></label>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div id="card6" class="card">-->
-<!--        <img class="card-icon no-meat" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="No meat image">-->
-<!--        For children-->
-<!--        <div class="checkbox-inner">-->
-<!--            <input id="no-meat-checkbox" class="checkbox-input" type="checkbox">-->
-<!--            <label class="checkbox-label" for="no-meat-checkbox"></label>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
-<!--</body>-->
-<!--</html>-->
 
 
 

@@ -9,6 +9,9 @@
                 <th>Store</th>
             </tr>
             <tr th:each="product : ${products}">
+                <td>
+                    <img th:src="${product.pictureUrl}" alt="Image Description">
+                </td>
                 <td th:text="${product.productName}">Name</td>
                 <td th:text="${product.productCategory}">Category</td>
                 <td th:text="${product.productPrice}">Price</td>
