@@ -1,0 +1,22 @@
+
+<div th:fragment="product-list">
+    <div class="scrollable-box">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Store</th>
+            </tr>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.productName}">Name</td>
+                <td th:text="${product.productCategory}">Category</td>
+                <td th:text="${product.productPrice}">Price</td>
+                <td th:text="${product.store}">Store</td>
+                <td>
+                    <i class="bi bi-heart heart-icon" th:attr="data-product-id=${product.productID}" onclick="toggleFavorite(this)"></i>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
