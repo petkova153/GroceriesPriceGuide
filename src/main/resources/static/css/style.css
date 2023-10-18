@@ -86,9 +86,19 @@
 /* Apply styles to the scrollable box */
 .scrollable-box {
     height: 200px;
+    width: 800px;
     overflow-y: auto !important;
     border: 1px solid #ccc;
     padding: 10px;
+}
+
+.heart-icon {
+    cursor: pointer; /* Change cursor to a hand pointer on hover */
+}
+
+.far.fa-heart::before {
+    content: "\f08a"; /* Unicode code for an empty heart outline in Font Awesome */
+    font-size: 20px; /* Adjust the size to your preference */
 }
 /*.cards {*/
 /*    display: flex;*/

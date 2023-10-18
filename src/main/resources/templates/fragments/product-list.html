@@ -1,3 +1,4 @@
+
 <div th:fragment="product-list">
     <div class="scrollable-box">
         <table>
@@ -12,6 +13,9 @@
                 <td th:text="${product.productCategory}">Category</td>
                 <td th:text="${product.productPrice}">Price</td>
                 <td th:text="${product.store}">Store</td>
+                <td>
+                    <i class="bi bi-heart heart-icon" th:attr="data-product-id=${product.productID}" onclick="toggleFavorite(this)"></i>
+                </td>
             </tr>
         </table>
     </div>
