@@ -31,7 +31,7 @@ public class ProductController {
         model.addAttribute("products", products);
         return "products"; // Thymeleaf view name
     }
-    
+
     ////Searching and Filtering good stuff////
 
     @GetMapping("/search")
