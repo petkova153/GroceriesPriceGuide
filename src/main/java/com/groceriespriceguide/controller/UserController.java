@@ -34,6 +34,7 @@ public class UserController {
         return "register";
     }
 
+
     @PostMapping("/register")
     public String handleUserRegistration(UserEntity userEntity) {
         try {
