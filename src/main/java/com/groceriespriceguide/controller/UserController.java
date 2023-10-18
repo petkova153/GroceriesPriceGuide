@@ -24,10 +24,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/login")
-    public String displayLoginPage() {
-        return "login"; //logIn is the name of the file
-    }
 
     @GetMapping("/register")
     public String displayRegistrationPage() {
@@ -44,6 +40,11 @@ public class UserController {
             return "redirect:/register?status=REGISTRATION_FAILED&error="
                     + exception.getMessage();
         }
+    }
+
+    @GetMapping("/login")
+    public String displayLoginPage() {
+        return "login"; //logIn is the name of the file
     }
 
     @PostMapping("/login")
@@ -63,6 +64,7 @@ public class UserController {
             return "redirect:/login?status=LOGIN_FAILED&error=" + exception.getMessage();
         }
     }
+
     @GetMapping("/logout")
     public String handleLogout(
             @CookieValue(value = "loggedInUserId", defaultValue = "")
