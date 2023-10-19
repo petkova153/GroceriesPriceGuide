@@ -1,5 +1,6 @@
 
 <div th:fragment="product-list">
+    <div data-user-id="${loggedInUserId}"></div>
     <div class="scrollable-box">
         <table>
             <tr>
@@ -22,39 +23,93 @@
             </tr>
         </table>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        function getCookieValue(cookieName) {
+            const name = cookieName + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookieArray = decodedCookie.split(';');
+
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+
+            return null;
+        }
+
         function toggleFavorite(heartIcon) {
             var productId = heartIcon.getAttribute("data-product-id");
+            var userId = getCookieValue("loggedInUserId");
+            console.log("This is a debug message");
+            console.log(userId);
+            isProductInFavorites(productId, userId)
+                .then(function (inFavorites) {
+                    if (inFavorites) {
+                        removeFromFavorites(productId, userId);
+                        heartIcon.classList.remove("filled-heart");
+                    } else {
+                        addToFavorites(productId, userId);
+                        heartIcon.classList.add("filled-heart");
+                    }
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        }
 
-            // Check if the product is already in favorites
-            if (isProductInFavorites(productId)) {
-                // Remove product from favorites
-                removeFromFavorites(productId);
-                heartIcon.classList.remove("filled-heart");
+
+
+        // Check if the product is in favorites
+        function isProductInFavorites(productId, userId) {
+            return new Promise(function (resolve, reject) {
+                getFavoriteProducts(userId)
+                    .then(function (userFavorites) {
+                        resolve(userFavorites.includes(productId));
+                    })
+                    .catch(function (error) {
+                        reject(error);
+                    });
+            });
+        }
+
+        // Retrieve favorite products for a user
+        function getFavoriteProducts(userId) {
+            return new Promise(function (resolve, reject) {
+                $.get(`/api/favorites/user/${userId}`, function (data) {
+                    resolve(data);
+                }).fail(function (error) {
+                    reject(error);
+                });
+            });
+        }
+        // Add a product to favorites
+        function addToFavorites(productId) {
+            const loggedInUserId = getCookieValue("loggedInUserId");
+
+            if (loggedInUserId) {
+                $.post(`/api/favorites/add?productId=${productId}&userId=${loggedInUserId}`, function (response) {
+                    // Handle the response from the server
+                    console.log(response);
+                });
             } else {
-                // Add product to favorites
-                addToFavorites(productId);
-                heartIcon.classList.add("filled-heart");
+                console.log("Logged-in user ID is not available.");
             }
         }
-
-
-        function isProductInFavorites(productId) {
-            const userFavorites = getUserFavoriteProducts();
-            return userFavorites.includes(productId);
-        }
-
-        function addToFavorites(productId) {
-            // Make an AJAX request to your Spring Boot backend to add the product to the user's favorites.
-        }
-
-        function removeFromFavorites(productId) {
-            // Make an AJAX request to your Spring Boot backend to remove the product from the user's favorites.
-        }
-        function getUserFavoriteProducts() {
-            // You can fetch the user's favorite products from the server or some client-side storage
-            // For simplicity, let's assume it's an array of product IDs
-            return [1, 3, 5]; // Example list of favorite product IDs
+        function removeFromFavorites(productId, userId) {
+            $.ajax({
+                url: `/api/favorites/remove?productId=${productId}&userId=${userId}`,
+                type: 'DELETE',
+                success: function (response) {
+                    // Handle the response from the server
+                    console.log(response);
+                }
+            });
         }
     </script>
 </div>

@@ -17,43 +17,33 @@
 <header th:replace="~{fragments/headers.html :: topSection}"></header>
 <div class="filter-container">
     <form th:action="@{/search}" method="post" class="filter-group">
-        <div class="filter-group">
-            <label>Select Stores:</label>
-            <button type="button" th:onclick="toggleFilter('rimi')">Rimi</button>
-            <button type="button" th:onclick="toggleFilter('assorti')">Assorti</button>
-            <button type="button" th:onclick="toggleFilter('barbora')">Barbora</button>
-
-            <label>Select Categories:</label>
-            <button type="button" th:onclick="toggleFilter('category1')"> Fruits and veggies
-            </button>
-            <button type="button" th:onclick="toggleFilter('category2')">
-                 Dairy and eggs
-            </button>
-            <button type="button" th:onclick="toggleFilter('category2')">
-                 Bakery
-            </button>
-            <button type="button" th:onclick="toggleFilter('category2')">
-                 Meat,fish, and ready meals
-            </button>
-            <button type="button" th:onclick="toggleFilter('category2')">
-                Pantry staples
-            </button>
-            <input type="text" name="query" placeholder="Search by product name">
-            <button type="submit">Filter</button>
+        <label>Select Stores:</label>
+        <div th:each="store : ${availableStores}">
+            <input type="checkbox" name="selectedStores" th:value="${store}" /> <label th:text="${store}"></label>
         </div>
+
+        <label>Select Categories:</label>
+        <div th:each="category : ${availableCategories}">
+            <input type="checkbox" name="selectedCategories" th:value="${category}" /> <label th:text="${category}"></label>
+        </div>
+        <input type="text" name="query" placeholder="Search by product name">
+        <button type="submit">Filter</button>
     </form>
 </div>
+
 <div id="main-panel">
     <h2>All Products</h2>
     <div th:include="~{fragments/product-list :: product-list}"></div>
 </div>
 
 <script>
+
     let selectedStores = [];
     let selectedCategories = [];
 
     function toggleFilter(value) {
         if (value.startsWith('productStore')) {
+            // Toggle the store filter
             if (selectedStores.includes(value)) {
                 selectedStores = selectedStores.filter(item => item !== value);
             } else {
@@ -62,6 +52,7 @@
                 }
             }
         } else if (value.startsWith('productCategory')) {
+            // Toggle the category filter
             if (selectedCategories.includes(value)) {
                 selectedCategories = selectedCategories.filter(item => item !== value);
             } else {
@@ -70,7 +61,29 @@
                 }
             }
         }
+
+        // Call a function to apply filters
+        applyFilters();
     }
+
+    // Function to apply filters
+    function applyFilters() {
+        // Get all product rows
+        const productRows = document.querySelectorAll('[data-store][data-product_category]');
+
+        productRows.forEach(row => {
+            const store = row.getAttribute('data-store');
+            const category = row.getAttribute('data-product_category');
+            const isVisible = (
+                (selectedStores.length === 0 || selectedStores.includes('productStore' + store)) &&
+                (selectedCategories.length === 0 || selectedCategories.includes('productCategory' + category))
+            );
+
+            // Toggle visibility of the product row
+            row.style.display = isVisible ? 'table-row' : 'none';
+        });
+    }
+
 
     // This code updates hidden form fields with the selected stores and categories
     document.querySelector('form').addEventListener('submit', function() {
