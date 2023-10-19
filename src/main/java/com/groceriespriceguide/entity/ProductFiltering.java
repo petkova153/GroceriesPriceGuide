@@ -18,14 +18,17 @@ public class ProductFiltering {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("productName")), "%" + keyword.toLowerCase() + "%"));
             }
 
+
             // Filter by stores
             if (stores != null && !stores.isEmpty()) {
                 predicates.add(root.get("store").in(stores));
             }
+
             // Filter by categories
             if (categories != null && !categories.isEmpty()) {
                 predicates.add(root.get("productCategory").in(categories));
             }
+
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }

@@ -47,9 +47,9 @@ public class ProductController {
     }
 
     @PostMapping("/search")
-    public String filterProducts(@RequestParam("selectedStores") List<String> selectedStores,
-                                 @RequestParam("selectedCategories") List<String> selectedCategories,
-                                 @RequestParam("query") String selectedName,
+    public String filterProducts(@RequestParam(value = "selectedStores", required = false) List<String> selectedStores,
+                                 @RequestParam(value = "selectedCategories", required = false) List<String> selectedCategories,
+                                 @RequestParam(value = "query", required = false) String selectedName,
                                  Model model) {
         List<Product> filteredProducts = productService.searchProducts(selectedName,selectedStores, selectedCategories);
         System.out.println(filteredProducts);
