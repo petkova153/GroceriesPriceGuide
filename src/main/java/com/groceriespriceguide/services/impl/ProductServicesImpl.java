@@ -97,4 +97,20 @@ public class ProductServicesImpl implements ProductService {
     }
 
 
+    public List<Product> getSortedProducts(String sortBy) {
+        switch (sortBy) {
+            case "name_asc":
+                return productRepository.findAllByOrderByNameAsc();
+            case "name_desc":
+                return productRepository.findAllByOrderByNameDesc();
+            case "price_asc":
+                return productRepository.findAllByOrderByPriceAsc();
+            case "price_desc":
+                return productRepository.findAllByOrderByPriceDesc();
+            default:
+                // Default to returning all products if sortBy parameter is invalid
+                return productRepository.findAll();
+        }
+    }
+
 }
