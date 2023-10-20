@@ -4,6 +4,7 @@ import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.entity.UserEntity;
 import com.groceriespriceguide.services.FavoriteService;
 import com.groceriespriceguide.services.ProductService;
+import com.groceriespriceguide.services.UserService;
 import com.groceriespriceguide.users.UserLoginRequest;
 import com.groceriespriceguide.services.impl.UserServiceImpl;
 import jakarta.servlet.http.Cookie;
@@ -43,6 +44,7 @@ public class UserController {
     @GetMapping("/register")
     public String displayRegistrationPage(Model model)
     {
+//        model.addAttribute("Error message", ???);
         return "register";
     }
 
@@ -50,7 +52,6 @@ public class UserController {
     @PostMapping("/register")
     public String handleUserRegistration(UserEntity userEntity) {
         try {
-//            if (username exists.) throw new exception
             this.userService.createUser(userEntity);
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {

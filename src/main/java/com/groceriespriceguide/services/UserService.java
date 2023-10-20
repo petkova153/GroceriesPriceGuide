@@ -13,7 +13,6 @@ public interface UserService {
 
     UserEntity verifyUser(String username, String password);
 
-//    List<UserEntity> getAllUsers();
     UserEntity getUserById(long userId);
 
 }
