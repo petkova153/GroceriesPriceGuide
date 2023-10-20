@@ -9,11 +9,9 @@ import java.util.List;
 @Service
 public interface UserService {
 
-    void createUser(UserEntity userEntity);
+    void createUser(UserEntity userEntity) throws Exception;
 
     UserEntity verifyUser(String username, String password);
-
-    List<UserEntity> getAllUsers();
 
     UserEntity getUserById(long userId);
 

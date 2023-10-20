@@ -4,6 +4,7 @@ import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.entity.UserEntity;
 import com.groceriespriceguide.services.FavoriteService;
 import com.groceriespriceguide.services.ProductService;
+import com.groceriespriceguide.services.UserService;
 import com.groceriespriceguide.users.UserLoginRequest;
 import com.groceriespriceguide.services.impl.UserServiceImpl;
 import jakarta.servlet.http.Cookie;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +42,9 @@ public class UserController {
 
 
     @GetMapping("/register")
-    public String displayRegistrationPage() {
+    public String displayRegistrationPage(Model model)
+    {
+//        model.addAttribute("Error message", ???);
         return "register";
     }
 
@@ -48,7 +52,6 @@ public class UserController {
     @PostMapping("/register")
     public String handleUserRegistration(UserEntity userEntity) {
         try {
-//            if (username exists.) throw new exception
             this.userService.createUser(userEntity);
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {
@@ -80,7 +83,6 @@ public class UserController {
             return "redirect:/login?status=LOGIN_FAILED&error=" + exception.getMessage();
         }
     }
-
 
     @GetMapping("/logout")
     public String handleLogout(@CookieValue(value = "loggedInUserId", defaultValue = "")
