@@ -3,21 +3,11 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: url(https://picsum.photos/3000/2000/?image=1015);
+    background: url(https://fastly.picsum.photos/id/292/3852/2556.jpg?hmac=cPYEh0I48Xpek2DPFLxTBhlZnKVhQCJsbprR-Awl9lo);
     background-size: cover;
     background-repeat: no-repeat;
 }
 
-body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 25%;
-    height: 100%;
-    background-color: #03a9f4;
-    opacity: 0.8;
-}
 
 .form {
     position: absolute;
@@ -72,14 +62,14 @@ body::before {
 .form .input-box input[type="submit"] {
     border: none;
     cursor: pointer;
-    background-color: #03a9f4;
+    background-color: #6aad81;
     color: #fff;
     font-weight: bold;
     transition: 0.5s;
 }
 
 .form .input-box input[type="submit"]:hover {
-    background-color: #ff4987;
+    background-color: #6aad6d;
 }
 
 .form a {
