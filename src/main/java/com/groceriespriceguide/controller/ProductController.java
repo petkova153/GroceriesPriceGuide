@@ -56,4 +56,15 @@ public class ProductController {
         model.addAttribute("products", filteredProducts);
         return "search";
     }
+
+    //Sorting
+    @GetMapping("/sort")
+    public String sortProducts(@RequestParam(name = "sortBy", defaultValue = "name_asc") String sortBy, Model model) {
+        List<Product> products = productService.getSortedProducts(sortBy);
+        model.addAttribute("products", products);
+        model.addAttribute("sortBy", sortBy); // Add sortBy to the model to pre-select the dropdown in the view
+        return "products";
+    }
+
+
 }
