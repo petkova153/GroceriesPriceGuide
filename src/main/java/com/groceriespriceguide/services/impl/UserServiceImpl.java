@@ -21,7 +21,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public void createUser(UserEntity userEntity) {
-        try{this.userRepository.save(userEntity);}
+        try{
+            // if username is not taken
+            this.userRepository.save(userEntity);}
+        // else catch exception
         catch(Exception e){
             System.out.println(e.getMessage());
         }
