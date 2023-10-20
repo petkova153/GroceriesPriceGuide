@@ -93,7 +93,8 @@ public class FavoritesController {
             System.out.println(product);
             Favorites favoriteToRemove = favoriteService.findByUserAndProduct(user,product);
             favoriteService.removeFromFavorites(favoriteToRemove);
-            response.setStatus("favorite item successfully removed");
+            response.setStatus("success");
+            response.setMessage("Item removed" + favoriteToRemove);
         } catch (Exception ex) {
             response.setStatus("error");
             response.setMessage(ex.getMessage());

@@ -54,6 +54,7 @@
                     } else {
                         alert('Failed to remove product to favorites. Error: ' + response.message);
                     }
+                    console.log('Response:', response);
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
