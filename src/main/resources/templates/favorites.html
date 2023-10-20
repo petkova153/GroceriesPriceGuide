@@ -1,12 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
-    <title><!DOCTYPE html>
-        <html lang="en">
-        <head>
-        <meta charset="UTF-8">
-        <title>Favorites</title>
+    <title>Favorites</title>
     <!--    <link rel="stylesheet" th:href="@{/style.css}"/>-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!--    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">-->
@@ -16,5 +12,58 @@
 <body>
 <header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
 
+<div class="scrollable-box" id="favorites-table">
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Store</th>
+        </tr>
+        <tr th:each="favorite : ${favorites}">
+            <td>
+                <img th:src="${favorite.product.pictureUrl}" alt="Image Description">
+            </td>
+            <td th:text="${favorite.product.productName}">Name</td>
+            <td th:text="${favorite.product.productCategory}">Category</td>
+            <td th:text="${favorite.product.productPrice}">Price</td>
+            <td th:text="${favorite.product.store}">Store</td>
+            <td>
+                <form>
+                    <button class="removeFromFavoritesButton" th:attr="data-product-id=${favorite.product.productID}">Remove From Favorites</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+    /* Your JavaScript code goes here */
+    $(document).ready(function() {
+        $(document).on('click', '.removeFromFavoritesButton', function() {
+            var productID = $(this).data('product-id');
+            console.log('Product ID:', productID);
+            $.ajax({
+                type: 'POST',
+                url: '/favorites/remove',
+                data: { productID: productID },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('Product removed from favorites!');
+                    } else {
+                        alert('Failed to remove product to favorites. Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Failed to add product to favorites. Please try again later.');
+                    location.reload();
+                }
+
+            });
+        });
+    });
+</script>
 </body>
 </html>

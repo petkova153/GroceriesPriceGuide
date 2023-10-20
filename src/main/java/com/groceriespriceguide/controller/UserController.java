@@ -48,6 +48,7 @@ public class UserController {
     @PostMapping("/register")
     public String handleUserRegistration(UserEntity userEntity) {
         try {
+//            if (username exists.) throw new exception
             this.userService.createUser(userEntity);
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {
@@ -55,7 +56,6 @@ public class UserController {
                     + exception.getMessage();
         }
     }
-
     @GetMapping("/login")
     public String displayLoginPage() {
         return "login"; //logIn is the name of the file
@@ -90,11 +90,8 @@ public class UserController {
         response.addCookie(cookie);
         return "redirect:/login?status=LOGOUT_SUCCESS";
     }
-
-
     @GetMapping("/favorites")
     public String displayFavorites() {
         return "favorites";
     }
-
 }
