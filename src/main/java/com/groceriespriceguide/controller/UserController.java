@@ -23,7 +23,12 @@ public class UserController {
     // checks for validity
     // sends and retrieves service information
     private UserServiceImpl userService;
-    @Autowired
+    @Autowired 
+    //  If you're building an application that will always rely on the Spring ecosystem,
+    //  @Autowired is a suitable choice. Seeking Portability:
+    //  If you're aiming to write code that's not tied to a specific framework or container,
+    //  or you're working with Java EE, then @Inject is the way to go.Aug 21, 2023
+
     ProductService productService;
     @Autowired
     FavoriteService favoriteService;
@@ -67,7 +72,7 @@ public class UserController {
 
             // Create a cookie and save the user ID for the session
             Cookie cookie = new Cookie("loggedInUserId", user.getId().toString());
-            cookie.setMaxAge(20000000);
+            cookie.setMaxAge(172_800); // 48 hours
             response.addCookie(cookie);
 
             return "redirect:/favorites";
