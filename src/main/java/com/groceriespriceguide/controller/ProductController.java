@@ -1,12 +1,8 @@
 package com.groceriespriceguide.controller;
 
 import com.groceriespriceguide.entity.Product;
-import com.groceriespriceguide.entity.ProductFiltering;
-import com.groceriespriceguide.entity.Search;
 import com.groceriespriceguide.repository.ProductRepository;
 import com.groceriespriceguide.services.ProductService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

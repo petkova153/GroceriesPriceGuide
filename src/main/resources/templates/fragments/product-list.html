@@ -2,6 +2,7 @@
     <div class="scrollable-box">
         <table>
             <tr>
+                <th>Picture</th>
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
@@ -12,7 +13,9 @@
                 <td>
                     <img th:src="${product.pictureUrl}" alt="Image Description">
                 </td>
-                <td th:text="${product.productName}">Name</td>
+                <td>
+                    <a th:text="${product.productName}" th:href="${product.productUrl}">Name</a>
+                </td>
                 <td th:text="${product.productCategory}">Category</td>
                 <td th:text="${product.productPrice}">Price</td>
                 <td th:text="${product.store}">Store</td>
