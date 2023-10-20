@@ -22,20 +22,22 @@ public class UserServiceImpl implements UserService {
 
     public void createUser(UserEntity userEntity) {
         try{
+            UserEntity checkIfUsernameExists = userRepository.findByUsername(userEntity.getUsername());
+            // if username is found to be taken
+            if (checkIfUsernameExists != null) throw new RuntimeException("Sorry, the username is taken, try another one");
             // if username is not taken
-            this.userRepository.save(userEntity);}
-        // else catch exception
-        catch(Exception e){
+            this.userRepository.save(userEntity);
+            System.out.println(userEntity);
+
+        } catch(Exception e){
             System.out.println(e.getMessage());
         }
     }
-
     public UserEntity verifyUser(String username, String password) {
         UserEntity user = this.userRepository.findByUsernameAndPassword(username, password);
         System.out.println(user);
         return user;
     }
-
     public List<UserEntity> getAllUsers() {
         return (ArrayList<UserEntity>)
                 this.userRepository.findAll();
