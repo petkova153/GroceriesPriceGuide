@@ -21,7 +21,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public void createUser(UserEntity userEntity) {
-        this.userRepository.save(userEntity);
+        try{this.userRepository.save(userEntity);}
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public UserEntity verifyUser(String username, String password) {

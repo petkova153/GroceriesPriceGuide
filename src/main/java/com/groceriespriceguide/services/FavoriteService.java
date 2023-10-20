@@ -10,8 +10,8 @@ import java.util.List;
 @Service
 public interface FavoriteService {
     List<Favorites> getFavoriteProductsForUser(UserEntity user);
-    List<Favorites> findByUserAndProduct(UserEntity user, Product product);
-    void addToFaves(Long productID, Long userID) throws Exception;
+    Favorites findByUserAndProduct(UserEntity user, Product product);
+    Favorites addToFaves(UserEntity user, Product product) throws Exception;
     void removeFromFavorites(Favorites favoriteToRemove) throws Exception;
     void deleteAllFavorites(UserEntity user);
 }

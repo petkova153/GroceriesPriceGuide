@@ -36,27 +36,26 @@ public class FavoritesServiceImp implements FavoriteService {
     public List<Favorites> getFavoriteProductsForUser(UserEntity user){
         return favoritesRepository.findByUser(user);
     }
-    public List<Favorites> findByUserAndProduct(UserEntity user, Product product){
+    public Favorites findByUserAndProduct(UserEntity user, Product product){
         return favoritesRepository.findByUserAndProduct(user, product);
     }
 
 
-    public void addToFaves(Long productID, Long userID) throws Exception {
-        Product product = productService.findProductById(productID);
-
-        UserEntity user = userService.getUserById(userID);
-
+    public Favorites addToFaves(UserEntity user, Product product) throws Exception {
         if (product != null && user != null) {
-            List<Favorites> existingFavorites = favoritesRepository.findByUserAndProduct(user, product);
-            if (existingFavorites.isEmpty()) {
+            Favorites existingFavorites = favoritesRepository.findByUserAndProduct(user, product);
+            if (existingFavorites == null) {
+                // Product doesn't exist in favorites, so we can create a new entry
                 Favorites favorites = new Favorites();
                 favorites.setProduct(product);
                 favorites.setUser(user);
-                favoritesRepository.save(favorites);
+                return favoritesRepository.save(favorites);
             } else {
                 throw new Exception("Product already exists in Favorites");
             }
-        } else throw new Exception("Couldn't save products to favorites");
+        } else {
+            throw new Exception("Couldn't save products to favorites");
+        }
     }
 
     public void removeFromFavorites(Favorites favoriteToRemove) throws Exception{

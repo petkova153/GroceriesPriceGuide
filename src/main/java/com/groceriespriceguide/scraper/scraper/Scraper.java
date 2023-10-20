@@ -24,8 +24,8 @@ public class Scraper {
             final List<String> urlLinks = new ArrayList<>();
             final List<Product> productCompleteList = new ArrayList<>();
             //urlLinks.add("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15");
-            urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
-            //urlLinks.add("https://www.assorti.lt/katalogas/maistas/darzoves-ir-vaisiai/");
+            //urlLinks.add("https://www.barbora.lt/darzoves-ir-vaisiai");
+            urlLinks.add("https://www.assorti.lt/katalogas/maistas/darzoves-ir-vaisiai/");
             //urlLinks.add("https://lastmile.lt/chain/category/IKI/Darzoves");
 
             for(String url:urlLinks)

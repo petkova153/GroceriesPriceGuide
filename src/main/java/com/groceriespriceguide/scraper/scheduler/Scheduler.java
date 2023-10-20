@@ -22,7 +22,7 @@ public class Scheduler {
     Scraper scraper;
     @Autowired
     ProductService productService;
-    public static final int THOUSAND_SECONDS = 10000;
+    public static final int THOUSAND_SECONDS = 200000;
     @Scheduled(fixedDelay = THOUSAND_SECONDS)
     public void scheduleScraping() {
         List<Product> allProducts = null;
