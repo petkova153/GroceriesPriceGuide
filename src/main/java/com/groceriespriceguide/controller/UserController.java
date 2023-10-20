@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +41,8 @@ public class UserController {
 
 
     @GetMapping("/register")
-    public String displayRegistrationPage() {
+    public String displayRegistrationPage(Model model)
+    {
         return "register";
     }
 
@@ -81,7 +83,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping("/logout")
     public String handleLogout(@CookieValue(value = "loggedInUserId", defaultValue = "")
                                String userId, HttpServletResponse response) {
@@ -89,9 +90,5 @@ public class UserController {
         cookie.setMaxAge(0); // This deletes the cookie
         response.addCookie(cookie);
         return "redirect:/login?status=LOGOUT_SUCCESS";
-    }
-    @GetMapping("/favorites")
-    public String displayFavorites() {
-        return "favorites";
     }
 }
