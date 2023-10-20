@@ -90,8 +90,4 @@ public class UserController {
         response.addCookie(cookie);
         return "redirect:/login?status=LOGOUT_SUCCESS";
     }
-    @GetMapping("/favorites")
-    public String displayFavorites() {
-        return "favorites";
-    }
 }
