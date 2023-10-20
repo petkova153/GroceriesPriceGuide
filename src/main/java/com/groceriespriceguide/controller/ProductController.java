@@ -20,14 +20,19 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String listProducts(Model model) {
+    public String listProducts(Model model, @CookieValue(value = "loggedInUserId", defaultValue = "") String userId) {
         List<String> availableStores = getAvailableStores();
         List<String> availableCategories = getAvailableCategories();
 
 
         model.addAttribute("availableStores", availableStores);
         model.addAttribute("availableCategories", availableCategories);
-
+        if (userId.isEmpty()) {
+            System.out.println(userId);
+            model.addAttribute("userLogged", "not logged");}
+        else {
+            System.out.println(userId);
+            model.addAttribute("userLogged", "logged");}
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
         return "products"; // Thymeleaf view name

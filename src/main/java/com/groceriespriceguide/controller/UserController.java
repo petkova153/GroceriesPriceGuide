@@ -40,7 +40,17 @@ public class UserController {
         this.userService = userService;
     }
 
-
+@GetMapping("")
+public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defaultValue = "") String userId)
+        {
+    if (userId.isEmpty()) {
+        System.out.println(userId);
+        model.addAttribute("userLogged", "not logged");}
+    else {
+        System.out.println(userId);
+        model.addAttribute("userLogged", "logged");}
+    return "index";
+}
     @GetMapping("/register")
     public String displayRegistrationPage(Model model)
     {

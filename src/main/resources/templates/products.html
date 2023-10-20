@@ -12,7 +12,13 @@
 </head>
 <body>
 <div>
+    <div th:if="${userLogged == 'logged'}">
         <header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
+    </div>
+    <div th:unless="${userLogged == 'logged'}">
+        <header th:replace="~{fragments/headers.html :: topSection}"></header>
+    </div>
+
 </div>
 
 <div class="filter-container">
@@ -33,7 +39,67 @@
 
 <div id="main-panel">
     <h2>All Products</h2>
-    <div th:include="~{fragments/product-list.html :: product-list}"></div>
+    <div class="scrollable-box">
+        <table>
+            <tr>
+                <th>Picture</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Store</th>
+
+            </tr>
+            <tr th:each="product : ${products}">
+                <td>
+                    <img th:src="${product.pictureUrl}" alt="Image Description">
+                </td>
+                <td>
+                    <a th:text="${product.productName}" th:href="${product.productUrl}">Name</a>
+                </td>
+                <td th:text="${product.productCategory}">Category</td>
+                <td th:text="${product.productPrice}">Price</td>
+                <td th:text="${product.store}">Store</td>
+                <div th:if="${userLogged == 'logged'}">
+                    <td>
+                        <form>
+                            <button class="addToFavoritesButton" th:attr="data-product-id=${product.productID}">Add to Favorites</button>
+                        </form>
+                    </td>
+                </div>
+            </tr>
+        </table>
+    </div>
+
+    <!-- templates/fragments/favorites.js.html -->
+    <!-- templates/fragments/favorites.js.html -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:inline="javascript">
+        /* Your JavaScript code goes here */
+        $(document).ready(function() {
+            $(document).on('click', '.addToFavoritesButton', function() {
+                var productID = $(this).data('product-id');
+                console.log('Product ID:', productID);
+                $.ajax({
+                    type: 'POST',
+                    url: '/favorites/add',
+                    data: { productID: productID },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('Product added to favorites!');
+                        } else {
+                            alert('Failed to add product to favorites. Error: ' + response.message);
+                        }
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Failed to add product to favorites. Please try again later.');
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
 </div>
 </body>
 </html>

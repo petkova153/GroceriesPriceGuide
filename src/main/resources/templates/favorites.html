@@ -15,6 +15,7 @@
 <div class="scrollable-box" id="favorites-table">
     <table>
         <tr>
+            <th>Picture</th>
             <th>Name</th>
             <th>Category</th>
             <th>Price</th>
@@ -24,7 +25,9 @@
             <td>
                 <img th:src="${favorite.product.pictureUrl}" alt="Image Description">
             </td>
-            <td th:text="${favorite.product.productName}">Name</td>
+            <td>
+                <a th:text="${favorite.product.productName}" th:href="${favorite.product.productUrl}">Name</a>
+            </td>
             <td th:text="${favorite.product.productCategory}">Category</td>
             <td th:text="${favorite.product.productPrice}">Price</td>
             <td th:text="${favorite.product.store}">Store</td>
@@ -55,6 +58,7 @@
                         alert('Failed to remove product to favorites. Error: ' + response.message);
                     }
                     console.log('Response:', response);
+                    location.reload();
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);

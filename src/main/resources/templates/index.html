@@ -10,7 +10,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body>
-<header th:replace="~{fragments/headers.html :: topSection}"></header>
+<div>
+    <div th:if="${userLogged == 'logged'}">
+        <header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
+    </div>
+    <div th:unless="${userLogged == 'logged'}">
+        <header th:replace="~{fragments/headers.html :: topSection}"></header>
+    </div>
+</div>
 <form onsubmit="return handleData()" method="post" action="/static">
 <div class="filter-container">
     <div class="cards">
