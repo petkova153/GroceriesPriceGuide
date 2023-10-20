@@ -25,4 +25,5 @@ public interface ProductService {
     ////
     List<Product> searchProducts(String keyword, List<String> stores, List<String> categories);
 
+    List<Product> getSortedProducts(String sortBy);
 }
