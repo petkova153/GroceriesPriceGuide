@@ -10,7 +10,7 @@ import java.util.List;
 public interface FavoritesRepository extends JpaRepository<Favorites, Long> {
 
     List<Favorites>findByUser(UserEntity user);
-    List<Favorites>findByUserAndProduct(UserEntity user, Product product);
+    Favorites findByUserAndProduct(UserEntity user, Product product);
 
 
 }

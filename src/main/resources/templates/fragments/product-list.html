@@ -1,6 +1,4 @@
-
-<div th:fragment="product-list">
-    <div data-user-id="${loggedInUserId}"></div>
+<div th:fragment="product-list" xmlns:sec="http://www.w3.org/1999/xhtml">
     <div class="scrollable-box">
         <table>
             <tr>
@@ -8,6 +6,7 @@
                 <th>Category</th>
                 <th>Price</th>
                 <th>Store</th>
+                <th>Action</th> <!-- New column for "Add to favorites" -->
             </tr>
             <tr th:each="product : ${products}">
                 <td>
@@ -18,98 +17,41 @@
                 <td th:text="${product.productPrice}">Price</td>
                 <td th:text="${product.store}">Store</td>
                 <td>
-                    <i class="bi bi-heart heart-icon" th:attr="data-product-id=${product.productID}" onclick="toggleFavorite(this)"></i>
+                    <form>
+                        <button class="addToFavoritesButton" th:attr="data-product-id=${product.productID}">Add to Favorites</button>
+                    </form>
                 </td>
             </tr>
         </table>
     </div>
+
+<!-- templates/fragments/favorites.js.html -->
+    <!-- templates/fragments/favorites.js.html -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function getCookieValue(cookieName) {
-            const name = cookieName + "=";
-            const decodedCookie = decodeURIComponent(document.cookie);
-            const cookieArray = decodedCookie.split(';');
-
-            for (let i = 0; i < cookieArray.length; i++) {
-                let cookie = cookieArray[i];
-                while (cookie.charAt(0) === ' ') {
-                    cookie = cookie.substring(1);
-                }
-                if (cookie.indexOf(name) === 0) {
-                    return cookie.substring(name.length, cookie.length);
-                }
-            }
-
-            return null;
-        }
-
-        function toggleFavorite(heartIcon) {
-            var productId = heartIcon.getAttribute("data-product-id");
-            var userId = getCookieValue("loggedInUserId");
-            console.log("This is a debug message");
-            console.log(userId);
-            isProductInFavorites(productId, userId)
-                .then(function (inFavorites) {
-                    if (inFavorites) {
-                        removeFromFavorites(productId, userId);
-                        heartIcon.classList.remove("filled-heart");
-                    } else {
-                        addToFavorites(productId, userId);
-                        heartIcon.classList.add("filled-heart");
+    <script th:inline="javascript">
+        /* Your JavaScript code goes here */
+        $(document).ready(function() {
+            $(document).on('click', '.addToFavoritesButton', function() {
+                var productID = $(this).data('product-id');
+                console.log('Product ID:', productID);
+                $.ajax({
+                    type: 'POST',
+                    url: '/favorites/add',
+                    data: { productID: productID },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('Product added to favorites!');
+                        } else {
+                            alert('Failed to add product to favorites. Error: ' + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Failed to add product to favorites. Please try again later.');
                     }
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        }
-
-
-
-        // Check if the product is in favorites
-        function isProductInFavorites(productId, userId) {
-            return new Promise(function (resolve, reject) {
-                getFavoriteProducts(userId)
-                    .then(function (userFavorites) {
-                        resolve(userFavorites.includes(productId));
-                    })
-                    .catch(function (error) {
-                        reject(error);
-                    });
-            });
-        }
-
-        // Retrieve favorite products for a user
-        function getFavoriteProducts(userId) {
-            return new Promise(function (resolve, reject) {
-                $.get(`/api/favorites/user/${userId}`, function (data) {
-                    resolve(data);
-                }).fail(function (error) {
-                    reject(error);
                 });
             });
-        }
-        // Add a product to favorites
-        function addToFavorites(productId) {
-            const loggedInUserId = getCookieValue("loggedInUserId");
-
-            if (loggedInUserId) {
-                $.post(`/api/favorites/add?productId=${productId}&userId=${loggedInUserId}`, function (response) {
-                    // Handle the response from the server
-                    console.log(response);
-                });
-            } else {
-                console.log("Logged-in user ID is not available.");
-            }
-        }
-        function removeFromFavorites(productId, userId) {
-            $.ajax({
-                url: `/api/favorites/remove?productId=${productId}&userId=${userId}`,
-                type: 'DELETE',
-                success: function (response) {
-                    // Handle the response from the server
-                    console.log(response);
-                }
-            });
-        }
+        });
     </script>
 </div>
+

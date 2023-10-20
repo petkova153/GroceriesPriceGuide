@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title><!DOCTYPE html>
@@ -14,7 +14,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body>
-<header th:replace="~{fragments/headers.html :: topSection}"></header>
+<div>
+        <header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
+</div>
+
 <div class="filter-container">
     <form th:action="@{/search}" method="post" class="filter-group">
         <label>Select Stores:</label>
@@ -35,61 +38,5 @@
     <h2>All Products</h2>
     <div th:include="~{fragments/product-list :: product-list}"></div>
 </div>
-
-<script>
-
-    let selectedStores = [];
-    let selectedCategories = [];
-
-    function toggleFilter(value) {
-        if (value.startsWith('productStore')) {
-            // Toggle the store filter
-            if (selectedStores.includes(value)) {
-                selectedStores = selectedStores.filter(item => item !== value);
-            } else {
-                if (selectedStores.length < 3) {
-                    selectedStores.push(value);
-                }
-            }
-        } else if (value.startsWith('productCategory')) {
-            // Toggle the category filter
-            if (selectedCategories.includes(value)) {
-                selectedCategories = selectedCategories.filter(item => item !== value);
-            } else {
-                if (selectedCategories.length < 5) {
-                    selectedCategories.push(value);
-                }
-            }
-        }
-
-        // Call a function to apply filters
-        applyFilters();
-    }
-
-    // Function to apply filters
-    function applyFilters() {
-        // Get all product rows
-        const productRows = document.querySelectorAll('[data-store][data-product_category]');
-
-        productRows.forEach(row => {
-            const store = row.getAttribute('data-store');
-            const category = row.getAttribute('data-product_category');
-            const isVisible = (
-                (selectedStores.length === 0 || selectedStores.includes('productStore' + store)) &&
-                (selectedCategories.length === 0 || selectedCategories.includes('productCategory' + category))
-            );
-
-            // Toggle visibility of the product row
-            row.style.display = isVisible ? 'table-row' : 'none';
-        });
-    }
-
-
-    // This code updates hidden form fields with the selected stores and categories
-    document.querySelector('form').addEventListener('submit', function() {
-        document.querySelector('input[name="productStore"]').value = selectedStores.join(',');
-        document.querySelector('input[name="productCategory"]').value = selectedCategories.join(',');
-    });
-</script>
 </body>
 </html>
