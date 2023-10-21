@@ -7,6 +7,7 @@ import com.groceriespriceguide.services.ProductService;
 import com.groceriespriceguide.services.UserService;
 import com.groceriespriceguide.users.UserLoginRequest;
 import com.groceriespriceguide.services.impl.UserServiceImpl;
+import jakarta.jws.soap.SOAPBinding;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,19 +53,18 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
     return "index";
 }
     @GetMapping("/register")
-    public String displayRegistrationPage(Model model)
-    {
-//        model.addAttribute("Error message", ???);
+    public String displayRegistrationPage() {
         return "register";
     }
 
-
     @PostMapping("/register")
-    public String handleUserRegistration(UserEntity userEntity) {
+    public String handleUserRegistration(UserEntity userEntity, Model model) {
         try {
             this.userService.createUser(userEntity);
+            model.addAttribute("REGISTRATION COMPLETED", "REGISTRATION COMPLETED");
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {
+            model.addAttribute("REG FAILED, ERROR", "REGISTRATION FAILED, please try again");
             return "redirect:/register?status=REGISTRATION_FAILED&error="
                     + exception.getMessage();
         }

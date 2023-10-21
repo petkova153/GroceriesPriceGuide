@@ -9,7 +9,10 @@
     <link href="/css/register.css" rel="stylesheet"/>
 </head>
 <body>
-<header th:replace="fragments/headers.html::topSection"></header>
+<div>
+        <header th:replace="fragments/headers.html::topSection"></header>
+</div>
+
 <div class="form">
     <form method="post" action="/register" th:object="${registerRequest}">
         <h2>Register</h2>
@@ -34,6 +37,7 @@
         <div class="input-box">
             <input type="submit" name="sign-in" value="Register">
         </div>
+
         <a href="/">Navigate to home</a>
     </form>
 </div>
