@@ -17,6 +17,11 @@
 <body>
 <header th:replace="fragments/headers.html::topSection"></header>
 <title>Please register</title>
+
+<!--<div th:if="${param.query != null}">-->
+<!--    <p th:text="${param.query[0] + ' ' + param.query[1] + ' ' + param.query[2]}" th:unless="${param.query == null}"></p>-->
+<!--</div>-->
+
 <div class="form">
     <form method="post" action="/login" th:object="${loginRequest}">
         <h2>Login</h2>
@@ -31,6 +36,7 @@
         <div class="input-box">
             <input type="submit" name="sign-in" value="Login">
         </div>
+
         <a href="/register">Navigate to register</a>
     </form>
 </div>
