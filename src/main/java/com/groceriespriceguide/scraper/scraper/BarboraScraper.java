@@ -35,7 +35,7 @@ public class BarboraScraper implements ScraperInterface{
         Product product = new Product();
         product.setStore(shop);
         product.setProductName(scraperController.extractElement(productEntity, "img", "alt"));
-            product.setProductUrl(shop + scraperController.extractElement(productEntity, "a", "href"));
+            product.setProductUrl("www." + shop + ".lt" +scraperController.extractElement(productEntity, "a", "href"));
             product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
             product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
         String tempValuePrice = scraperController.extractElWithParser(productEntity, "//span[contains(@class, 'tw-mr-0.5')][contains(@class, 'tw-text-b-price-sm')][contains(@class, 'tw-font-semibold')][contains(@class, 'lg:tw-text-b-price-xl')]", ">","</") +

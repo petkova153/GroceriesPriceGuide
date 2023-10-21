@@ -66,8 +66,12 @@ public class ProductServicesImpl implements ProductService {
 
 
     public Product updateExistingProduct(Product updatedProduct){
+        try {
             return productRepository.save(updatedProduct);
-
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     private String dateFormatter(Timestamp timestamp){

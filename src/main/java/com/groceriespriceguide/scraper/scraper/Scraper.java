@@ -8,36 +8,23 @@ import java.util.*;
 @Component
 public class Scraper {
 
-    final BarboraScraper barboraScraper;
-    final RimiScraper rimiScraper;
-    final IkiScraper ikiScraper;
-    final AssortiScraper assortiScraper;
+
     final ScraperController scraperController;
 
-    public Scraper(final BarboraScraper barboraScraper, final RimiScraper rimiScraper,
-                   final IkiScraper ikiScraper, final AssortiScraper assortiScraper,
+    public Scraper(
                    final ScraperController scraperController) {
-        this.barboraScraper = barboraScraper;
-        this.rimiScraper = rimiScraper;
-        this.ikiScraper = ikiScraper;
-        this.assortiScraper = assortiScraper;
         this.scraperController = scraperController;
     }
 
     @Transactional
-    public List<Product> scrapeProducts() {
+    public List<Product> scrapeProducts(String url, ScraperInterface selectedScraper) {
         try (Playwright playwright = Playwright.create()) {
             BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions();
             launchOptions.setHeadless(true);
             final List<Product> productCompleteList = new ArrayList<>();
-            Map<String, ScraperInterface> scraperMap = new HashMap<>();
-            scraperMap.put("https://www.barbora.lt/darzoves-ir-vaisiai", barboraScraper);
-            scraperMap.put("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15", rimiScraper);
-            scraperMap.put("https://www.assorti.lt/katalogas/maistas/darzoves-ir-vaisiai/", assortiScraper);
+
             try {
-            for (Map.Entry<String, ScraperInterface> entry : scraperMap.entrySet()) {
-                String url = entry.getKey();
-                ScraperInterface selectedScraper = entry.getValue();
+
                 Browser browser = playwright.chromium().launch(launchOptions);
                 Page page = browser.newPage();
                 int timeoutMillis = 60000;
@@ -51,7 +38,7 @@ public class Scraper {
                     productCompleteList.addAll(tempString);
                 }
                 browser.close();
-            }
+
                 if (!productCompleteList.isEmpty()) return productCompleteList;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
