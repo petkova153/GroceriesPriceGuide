@@ -18,10 +18,13 @@ import java.util.Optional;
 @Component
 public class Scheduler {
     final Logger LOGGER = LoggerFactory.getLogger(Scheduler.class);
-    @Autowired
-    Scraper scraper;
-    @Autowired
-    ProductService productService;
+    final Scraper scraper;
+    final ProductService productService;
+
+    public Scheduler(final Scraper scraper, final ProductService productService){
+        this.scraper = scraper;
+        this.productService = productService;
+    }
     public static final int THOUSAND_SECONDS = 200000;
     @Scheduled(fixedDelay = THOUSAND_SECONDS)
     public void scheduleScraping() {

@@ -3,17 +3,18 @@ package com.groceriespriceguide.scraper.scraper;
 import com.groceriespriceguide.entity.Product;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 @Component
-public class RimiScraper {
-    @Autowired
-    ScraperController scraperController;
+public class RimiScraper implements ScraperInterface{
+    final ScraperController scraperController;
+    public RimiScraper(final ScraperController scraperController){
+        this.scraperController = scraperController;
+    }
     Scraper scraper;
-    List<Product> parseRimi(Page doc) {
+    public List<Product> parse(Page doc) {
         List<Product> productList = new ArrayList<>();
         final String url = doc.url();
         //rimi

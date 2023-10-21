@@ -3,16 +3,17 @@ package com.groceriespriceguide.scraper.scraper;
 import com.groceriespriceguide.entity.Product;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 @Component
-public class BarboraScraper {
-    @Autowired
-    ScraperController scraperController;
-    List<Product> parseBarbora(Page doc) {
+public class BarboraScraper implements ScraperInterface{
+    final ScraperController scraperController;
+    public BarboraScraper(final ScraperController scraperController){
+        this.scraperController = scraperController;
+    }
+    public List<Product> parse (Page doc) {
         List<Product> productList = new ArrayList<>();
         final String url = doc.url();
         //barbora
