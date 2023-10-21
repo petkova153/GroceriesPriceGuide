@@ -1,8 +1,8 @@
 package com.groceriespriceguide.scraper.scheduler;
 
 import com.groceriespriceguide.entity.Product;
+import com.groceriespriceguide.scraper.scraper.*;
 import com.groceriespriceguide.services.ProductService;
-import com.groceriespriceguide.scraper.scraper.Scraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -10,56 +10,87 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class Scheduler {
     final Logger LOGGER = LoggerFactory.getLogger(Scheduler.class);
-    @Autowired
-    Scraper scraper;
-    @Autowired
-    ProductService productService;
-    public static final int THOUSAND_SECONDS = 200000;
+    final Scraper scraper;
+    final ProductService productService;
+    final BarboraScraper barboraScraper;
+    final RimiScraper rimiScraper;
+    final IkiScraper ikiScraper;
+    final AssortiScraper assortiScraper;
+
+    public Scheduler(final Scraper scraper, final ProductService productService,final BarboraScraper barboraScraper, final RimiScraper rimiScraper,
+                     final IkiScraper ikiScraper, final AssortiScraper assortiScraper){
+        this.barboraScraper = barboraScraper;
+        this.rimiScraper = rimiScraper;
+        this.ikiScraper = ikiScraper;
+        this.assortiScraper = assortiScraper;
+        this.scraper = scraper;
+        this.productService = productService;
+    }
+    public static final int THOUSAND_SECONDS = 20000000;
     @Scheduled(fixedDelay = THOUSAND_SECONDS)
     public void scheduleScraping() {
         List<Product> allProducts = null;
         try {
-            allProducts = scraper.scrapeProducts();
-        } catch (final Exception e) {
-            LOGGER.error("error occurred while scraping data", e);
+            Map<String, ScraperInterface> scraperMap = new HashMap<>();
+            scraperMap.put("https://www.barbora.lt/darzoves-ir-vaisiai", barboraScraper);
+            scraperMap.put("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15", rimiScraper);
+            scraperMap.put("https://www.assorti.lt/katalogas/maistas/darzoves-ir-vaisiai/", assortiScraper);
+            for (Map.Entry<String, ScraperInterface> entry : scraperMap.entrySet()) {
+                String url = entry.getKey();
+                ScraperInterface selectedScraper = entry.getValue();
+                allProducts = scraper.scrapeProducts(url, selectedScraper);
+                updateDatabase(allProducts);
+            }
+            }catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-    if (allProducts  !=  null && !allProducts.isEmpty()) {
-        List<Product> productsToUpdate = new ArrayList<>();
-        List<Product> productsToAdd = new ArrayList<>();
-        for (Product product : allProducts) {
-            if (product != null) {
-                String url = product.getProductUrl();
-                Product existingProduct = productService.getProductByURL(url);
-                if (existingProduct != null) {
-                    // A product with the same URL already exists, update its price and lastUpdatedAt
-                    existingProduct.setProductPrice(product.getProductPrice());
-                    existingProduct.setLastUpdated(new Timestamp(System.currentTimeMillis()));
-                    productsToUpdate.add(existingProduct);
-                } else {
-                    // The product does not exist, persist it
-                    Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-                    product.setLastUpdated(currentTimestamp);
-                    product.setCreatedAT(currentTimestamp);
-                    productsToAdd.add(product);
+    }
+    public void updateDatabase(List<Product> allProducts) {
+        try {
+            if (allProducts != null && !allProducts.isEmpty()) {
+                List<Product> productsToUpdate = new ArrayList<>();
+                List<Product> productsToAdd = new ArrayList<>();
+
+                for (Product product : allProducts) {
+                    if (product != null) {
+                        String url = product.getProductUrl();
+                        Product existingProduct = productService.getProductByURL(url);
+
+                        if (existingProduct != null) {
+                            // A product with the same URL already exists, update its price and lastUpdatedAt
+                            existingProduct.setProductPrice(product.getProductPrice());
+                            existingProduct.setLastUpdated(new Timestamp(System.currentTimeMillis()));
+                            existingProduct.setProductUrl(product.getProductUrl());
+                            productsToUpdate.add(existingProduct);
+                        } else {
+                            // The product does not exist, persist it
+                            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+                            product.setLastUpdated(currentTimestamp);
+                            product.setCreatedAT(currentTimestamp);
+                            productsToAdd.add(product);
+                        }
+                    }
+                }
+
+                // Update existing products in a single batch
+                if (!productsToUpdate.isEmpty()) {
+                    for (Product existingProduct : productsToUpdate){
+                    productService.updateExistingProduct(existingProduct);
+                    }
+                }
+
+                // Persist new products in a single batch
+                if (!productsToAdd.isEmpty()) {
+                    productService.persistProduct(productsToAdd);
                 }
             }
+        } catch (final Exception e) {
+            LOGGER.error("Error occurred while updating the database", e);
         }
-        // Update existing products one by one
-        for (Product productToUpdate : productsToUpdate) {
-            productService.updateExistingProduct(productToUpdate);
-
-        }
-
-        // Remove updated products from the original list
-       if (productsToAdd != null) productService.persistProduct(productsToAdd);
     }
-}
 }

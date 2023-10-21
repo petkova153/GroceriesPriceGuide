@@ -3,16 +3,17 @@ package com.groceriespriceguide.scraper.scraper;
 import com.groceriespriceguide.entity.Product;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 @Component
-public class IkiScraper {
-    @Autowired
-    ScraperController scraperController;
-    List<Product> parseIKI(Page doc) {
+public class IkiScraper implements ScraperInterface{
+    final ScraperController scraperController;
+    public IkiScraper(final ScraperController scraperController){
+        this.scraperController = scraperController;
+    }
+    public List<Product> parse(Page doc) {
         List<Product> productList = new ArrayList<>();
         final String url = doc.url();
         String shop = url.substring(url.indexOf("www.")+4,url.indexOf(".lt"));
