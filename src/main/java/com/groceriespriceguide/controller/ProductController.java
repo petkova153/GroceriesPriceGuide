@@ -20,23 +20,38 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String listProducts(Model model, @CookieValue(value = "loggedInUserId", defaultValue = "") String userId) {
+    public String listAndFilterProducts(
+            @RequestParam(value = "selectedStores", required = false) List<String> selectedStores,
+            @RequestParam(value = "selectedCategories", required = false) List<String> selectedCategories,
+            @RequestParam(value = "query", required = false) String selectedName,
+            Model model,
+            @CookieValue(value = "loggedInUserId", defaultValue = "") String userId
+    ) {
         List<String> availableStores = getAvailableStores();
         List<String> availableCategories = getAvailableCategories();
-
-
         model.addAttribute("availableStores", availableStores);
         model.addAttribute("availableCategories", availableCategories);
+
         if (userId.isEmpty()) {
-            System.out.println(userId);
-            model.addAttribute("userLogged", "not logged");}
-        else {
-            System.out.println(userId);
-            model.addAttribute("userLogged", "logged");}
-        List<Product> products = productRepository.findAll();
+            model.addAttribute("userLogged", "not logged");
+        } else {
+            model.addAttribute("userLogged", "logged");
+        }
+
+        List<Product> products;
+
+        if (selectedStores != null || selectedCategories != null || selectedName != null) {
+            // Filter products based on user input
+            products = productService.searchProducts(selectedName, selectedStores, selectedCategories);
+        } else {
+            // List all products
+            products = productRepository.findAll();
+        }
+
         model.addAttribute("products", products);
         return "products"; // Thymeleaf view name
     }
+
 
     ////Searching and Filtering good stuff////
     public static List<String> getAvailableStores() {
@@ -45,17 +60,6 @@ public class ProductController {
 
     public static List<String> getAvailableCategories() {
         return Arrays.asList("Fruits and Vegetables", "Dairy and eggs", "Bakery","Meat,fish, and ready meals", "Pantry staples");
-    }
-
-    @PostMapping("/search")
-    public String filterProducts(@RequestParam(value = "selectedStores", required = false) List<String> selectedStores,
-                                 @RequestParam(value = "selectedCategories", required = false) List<String> selectedCategories,
-                                 @RequestParam(value = "query", required = false) String selectedName,
-                                 Model model) {
-        List<Product> filteredProducts = productService.searchProducts(selectedName,selectedStores, selectedCategories);
-        System.out.println(filteredProducts);
-        model.addAttribute("products", filteredProducts);
-        return "search";
     }
 
     //Sorting

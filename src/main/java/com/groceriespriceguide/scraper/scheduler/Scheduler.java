@@ -3,7 +3,6 @@ package com.groceriespriceguide.scraper.scheduler;
 import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.scraper.scraper.*;
 import com.groceriespriceguide.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
@@ -34,12 +33,25 @@ public class Scheduler {
     public static final int THOUSAND_SECONDS = 20000000;
     @Scheduled(fixedDelay = THOUSAND_SECONDS)
     public void scheduleScraping() {
-        List<Product> allProducts = null;
+        List<Product> allProducts;
         try {
             Map<String, ScraperInterface> scraperMap = new HashMap<>();
             scraperMap.put("https://www.barbora.lt/darzoves-ir-vaisiai", barboraScraper);
+            scraperMap.put("https://www.barbora.lt/pieno-gaminiai-ir-kiausiniai", barboraScraper);
+            scraperMap.put("https://www.barbora.lt/duonos-gaminiai-ir-konditerija", barboraScraper);
+            scraperMap.put("https://www.barbora.lt/mesa-zuvis-ir-kulinarija", barboraScraper);
+            scraperMap.put("https://www.barbora.lt/bakaleja", barboraScraper);
             scraperMap.put("https://www.rimi.lt/e-parduotuve/lt/produktai/vaisiai-darzoves-ir-geles/c/SH-15", rimiScraper);
+            scraperMap.put("https://www.rimi.lt/e-parduotuve/lt/produktai/pieno-produktai-kiausiniai-ir-suris/c/SH-11", rimiScraper);
+            scraperMap.put("https://www.rimi.lt/e-parduotuve/lt/produktai/duonos-gaminiai-ir-konditerija/c/SH-3", rimiScraper);
+            scraperMap.put("https://www.rimi.lt/e-parduotuve/lt/produktai/mesa-zuvys-ir-kulinarija/c/SH-9", rimiScraper);
+            scraperMap.put("https://www.rimi.lt/e-parduotuve/lt/produktai/bakaleja/c/SH-2", rimiScraper);
             scraperMap.put("https://www.assorti.lt/katalogas/maistas/darzoves-ir-vaisiai/", assortiScraper);
+            scraperMap.put("https://www.assorti.lt/katalogas/maistas/pieno-gaminiai-ir-kiausiniai/", assortiScraper);
+            scraperMap.put("https://www.assorti.lt/katalogas/maistas/duonos-gaminiai-ir-konditerija-2/", assortiScraper);
+            scraperMap.put("https://www.assorti.lt/katalogas/maistas/sviezia-mesa-ir-paukstiena/", assortiScraper);
+            scraperMap.put("https://www.assorti.lt/katalogas/maistas/zuvis-ir-zuvies-gaminiai/", assortiScraper);
+            scraperMap.put("https://www.assorti.lt/katalogas/maistas/bakaleja/", assortiScraper);
             for (Map.Entry<String, ScraperInterface> entry : scraperMap.entrySet()) {
                 String url = entry.getKey();
                 ScraperInterface selectedScraper = entry.getValue();
@@ -47,7 +59,6 @@ public class Scheduler {
                 updateDatabase(allProducts);
             }
             }catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
     public void updateDatabase(List<Product> allProducts) {
@@ -89,6 +100,7 @@ public class Scheduler {
                     productService.persistProduct(productsToAdd);
                 }
             }
+            System.out.println("done");
         } catch (final Exception e) {
             LOGGER.error("Error occurred while updating the database", e);
         }

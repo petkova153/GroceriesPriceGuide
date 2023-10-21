@@ -1,6 +1,4 @@
 package com.groceriespriceguide.scraper.scraper;
-
-import ch.qos.logback.core.joran.conditional.ElseAction;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
 import org.springframework.stereotype.Component;

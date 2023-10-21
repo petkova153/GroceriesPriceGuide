@@ -13,14 +13,19 @@
 <header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
 
 <div class="scrollable-box" id="favorites-table">
-    <table>
-        <tr>
-            <th>Picture</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Store</th>
-        </tr>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Picture</th>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Price</th>
+                <th scope="col">Store</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
         <tr th:each="favorite : ${favorites}">
             <td>
                 <img th:src="${favorite.product.pictureUrl}" alt="Image Description">
@@ -33,7 +38,7 @@
             <td th:text="${favorite.product.store}">Store</td>
             <td>
                 <form>
-                    <button class="removeFromFavoritesButton" th:attr="data-product-id=${favorite.product.productID}">Remove From Favorites</button>
+                    <button class="btn btn-success btn-sm removeFromFavoritesButton" th:attr="data-product-id=${favorite.product.productID}">Remove From Favorites</button>
                 </form>
             </td>
         </tr>
@@ -70,5 +75,6 @@
         });
     });
 </script>
+</div>
 </body>
 </html>

@@ -34,7 +34,7 @@ public class RimiScraper implements ScraperInterface{
         String tempValuePrice = scraperController.extractElWithParser(productEntity, "div.price-tag", "an>", "</") +
                 "." + scraperController.extractElWithParser(productEntity, "sup", "up>", "</");
         if (!tempValuePrice.contains("null")) product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
-        product.setProductUrl("www." + shop + ".lt" + scraperController.extractElement(productEntity, "a.card__url", "href"));
+        product.setProductUrl("https://www." + shop + ".lt" + scraperController.extractElement(productEntity, "a.card__url", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
         return product;

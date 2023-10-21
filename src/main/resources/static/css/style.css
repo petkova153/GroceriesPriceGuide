@@ -85,13 +85,13 @@
 /**/
 
 /* Apply styles to the scrollable box */
-.scrollable-box {
-    height: 1000px;
-    width: 1000px;
-    overflow-y: auto !important;
-    border: 1px solid #ccc;
-    padding: 10px;
-}
+/*.scrollable-box {*/
+/*    height: 1000px;*/
+/*    width: 1000px;*/
+/*    overflow-y: auto !important;*/
+/*    border: 1px solid #ccc;*/
+/*    padding: 10px;*/
+/*}*/
 
 .heart-icon {
     cursor: pointer; /* Change cursor to a hand pointer on hover */
