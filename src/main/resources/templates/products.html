@@ -63,20 +63,20 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
-                            <th scope="col" class="col-md-4">Product</th>
-                            <th scope="col" class="col-md-2">Price</th>
+                            <th scope="col" style="padding: 2px 2px 5px 2px;">Product</th>
+                            <th scope="col" style="padding: 2px 2px 5px 2px;">Price</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="product : ${products}" th:if="${product.store == store}">
-                            <td class="col-md-4">
+                            <td class="col-md-6" style="padding: 2px 2px 5px 2px;">
                                 <div class="product-details">
                                     <img th:src="${product.pictureUrl}" alt="Product Image" class="product-image" style="width: 40px; height: 40px;">
                                     <a th:text="${product.productName}" th:href="${product.productUrl}"></a>
                                     <span th:text="${product.productCategory}"></span>
                                 </div>
                             </td>
-                            <td class="col-md-2">
+                            <td class="col-md-2" style="padding: 2px 2px 2px 2px;">
                                 <span th:text="${product.productPrice}"></span>
                                 <button class="btn btn-success btn-sm addToFavoritesButton col-md-4" th:attr="data-product-id=${product.productID}">
                                     <i class="bi-heart"></i>
