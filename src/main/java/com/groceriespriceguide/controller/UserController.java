@@ -8,16 +8,18 @@ import com.groceriespriceguide.services.UserService;
 import com.groceriespriceguide.users.UserLoginRequest;
 import com.groceriespriceguide.services.impl.UserServiceImpl;
 import jakarta.jws.soap.SOAPBinding;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Controller
 public class UserController {
@@ -58,13 +60,11 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
     }
 
     @PostMapping("/register")
-    public String handleUserRegistration(UserEntity userEntity, Model model) {
+    public String handleUserRegistration(UserEntity userEntity) {
         try {
             this.userService.createUser(userEntity);
-            model.addAttribute("REGISTRATION COMPLETED", "REGISTRATION COMPLETED");
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {
-            model.addAttribute("REG FAILED, ERROR", "REGISTRATION FAILED, please try again");
             return "redirect:/register?status=REGISTRATION_FAILED&error="
                     + exception.getMessage();
         }
@@ -74,9 +74,11 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
         return "login"; //logIn is the name of the file
     }
 
+
+
     @PostMapping("/login")
     public String handleUserLogin(UserLoginRequest userLoginRequest,
-                                  HttpServletResponse response) {
+                                  HttpServletResponse response)  {
         try {
             UserEntity user = this.userService.verifyUser(userLoginRequest.getUsername(),
                     userLoginRequest.getPassword());
