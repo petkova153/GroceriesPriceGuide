@@ -3,11 +3,13 @@ package com.groceriespriceguide.scraper.scheduler;
 import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.scraper.scraper.*;
 import com.groceriespriceguide.services.ProductService;
+import com.microsoft.playwright.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -20,20 +22,22 @@ public class Scheduler {
     final RimiScraper rimiScraper;
     final IkiScraper ikiScraper;
     final AssortiScraper assortiScraper;
+    final ScraperController scraperController;
 
     public Scheduler(final Scraper scraper, final ProductService productService,final BarboraScraper barboraScraper, final RimiScraper rimiScraper,
-                     final IkiScraper ikiScraper, final AssortiScraper assortiScraper){
+                     final IkiScraper ikiScraper, final AssortiScraper assortiScraper, final ScraperController scraperController){
         this.barboraScraper = barboraScraper;
         this.rimiScraper = rimiScraper;
         this.ikiScraper = ikiScraper;
         this.assortiScraper = assortiScraper;
         this.scraper = scraper;
         this.productService = productService;
+        this.scraperController = scraperController;
     }
     public static final int THOUSAND_SECONDS = 20000000;
     @Scheduled(fixedDelay = THOUSAND_SECONDS)
     public void scheduleScraping() {
-        List<Product> allProducts;
+
         try {
             Map<String, ScraperInterface> scraperMap = new HashMap<>();
             scraperMap.put("https://www.barbora.lt/darzoves-ir-vaisiai", barboraScraper);
@@ -55,11 +59,51 @@ public class Scheduler {
             for (Map.Entry<String, ScraperInterface> entry : scraperMap.entrySet()) {
                 String url = entry.getKey();
                 ScraperInterface selectedScraper = entry.getValue();
-                allProducts = scraper.scrapeProducts(url, selectedScraper);
-                updateDatabase(allProducts);
+                try (Playwright playwright = Playwright.create()) {
+                    BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions();
+                    launchOptions.setHeadless(true);
+                    Browser browser = playwright.chromium().launch(launchOptions);
+                    Page page = loadAPage(url,browser);
+                    int pages = scraperController.getPages(page);
+                    loopPages(pages,page,selectedScraper);
+                    browser.close();
+                }
+                catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
             }
             }catch (Exception e) {
         }
+    }
+
+    private void loopPages(int pages, Page page,ScraperInterface selectedScraper){
+        List<Product> allProducts;
+        try {
+            allProducts = scraper.scrapeALink(page, selectedScraper);
+            System.out.println(page.url());
+            updateDatabase(allProducts);
+            for (int y = 2; y <= pages; y++) {
+                List<Product> moreProducts;
+                BrowserContext newContext = page.context().browser().newContext();
+                Page newPage = newContext.newPage();
+                String newPageUrl = page.url() + "?page=" + y;
+                System.out.println("url: " + newPageUrl);
+                newPage.navigate(newPageUrl);
+                moreProducts = scraper.scrapeALink(newPage, selectedScraper);
+                newContext.close();
+                updateDatabase(moreProducts);
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    private Page loadAPage(String url, Browser browser){
+            Page page = browser.newPage();
+            int timeoutMillis = 60000;
+            page.navigate(url, new Page.NavigateOptions().setTimeout(timeoutMillis));
+            page.waitForLoadState();
+            return page;
     }
     public void updateDatabase(List<Product> allProducts) {
         try {
@@ -97,6 +141,7 @@ public class Scheduler {
 
                 // Persist new products in a single batch
                 if (!productsToAdd.isEmpty()) {
+                    System.out.println(productsToAdd);
                     productService.persistProduct(productsToAdd);
                 }
             }

@@ -119,6 +119,12 @@
     margin-top: 2px;
 }
 
+.product-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Optional: Center items horizontally */
+    text-align: center; /* Optional: Center text horizontally */
+}
 
 /*.chicken,*!*/
 /*.fish,*/
