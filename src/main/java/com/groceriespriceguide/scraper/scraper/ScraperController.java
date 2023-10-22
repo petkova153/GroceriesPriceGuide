@@ -52,8 +52,8 @@ public class ScraperController {
         catLT_EN.put("darzoves", "Fruits and Vegetables");
         catLT_EN.put("pieno", "Dairy and eggs");
         catLT_EN.put("duonos", "Bakery");
-        catLT_EN.put("mesa", "Meat, fish, and ready meals");
-        catLT_EN.put("zuvis", "Meat, fish, and ready meals");
+        catLT_EN.put("mesa", "Meat fish and ready meals");
+        catLT_EN.put("zuvis", "Meat fish and ready meals");
         catLT_EN.put("bakaleja", "Pantry staples");
         for (Map.Entry<String,String> category: catLT_EN.entrySet()){
             if (attr.contains(category.getKey())){
