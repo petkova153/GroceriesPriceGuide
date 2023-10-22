@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,20 +102,31 @@ public class ProductServicesImpl implements ProductService {
     }
 
 
-    public List<Product> getSortedProducts(String sortBy) {
+
+
+    public List<Product> getSortedProducts(List<Product> products, String sortBy) {
+        Comparator<Product> productComparator;
         switch (sortBy) {
             case "name_asc":
-                return productRepository.findAllByOrderByNameAsc();
+                productComparator = Comparator.comparing(Product::getProductName);
+                break;
             case "name_desc":
-                return productRepository.findAllByOrderByNameDesc();
+                productComparator = Comparator.comparing(Product::getProductName, Comparator.reverseOrder());
+                break;
             case "price_asc":
-                return productRepository.findAllByOrderByPriceAsc();
+                productComparator = Comparator.comparing(Product::getProductPrice, Comparator.nullsLast(Comparator.naturalOrder()));
+                break;
             case "price_desc":
-                return productRepository.findAllByOrderByPriceDesc();
+                productComparator = Comparator.comparing(Product::getProductPrice, Comparator.nullsLast(Comparator.reverseOrder()));
+                break;
             default:
-                // Default to returning all products if sortBy parameter is invalid
-                return productRepository.findAll();
+                // Default to sorting by product name ascending
+                productComparator = Comparator.comparing(Product::getProductName);
+                break;
         }
+        // Sort the provided list of products using the chosen comparator
+        products.sort(productComparator);
+        return products;
     }
 
 }
