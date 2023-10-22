@@ -82,7 +82,8 @@ public class ProductController {
         System.out.println("selectedName: " + selectedName);
 
         // Filter products based on user input
-        if (selectedCategories != null && !selectedCategories.isEmpty() || selectedStores != null && !selectedStores.isEmpty()) {
+        if (selectedCategories != null && !selectedCategories.isEmpty() || selectedStores != null && !selectedStores.isEmpty()
+                || selectedName != null && !selectedName.isEmpty()) {
             products = productService.searchProducts(selectedName, selectedStores, selectedCategories);
         } else {
             System.out.println("No filtering applied. Returning all products.");

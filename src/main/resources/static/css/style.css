@@ -125,7 +125,11 @@
     align-items: center; /* Optional: Center items horizontally */
     text-align: center; /* Optional: Center text horizontally */
 }
-
+.custom-button {
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    /* Additional styling if necessary */
+}
 
 /*.chicken,*!*/
 /*.fish,*/
