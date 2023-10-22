@@ -123,7 +123,7 @@ public class ProductController {
     }
 
     public static List<String> getAvailableCategories() {
-        return Arrays.asList("Fruits and Vegetables", "Dairy and eggs", "Bakery","Meat,fish, and ready meals", "Pantry staples");
+        return Arrays.asList("Fruits and Vegetables", "Dairy and eggs", "Bakery","Meat, fish, and ready meals", "Pantry staples");
     }
 
     //Sorting

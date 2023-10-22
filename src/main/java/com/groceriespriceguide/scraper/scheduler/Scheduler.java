@@ -120,7 +120,7 @@ public class Scheduler {
                             // A product with the same URL already exists, update its price and lastUpdatedAt
                             existingProduct.setProductPrice(product.getProductPrice());
                             existingProduct.setLastUpdated(new Timestamp(System.currentTimeMillis()));
-                            existingProduct.setProductUrl(product.getProductUrl());
+                            existingProduct.setProductCategory(product.getProductCategory());
                             productsToUpdate.add(existingProduct);
                         } else {
                             // The product does not exist, persist it
