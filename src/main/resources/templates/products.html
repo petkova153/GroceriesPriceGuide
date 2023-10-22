@@ -23,7 +23,7 @@
             <label>Select Stores:</label>
             <div th:each="store : ${availableStores}">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="selectedStores" th:value="${store}" id="store-${store}">
+                    <input class="form-check-input" type="checkbox" name="selectedStores" th:value="${store}" id="store-${store}" th:checked="${selectedStores != null and selectedStores.contains(store)}">
                     <label class="form-check-label" th:for="'store-' + ${store}" th:text="${store}"></label>
                 </div>
             </div>
@@ -33,11 +33,12 @@
             <label>Select Categories:</label>
             <div th:each="category : ${availableCategories}">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="selectedCategories" th:value="${category}" id="category-${category}">
+                    <input class="form-check-input" type="checkbox" name="selectedCategories" th:value="${category}" id="category-${category}" th:checked="${selectedCategories != null and selectedCategories.contains(category)}">
                     <label class="form-check-label" th:for="'category-' + ${category}" th:text="${category}"></label>
                 </div>
             </div>
         </div>
+
 
         <div class="filter-section">
             <label>Search by Name:</label>
@@ -56,6 +57,9 @@
 
         <div class="filter-button-section">
             <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+        </div>
+        <div class="clear-filter-button-section">
+                <button type="submit" class="btn btn-primary btn-sm" name="clearFilters">Clear All Filters</button>
         </div>
     </form>
 </div>
