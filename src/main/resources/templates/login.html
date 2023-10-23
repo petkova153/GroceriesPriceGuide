@@ -1,23 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body>
 <div>
-<header th:replace="fragments/headers.html::topSection-logged-in"></header>
+    <div>
+        <div th:if="${userLogged == 'logged'}">
+            <header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
+        </div>
+        <div th:unless="${userLogged == 'logged'}">
+            <header th:replace="~{fragments/headers.html :: topSection}"></header>
+        </div>
+    </div>
 </div>
 <div>
 <link href="/css/login.css" rel="stylesheet" />
 </div>
 <div>
 <title>Please register</title>
+
 </div>
+
 <div class="form">
+
     <form method="post" action="/login" th:object="${loginRequest}">
+        <div th:if="${failedLog == 'failed'}">
+            <h4>Please try again, your login details did not match</h4>
+        </div>
         <h2>Login</h2>
         <div class="input-box">
             <i class="fa fa-user" aria-hidden="true"></i>
@@ -32,7 +46,9 @@
         </div>
         <a href="/register">Navigate to register</a>
     </form>
+
 </div>
+
 </body>
 </html>
 

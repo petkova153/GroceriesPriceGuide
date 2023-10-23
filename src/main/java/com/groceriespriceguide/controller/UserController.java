@@ -78,12 +78,17 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
 
     @PostMapping("/login")
     public String handleUserLogin(UserLoginRequest userLoginRequest,
-                                  HttpServletResponse response)  {
+                                  HttpServletResponse response,
+                                  Model model)  {
         try {
             UserEntity user = this.userService.verifyUser(userLoginRequest.getUsername(),
                     userLoginRequest.getPassword());
-            if (user == null) throw new Exception
+            if (user == null){
+
+                throw new Exception
                     ("Please try again, your login details did not match");
+            }
+
 
             // Create a cookie and save the user ID for the session
             Cookie cookie = new Cookie("loggedInUserId", user.getId().toString());
@@ -92,6 +97,7 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
 
             return "redirect:/favorites";
         } catch (Exception exception) {
+            model.addAttribute("failedLog", "failed");
             return "redirect:/login?status=LOGIN_FAILED&error=" + exception.getMessage();
         }
     }

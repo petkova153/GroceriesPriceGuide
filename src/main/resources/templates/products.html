@@ -81,7 +81,7 @@
                         <tr th:each="product : ${products}" th:if="${product.store == store}">
                             <td >
                                 <div class="product-details">
-                                    <img th:src="${product.pictureUrl}" th:data-src="${product.pictureUrl}" class="product-image" style="width: 40px; height: 40px;" alt="Lazy Loaded Image">
+                                    <img th:src="${product.pictureUrl}" alt="Product Image" class="product-image" style="width: 40px; height: 40px;">
                                     <a th:text="${product.productName}" th:href="${product.productUrl}"></a>
                                     <span th:text="${product.productCategory}"></span>
                                 </div>
@@ -128,46 +128,5 @@
         });
     });
 </script>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
-<script>
-    // Define a function to handle the intersection of observed elements
-    // Define a function to handle the intersection of observed elements
-    const handleIntersection = (entries, observer) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                const dataSrc = img.getAttribute('data-src');
-
-                if (dataSrc) {
-                    // Set the actual source and remove the data-src attribute
-                    img.setAttribute('src', dataSrc);
-                    img.removeAttribute('data-src');
-
-                    // Unobserve the element to avoid further notifications
-                    observer.unobserve(img);
-                }
-            }
-        });
-    };
-
-    // Create an Intersection Observer with a callback function
-    const observer = new IntersectionObserver(handleIntersection);
-
-    // Query for all elements with the data-src attribute
-    const lazyLoadImages = document.querySelectorAll('img[data-src]');
-
-    // Observe each of these elements and set the data-src attribute from Thymeleaf
-    lazyLoadImages.forEach((img) => {
-        const dataSrc = img.getAttribute('data-src'); // Retrieve the data-src from the attribute
-        if (dataSrc) {
-            img.setAttribute('src', dataSrc); // Set the src attribute immediately if the data-src is present
-            img.removeAttribute('data-src'); // Remove the data-src attribute
-        } else {
-            observer.observe(img); // If data-src is not present, use the Intersection Observer
-        }
-    });
-
-</script>
-
 </body>
 </html>
