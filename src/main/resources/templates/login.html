@@ -23,14 +23,11 @@
 <!--        <link href="/css/error-message">-->
 <!--    </div>-->
 
-    <main class="container">
-        <section>
-            <div th:if="${failed_login}">Login failed</div>
-            </section>
+
 <!--    <div th:if="${failed_login}" class="error-message">-->
 <!--        <p th:text="${failed_login}"></p>-->
 <!--    </div>-->
-    </main>
+
 
 </div>
 
@@ -41,6 +38,11 @@
 </div>
 
     <form method="post" action="/login" th:object="${loginRequest}">
+
+<!--        <div th:if="${failed_login == 'failed_login'}">-->
+<!--            <p th:text="${failed_login}"></p>-->
+<!--                </div>-->
+
         <h2>Login</h2>
         <div class="input-box">
             <i class="fa fa-user" aria-hidden="true"></i>
