@@ -18,54 +18,18 @@
         <header th:replace="~{fragments/headers.html :: topSection}"></header>
     </div>
 </div>
-<form onsubmit="return handleData()" method="post" action="/static">
-<div class="filter-container">
-    <div class="cards">
-        <div id="card1" class="card">
-            <img class="card-icon chicken" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Chicken image">
-            Chicken
-            <div class="checkbox-inner">
-                <input id="chicken-checkbox" class="checkbox-input" type="checkbox">
-                <label class="checkbox-label" for="chicken-checkbox"></label>
-            </div>
+<div class="d-flex justify-content-center align-items-center vh-100" style="background-image: url('https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg'); background-size: cover;">
+    <!-- Larger and centered buttons with custom margin between them -->
+    <div class="text-center">
+        <a href="products" class="btn btn-primary btn-lg btn-spacing">Products</a>
+        <div th:if="${userLogged == 'logged'}">
+            <a href="favorites" class="btn btn-primary btn-lg btn-spacing">Favorites</a>
         </div>
-        <div id="card2" class="card">
-            <img class="card-icon pork" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Pork image">
-            Pork
-            <div class="checkbox-inner">
-                <input id="pork-checkbox" class="checkbox-input" type="checkbox">
-                <label class="checkbox-label" for="pork-checkbox"></label>
-            </div>
-        </div>
-        <div id="card3" class="card">
-            <img class="card-icon beef" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Beef image">
-            Beef
-            <div class="checkbox-inner">
-                <input id="beef-checkbox" class="checkbox-input" type="checkbox">
-                <label class="checkbox-label" for="beef-checkbox"></label>
-            </div>
-        </div>
-        <div id="card4" class="card">
-            <img class="card-icon fish" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Fish image">
-            Fish
-            <div class="checkbox-inner">
-                <input id="fish-checkbox" class="checkbox-input" type="checkbox">
-                <label class="checkbox-label" for="fish-checkbox"></label>
-            </div>
-        </div>
-        <div id="card5" class="card">
-            <img class="card-icon bacon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Bacon image">
-            Bacon
-            <div class="checkbox-inner">
-                <input id="bacon-checkbox" class="checkbox-input" type="checkbox">
-                <label class="checkbox-label" for="bacon-checkbox"></label>
-            </div>
+        <div th:unless="${userLogged == 'logged'}">
+            <a href="login" class="btn btn-primary btn-lg btn-spacing">Log In</a>
         </div>
     </div>
 </div>
-</form>
-</div>
-
 </body>
 </html>
 

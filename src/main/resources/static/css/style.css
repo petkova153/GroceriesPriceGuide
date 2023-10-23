@@ -131,6 +131,17 @@
     /* Additional styling if necessary */
 }
 
+.background-image-container {
+    background-image: url('https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg');
+    background-size: cover; /* Adjust this property as needed */
+    /* Other background properties */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
 /*.chicken,*!*/
 /*.fish,*/
 /*.pork,*/
