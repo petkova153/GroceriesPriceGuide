@@ -1,0 +1,10 @@
+.hero{
+    bacground-color:#85ad6a;
+    bacground-image:url("https://picsum.photos/images#22");
+    background-size: cover;
+    color:white;
+background-blend-mode: multiply;
+    padding-top: 100px;
+    padding-bottom: 100px;
+
+}

@@ -3,36 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Groceries Price Guide</title>
-<!--    <link rel="stylesheet" th:href="@{/style.css}"/>-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<!--    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">-->
-    <link href="/static/style.css" rel="stylesheet" />
+    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
 </head>
 <body>
+<div>
+<link href="/css/style.css" rel="stylesheet" />
+</div>
+<div>
 <header th:replace="~{fragments/headers.html :: topSection}"></header>
-<form onsubmit="return handleData()" method="post" action="/static">
-<div class="filter-container">
+</div>
+
+    <div class="title">
+        Choose groceries category
+</div>
+
+
+    <container>
     <div class="cards">
         <div id="card1" class="card">
-            <img class="card-icon chicken" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Chicken image">
-            Chicken
+            <img class="card-icon chicken" src="/images/vegetables.png">
+            Fruits and Vegetables
             <div class="checkbox-inner">
                 <input id="chicken-checkbox" class="checkbox-input" type="checkbox">
                 <label class="checkbox-label" for="chicken-checkbox"></label>
             </div>
         </div>
         <div id="card2" class="card">
-            <img class="card-icon pork" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Pork image">
-            Pork
+            <img class="card-icon pork" src="/images/milk.png" alt="Pork image">
+            Dairy and eggs
             <div class="checkbox-inner">
                 <input id="pork-checkbox" class="checkbox-input" type="checkbox">
                 <label class="checkbox-label" for="pork-checkbox"></label>
             </div>
         </div>
         <div id="card3" class="card">
-            <img class="card-icon beef" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Beef image">
-            Beef
+            <img class="card-icon beef" src="/images/bakery.jpg	" alt="Beef image">
+            Bakery
             <div class="checkbox-inner">
                 <input id="beef-checkbox" class="checkbox-input" type="checkbox">
                 <label class="checkbox-label" for="beef-checkbox"></label>
@@ -40,25 +49,37 @@
         </div>
         <div id="card4" class="card">
             <img class="card-icon fish" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Fish image">
-            Fish
+            Meat,fish, and ready meals
             <div class="checkbox-inner">
                 <input id="fish-checkbox" class="checkbox-input" type="checkbox">
                 <label class="checkbox-label" for="fish-checkbox"></label>
             </div>
         </div>
         <div id="card5" class="card">
-            <img class="card-icon bacon" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="Bacon image">
-            Bacon
+            <img class="card-icon bacon" src="/images/pantry.jpg" alt="Bacon image">
+Pantry Staples
             <div class="checkbox-inner">
                 <input id="bacon-checkbox" class="checkbox-input" type="checkbox">
                 <label class="checkbox-label" for="bacon-checkbox"></label>
             </div>
         </div>
+<!--        <div id="card6" class="card">-->
+<!--            <img class="card-icon no-meat" src="	https://png.pngtree.com/png-vector/20190627/ourlarge/pngtree-meat-icon-design-png-image_1515839.jpg" alt="No meat image">-->
+<!--            No meat-->
+<!--            <div class="checkbox-inner">-->
+<!--                <input id="no-meat-checkbox" class="checkbox-input" type="checkbox">-->
+<!--                <label class="checkbox-label" for="no-meat-checkbox"></label>-->
+<!--            </div>-->
+        </div>
     </div>
 </div>
+    </container>
 </form>
 </div>
-
+            </div>
+        </div>
+    </form>
+</div>
 </body>
 </html>
 
