@@ -20,10 +20,18 @@
 <div class="container mt-10">
     <form th:action="@{/products}" method="get" class="filter-group">
         <div class="filter-section">
+            <label>Show per Shop:</label>
+            <select id="products-per-shop" name="limit">
+                <option value="50" th:selected="${limit == 50}">50</option>
+                <option value="100" th:selected="${limit == 100}">100</option>
+                <option value="9999" th:selected="${limit == 9999}">All</option>
+            </select>
+        </div>
+        <div class="filter-section">
             <label>Select Stores:</label>
             <div th:each="store : ${availableStores}">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="selectedStores" th:value="${store}" id="store-${store}" th:checked="${selectedStores != null and selectedStores.contains(store)}">
+                    <input class="form-check-input" type="checkbox" name="selectedStores" th:value="${store}" th:checked="${selectedStores != null and selectedStores.contains(store)}">
                     <label class="form-check-label" th:for="'store-' + ${store}" th:text="${store}"></label>
                 </div>
             </div>
@@ -33,7 +41,7 @@
             <label>Select Categories:</label>
             <div th:each="category : ${availableCategories}">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="selectedCategories" th:value="${category}" id="category-${category}" th:checked="${selectedCategories != null and selectedCategories.contains(category)}">
+                    <input class="form-check-input" type="checkbox" name="selectedCategories" th:value="${category}" th:checked="${selectedCategories != null and selectedCategories.contains(category)}">
                     <label class="form-check-label" th:for="'category-' + ${category}" th:text="${category}"></label>
                 </div>
             </div>
@@ -73,20 +81,20 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
-                            <th scope="col" >Product</th>
-                            <th scope="col" >Price</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="product : ${products}" th:if="${product.store == store}">
-                            <td >
+                        <tr th:each="product : ${products}" th:if="${product.store == store}" class="product-row">
+                            <td>
                                 <div class="product-details">
                                     <img th:src="${product.pictureUrl}" alt="Product Image" class="product-image" style="width: 40px; height: 40px;">
                                     <a th:text="${product.productName}" th:href="${product.productUrl}"></a>
                                     <span th:text="${product.productCategory}"></span>
                                 </div>
                             </td>
-                            <td class="col-md-3" >
+                            <td class="col-md-3">
                                 <span th:text="${product.productPrice}"></span>
                                 <button class="btn btn-success btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
                                     <i class="bi-heart"></i>
@@ -100,7 +108,7 @@
         </div>
     </div>
 </div>
-
+</body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:inline="javascript">
     $(document).ready(function() {
@@ -114,19 +122,17 @@
                 success: function(response) {
                     if (response.status === 'success') {
                         alert('Product added to favorites!');
+                        location.reload();
                     } else {
                         alert('Failed to add product to favorites. Error: ' + response.message);
                     }
-                    location.reload();
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
                     alert('Failed to add product to favorites. Please try again later.');
-                    location.reload();
                 }
             });
         });
     });
 </script>
-</body>
 </html>

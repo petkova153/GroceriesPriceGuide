@@ -97,6 +97,7 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
 
             return "redirect:/favorites";
         } catch (Exception exception) {
+            System.out.println("Login failed");
             model.addAttribute("failedLog", "failed");
             return "redirect:/login?status=LOGIN_FAILED&error=" + exception.getMessage();
         }

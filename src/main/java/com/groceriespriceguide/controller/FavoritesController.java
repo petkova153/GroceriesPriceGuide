@@ -71,32 +71,42 @@ public class FavoritesController {
             model.addAttribute("favorites", favorites);
         return "favorites";
     }
-    @PostMapping("/remove")
+    @GetMapping("/remove")
     @ResponseBody
     public ApiResponse removeFromFavorites(@CookieValue(value = "loggedInUserId", defaultValue = "") String userId,
-                                      @RequestParam(value = "productID") Long productID) {
-        System.out.println("product"+productID);
-        System.out.println("user"+userId);
+                                           @RequestParam(value = "productID") Long productID) {
+        System.out.println("product" + productID);
+        System.out.println("user" + userId);
         ApiResponse response = new ApiResponse();
         try {
-
             Long currentUserId = Long.parseLong(userId);
-            if (currentUserId == null){throw new NotFoundException("User not found with ID: " + userId);}
+            if (currentUserId == null) {
+                throw new NotFoundException("User not found with ID: " + userId);
+            }
 
-
-            // Add the product to favorites here
             UserEntity user = userService.getUserById(currentUserId);
             Product product = productService.findProductById(productID);
-            System.out.println(user);
-            System.out.println(product);
-            Favorites favoriteToRemove = favoriteService.findByUserAndProduct(user,product);
-            favoriteService.removeFromFavorites(favoriteToRemove);
-            response.setStatus("success");
-            response.setMessage("Item removed" + favoriteToRemove);
-        } catch (Exception ex) {
+
+            if (user == null || product == null) {
+                throw new NotFoundException("User or product not found.");
+            }
+
+            Favorites favoriteToRemove = favoriteService.findByUserAndProduct(user, product);
+            if (favoriteToRemove != null) {
+                favoriteService.removeFromFavorites(favoriteToRemove);
+                response.setStatus("success");
+            } else {
+                throw new NotFoundException("Favorite not found for user and product.");
+            }
+        } catch (NotFoundException ex) {
             response.setStatus("error");
             response.setMessage(ex.getMessage());
+        } catch (Exception ex) {
+            response.setStatus("error");
+            response.setMessage("Failed to remove item from favorites. Error: " + ex.getMessage());
         }
+        System.out.println(response.getStatus());
         return response;
     }
+
 }

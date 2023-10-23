@@ -29,9 +29,7 @@
 <div class="form">
 
     <form method="post" action="/login" th:object="${loginRequest}">
-        <div th:if="${failedLog == 'failed'}">
-            <h4>Please try again, your login details did not match</h4>
-        </div>
+
         <h2>Login</h2>
         <div class="input-box">
             <i class="fa fa-user" aria-hidden="true"></i>
