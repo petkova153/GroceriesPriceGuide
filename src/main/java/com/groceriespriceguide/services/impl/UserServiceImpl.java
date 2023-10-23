@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
             System.out.println(userEntity);
         }
 
-
     public UserEntity verifyUser(String username, String password) {
         UserEntity user = this.userRepository.findByUsernameAndPassword(username, password);
         System.out.println(user);

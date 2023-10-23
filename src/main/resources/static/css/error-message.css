@@ -1,0 +1,7 @@
+.error-message {
+    background-color: #FF5733; /* Set background color to red or any desired color */
+    color: white; /* Set text color to white */
+    padding: 10px; /* Add padding around the content */
+    border: 1px solid #E23323; /* Add a border */
+    font-weight: bold; /* Make the text bold */
+}
