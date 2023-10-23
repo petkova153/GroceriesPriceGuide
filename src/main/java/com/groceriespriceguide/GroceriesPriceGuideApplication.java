@@ -10,16 +10,16 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EntityScan(basePackages = {"com.groceriespriceguide.entity"})
-@ComponentScan({ "com.groceriespriceguide.scraper.scheduler",
-		"com.groceriespriceguide.scraper.scraper",
-		"com.groceriespriceguide.controller",
-		"com.groceriespriceguide.services.impl"
+@ComponentScan({"com.groceriespriceguide.scraper.scheduler",
+        "com.groceriespriceguide.scraper.scraper",
+        "com.groceriespriceguide.controller",
+        "com.groceriespriceguide.services.impl"
 })
 @EnableJpaRepositories(basePackages = "com.groceriespriceguide.repository")
 public class GroceriesPriceGuideApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		SpringApplication.run(GroceriesPriceGuideApplication.class, args);
-	}
+        SpringApplication.run(GroceriesPriceGuideApplication.class, args);
+    }
 }

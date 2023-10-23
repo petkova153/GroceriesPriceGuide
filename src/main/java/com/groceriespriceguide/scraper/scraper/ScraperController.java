@@ -1,7 +1,6 @@
 package com.groceriespriceguide.scraper.scraper;
-
-import ch.qos.logback.core.joran.conditional.ElseAction;
 import com.microsoft.playwright.ElementHandle;
+import com.microsoft.playwright.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -53,8 +52,8 @@ public class ScraperController {
         catLT_EN.put("darzoves", "Fruits and Vegetables");
         catLT_EN.put("pieno", "Dairy and eggs");
         catLT_EN.put("duonos", "Bakery");
-        catLT_EN.put("mesa", "Meat,fish, and ready meals");
-        catLT_EN.put("zuvis", "Meat,fish, and ready meals");
+        catLT_EN.put("mesa", "Meat fish and ready meals");
+        catLT_EN.put("zuvis", "Meat fish and ready meals");
         catLT_EN.put("bakaleja", "Pantry staples");
         for (Map.Entry<String,String> category: catLT_EN.entrySet()){
             if (attr.contains(category.getKey())){
@@ -81,9 +80,6 @@ public class ScraperController {
         return null;
     }
 
-    String priceSleector(ElementHandle product, String spanEl){
-        return null;
-    }
     String extractNthElement(ElementHandle product, String spanEl, int nthEl) {
         final List<ElementHandle> spans = product.querySelectorAll(spanEl);
         int counter = 0;
@@ -100,6 +96,48 @@ public class ScraperController {
             }
         }
         return null;
+    }
+    public Integer getPages(Page page) {
+        try{
+            int pageURL = 0;
+            ElementHandle categories = null;
+            String url = page.url();
+            if (url.contains("barbora")||url.contains("assorti")){
+                categories = page.querySelector("ul.pagination");
+            }else if(url.contains("rimi")){
+                categories = page.querySelector("ul.pagination__list");
+            }
+            if (categories != null){
+                List<ElementHandle> pages = categories.querySelectorAll("a");
+                pageURL = parsePagination(pages);
+            }
+            return pageURL;
+        }
+        catch (NumberFormatException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Integer parsePagination(List<ElementHandle> pages) {
+        Integer highestPageNumber = null;
+
+        for (ElementHandle page : pages) {
+            String pageNumbers = page.innerText();
+            int pageNumber;
+
+            try {
+                pageNumber = Integer.parseInt(pageNumbers);
+                if (highestPageNumber == null || pageNumber > highestPageNumber) {
+                    highestPageNumber = pageNumber;
+                }
+            } catch (NumberFormatException e) {
+                // Handle the case where parsing to an integer fails (e.g., non-integer text)
+                System.err.println("Skipping non-integer: " + pageNumbers);
+            }
+        }
+        return highestPageNumber;
     }
 
 }

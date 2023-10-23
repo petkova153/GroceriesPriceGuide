@@ -3,17 +3,17 @@ package com.groceriespriceguide.scraper.scraper;
 import com.groceriespriceguide.entity.Product;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 @Component
-public class RimiScraper {
-    @Autowired
-    ScraperController scraperController;
-    Scraper scraper;
-    List<Product> parseRimi(Page doc) {
+public class RimiScraper implements ScraperInterface{
+    final ScraperController scraperController;
+    public RimiScraper(final ScraperController scraperController){
+        this.scraperController = scraperController;
+    }
+    public List<Product> parse(Page doc) {
         List<Product> productList = new ArrayList<>();
         final String url = doc.url();
         //rimi
@@ -34,7 +34,7 @@ public class RimiScraper {
         String tempValuePrice = scraperController.extractElWithParser(productEntity, "div.price-tag", "an>", "</") +
                 "." + scraperController.extractElWithParser(productEntity, "sup", "up>", "</");
         if (!tempValuePrice.contains("null")) product.setProductPrice(Double.parseDouble(tempValuePrice.replace(",",".")));
-        product.setProductUrl(shop + scraperController.extractElement(productEntity, "a.card__url", "href"));
+        product.setProductUrl("https://www." + shop + ".lt" + scraperController.extractElement(productEntity, "a.card__url", "href"));
         product.setPictureUrl(scraperController.extractElement(productEntity, "img", "src"));
         product.setProductCategory(scraperController.categoryTranslator(url.substring(url.indexOf(".lt/") + 3)));
         return product;

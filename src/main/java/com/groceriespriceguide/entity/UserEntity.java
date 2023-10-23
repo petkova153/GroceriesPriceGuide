@@ -18,25 +18,20 @@ import java.util.Set;
 
 public class UserEntity {
 
-    // (id,
-    // name,
-    // city,
-    // email,
-    // last Loge In,
-    // last Updated,
-    // Products? maybe this will be some list? but it should be in product class..
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 
     private Long id;
+    @Column(unique = true) // could not execute statement [Duplicate entry '...' for key 'user_entity
     private String username;
     private String password;
-    private String email;
     private String city;
     private Timestamp lastUpdated;
     private Timestamp createdAt;
     private Timestamp lastLoggedIn;
+    @Column(unique = true) // could not execute statement [Duplicate entry '...' for key 'user_entity
+    private String email;
+
 //    @ManyToMany(mappedBy = "favoredBy")
 //    private Set<Favorites> favorites;
 

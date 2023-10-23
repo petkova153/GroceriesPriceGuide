@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,8 +67,12 @@ public class ProductServicesImpl implements ProductService {
 
 
     public Product updateExistingProduct(Product updatedProduct){
+        try {
             return productRepository.save(updatedProduct);
-
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     private String dateFormatter(Timestamp timestamp){
@@ -96,5 +101,32 @@ public class ProductServicesImpl implements ProductService {
         return productRepository.findAll(spec);
     }
 
+
+
+
+    public List<Product> getSortedProducts(List<Product> products, String sortBy) {
+        Comparator<Product> productComparator;
+        switch (sortBy) {
+            case "name_asc":
+                productComparator = Comparator.comparing(Product::getProductName);
+                break;
+            case "name_desc":
+                productComparator = Comparator.comparing(Product::getProductName, Comparator.reverseOrder());
+                break;
+            case "price_asc":
+                productComparator = Comparator.comparing(Product::getProductPrice, Comparator.nullsLast(Comparator.naturalOrder()));
+                break;
+            case "price_desc":
+                productComparator = Comparator.comparing(Product::getProductPrice, Comparator.nullsLast(Comparator.reverseOrder()));
+                break;
+            default:
+                // Default to sorting by product name ascending
+                productComparator = Comparator.comparing(Product::getProductName);
+                break;
+        }
+        // Sort the provided list of products using the chosen comparator
+        products.sort(productComparator);
+        return products;
+    }
 
 }

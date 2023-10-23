@@ -3,18 +3,19 @@ package com.groceriespriceguide.scraper.scraper;
 import com.groceriespriceguide.entity.Product;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class AssortiScraper {
-    @Autowired
-    ScraperController scraperController;
-    List<Product> parseAssorti(Page page) {
-        List<Product> productList = new ArrayList<>();
+public class AssortiScraper implements ScraperInterface {
+    final ScraperController scraperController;
+    public AssortiScraper(final ScraperController scraperController){
+        this.scraperController = scraperController;
+    }
+    public List<Product> parse(Page page) {
+        List<Product> productsList = new ArrayList<>();
         final String url = page.url();
         //rimi
         String shop = url.substring(url.indexOf("www.")+4,url.indexOf(".lt"));
@@ -22,9 +23,9 @@ public class AssortiScraper {
         for (ElementHandle productEntity : products)
         {
             Product product = parseProductAssorti(productEntity,shop,url);
-            if (product != null) productList.add(product);
+            if (product != null) productsList.add(product);
         }
-        return productList;
+        return productsList;
     }
 
 

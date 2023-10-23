@@ -3,15 +3,16 @@ package com.groceriespriceguide.services.impl;
 import com.groceriespriceguide.entity.UserEntity;
 import com.groceriespriceguide.repository.UserRepository;
 import com.groceriespriceguide.services.UserService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
 
     // Spring, please provide us copies of the dependencies
@@ -21,11 +22,19 @@ public class UserServiceImpl implements UserService {
     }
 
     public void createUser(UserEntity userEntity) {
-        try{this.userRepository.save(userEntity);}
-        catch(Exception e){
-            System.out.println(e.getMessage());
+            UserEntity checkIfUsernameExists = userRepository.findByUsername(userEntity.getUsername());
+            // 1. if username is found to be taken
+            if (checkIfUsernameExists != null)
+                throw new RuntimeException("USERNAME is taken");
+            System.out.println("Sorry, the username is taken, try another one"); // this does not print
+            // 2. if email is found to be taken
+            UserEntity checkIfEmailExists = userRepository.findByEmail(userEntity.getEmail());
+            if (checkIfEmailExists != null) throw new RuntimeException("EMAIL is taken");
+            System.out.println("Sorry, the email is taken, try another email"); // this does not print
+            this.userRepository.save(userEntity);
+            System.out.println(userEntity);
         }
-    }
+
 
     public UserEntity verifyUser(String username, String password) {
         UserEntity user = this.userRepository.findByUsernameAndPassword(username, password);
@@ -39,7 +48,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserEntity getUserById(long userId) {
-        return this.userRepository.findById(userId).orElseThrow();
+        Optional<UserEntity> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new UserNotFoundException("User not found for ID: " + userId);
+        }
     }
 }
 

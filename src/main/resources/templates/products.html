@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Products search</title>
-
-    <!--    <link rel="stylesheet" th:href="@{/style.css}"/>-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!--    <link href="https://www.w3schools.com/lib/w3-colors-food.css" rel="stylesheet">-->
     <link href="/css/style.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
@@ -18,16 +15,15 @@
     <div th:unless="${userLogged == 'logged'}">
         <header th:replace="~{fragments/headers.html :: topSection}"></header>
     </div>
-
 </div>
 
-<div class="container mt-4">
+<div class="container mt-10">
     <form th:action="@{/products}" method="get" class="filter-group">
         <div class="filter-section">
             <label>Select Stores:</label>
             <div th:each="store : ${availableStores}">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="selectedStores" th:value="${store}" id="store-${store}">
+                    <input class="form-check-input" type="checkbox" name="selectedStores" th:value="${store}" id="store-${store}" th:checked="${selectedStores != null and selectedStores.contains(store)}">
                     <label class="form-check-label" th:for="'store-' + ${store}" th:text="${store}"></label>
                 </div>
             </div>
@@ -37,64 +33,76 @@
             <label>Select Categories:</label>
             <div th:each="category : ${availableCategories}">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="selectedCategories" th:value="${category}" id="category-${category}">
+                    <input class="form-check-input" type="checkbox" name="selectedCategories" th:value="${category}" id="category-${category}" th:checked="${selectedCategories != null and selectedCategories.contains(category)}">
                     <label class="form-check-label" th:for="'category-' + ${category}" th:text="${category}"></label>
                 </div>
             </div>
         </div>
+
 
         <div class="filter-section">
             <label>Search by Name:</label>
             <input class="form-control" type="text" name="query" placeholder="Search by product name">
         </div>
 
+        <div class="filter-section">
+            <label>Sort by:</label>
+            <select class="form-select" name="sortBy">
+                <option value="name_asc" th:selected="${sortBy == 'name_asc'}">Name (Ascending)</option>
+                <option value="name_desc" th:selected="${sortBy == 'name_desc'}">Name (Descending)</option>
+                <option value="price_asc" th:selected="${sortBy == 'price_asc'}">Price (Low to High)</option>
+                <option value="price_desc" th:selected="${sortBy == 'price_desc'}">Price (High to Low)</option>
+            </select>
+        </div>
+
         <div class="filter-button-section">
             <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+        </div>
+        <div class="clear-filter-button-section">
+            <button type="submit" class="btn btn-secondary btn-sm" name="clearFilters">Clear All Filters</button>
         </div>
     </form>
 </div>
 
-
-<div id="main-panel">
-    <h2>All Products</h2>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered">
-            <thead>
-            <tr>
-                <th scope="col">Picture</th>
-                <th scope="col">Name</th>
-                <th scope="col">Category</th>
-                <th scope="col">Price</th>
-                <th scope="col">Store</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="product : ${products}">
-                <td><img th:src="${product.pictureUrl}" alt="Product Image" class="product-image"></td>
-                <td><a th:text="${product.productName}" th:href="${product.productUrl}"></a></td>
-                <td th:text="${product.productCategory}"></td>
-                <td th:text="${product.productPrice}"></td>
-                <td th:text="${product.store}"></td>
-                <td th:if="${userLogged == 'logged'}">
-                <td>
-                    <form>
-                        <button class="btn btn-success btn-sm addToFavoritesButton" th:attr="data-product-id=${product.productID}">Add to Favorites</button>
-                    </form>
-                </td>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+<div class="container">
+    <div class="row">
+        <div th:each="store : ${availableStores}" class="col-md-4">
+            <div class="panel">
+                <h2>All Products for [[${store}]]</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col" >Product</th>
+                            <th scope="col" >Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${products}" th:if="${product.store == store}">
+                            <td >
+                                <div class="product-details">
+                                    <img th:src="${product.pictureUrl}" th:data-src="${product.pictureUrl}" class="product-image" style="width: 40px; height: 40px;" alt="Lazy Loaded Image">
+                                    <a th:text="${product.productName}" th:href="${product.productUrl}"></a>
+                                    <span th:text="${product.productCategory}"></span>
+                                </div>
+                            </td>
+                            <td class="col-md-3" >
+                                <span th:text="${product.productPrice}"></span>
+                                <button class="btn btn-success btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
+                                    <i class="bi-heart"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-
-<!-- templates/fragments/favorites.js.html -->
-<!-- templates/fragments/favorites.js.html -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:inline="javascript">
-    /* Your JavaScript code goes here */
     $(document).ready(function() {
         $(document).on('click', '.addToFavoritesButton', function() {
             var productID = $(this).data('product-id');
@@ -120,6 +128,46 @@
         });
     });
 </script>
-</div>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver"></script>
+<script>
+    // Define a function to handle the intersection of observed elements
+    // Define a function to handle the intersection of observed elements
+    const handleIntersection = (entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                const dataSrc = img.getAttribute('data-src');
+
+                if (dataSrc) {
+                    // Set the actual source and remove the data-src attribute
+                    img.setAttribute('src', dataSrc);
+                    img.removeAttribute('data-src');
+
+                    // Unobserve the element to avoid further notifications
+                    observer.unobserve(img);
+                }
+            }
+        });
+    };
+
+    // Create an Intersection Observer with a callback function
+    const observer = new IntersectionObserver(handleIntersection);
+
+    // Query for all elements with the data-src attribute
+    const lazyLoadImages = document.querySelectorAll('img[data-src]');
+
+    // Observe each of these elements and set the data-src attribute from Thymeleaf
+    lazyLoadImages.forEach((img) => {
+        const dataSrc = img.getAttribute('data-src'); // Retrieve the data-src from the attribute
+        if (dataSrc) {
+            img.setAttribute('src', dataSrc); // Set the src attribute immediately if the data-src is present
+            img.removeAttribute('data-src'); // Remove the data-src attribute
+        } else {
+            observer.observe(img); // If data-src is not present, use the Intersection Observer
+        }
+    });
+
+</script>
+
 </body>
 </html>
