@@ -5,12 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface ProductService {
     @Transactional
-    public void persistProduct(List<Product> dataList);
+    void persistProduct(List<Product> dataList);
 
     List<Product> getProductData();
     Product findProductById(Long id)throws Exception;

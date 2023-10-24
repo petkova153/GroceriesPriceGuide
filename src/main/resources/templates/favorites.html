@@ -19,6 +19,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Category</th>
                 <th scope="col">Price</th>
+                <th scope="col">Price change</th>
                 <th scope="col">Store</th>
                 <th scope="col">Action</th>
             </tr>
@@ -33,6 +34,7 @@
                 </td>
                 <td th:text="${favorite.product.productCategory}">Category</td>
                 <td th:text="${favorite.product.productPrice}">Price</td>
+                <td th:text="${favorite.product.priceChange}">Price</td>
                 <td th:text="${favorite.product.store}">Store</td>
                 <td>
                     <form>

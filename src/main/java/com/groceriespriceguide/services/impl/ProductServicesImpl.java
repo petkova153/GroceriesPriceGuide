@@ -5,16 +5,13 @@ import com.groceriespriceguide.entity.ProductFiltering;
 import com.groceriespriceguide.repository.ProductRepository;
 import com.groceriespriceguide.services.ProductService;
 import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServicesImpl implements ProductService {
@@ -43,7 +40,7 @@ public class ProductServicesImpl implements ProductService {
 
     public Product findProductById(Long id) throws Exception{
         for (Product product:productRepository.findAll()){
-            if (product.getProductID().equals(id))
+            if (product.getProductID().equals(id) && productRepository.findByProductID(id).isPresent())
                 return productRepository.findByProductID(id).get();
         }
         throw new Exception("Product cannot be found");
