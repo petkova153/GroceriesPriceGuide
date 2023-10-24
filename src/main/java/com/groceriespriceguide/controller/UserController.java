@@ -75,7 +75,7 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
             this.userService.createUser(userEntity);
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {
-            String errorMessageReg = "The USERNAME or PASSWORD is taken, please try again";
+            String errorMessageReg = exception.getMessage();
             model.addAttribute("failed_registration", errorMessageReg);
             return "redirect:/register?status=REGISTRATION_FAILED&error=" + errorMessageReg;
         }
