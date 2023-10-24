@@ -54,16 +54,7 @@ public class ProductServicesImpl implements ProductService {
         return productRepository.findByProductUrl(productURL);
     }
 
-    public List<Product> searchProductByKeywordInCertainCategoryAndStore(String keywrd, String category, String store1, String store2, String store3){
-        return productRepository.findByKeywordInSpecificCategoryAndStores(keywrd,category,store1,store2,store3);
-    }
-
-    public List<Product> getProductsInCategory(String category){
-        return productRepository.findProductByProductCategory(category);
-    }
-
-
-    public Product updateExistingProduct(Product updatedProduct){
+       public Product updateExistingProduct(Product updatedProduct){
         try {
             return productRepository.save(updatedProduct);
         }catch (Exception e){
@@ -72,25 +63,6 @@ public class ProductServicesImpl implements ProductService {
         return null;
     }
 
-    private String dateFormatter(Timestamp timestamp){
-        if (timestamp != null){
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
-            return dateFormat.format(timestamp);
-        }
-        return "Date not available.";
-
-    }
-
-    public String getCreationTimestamp(Product product){
-        return dateFormatter(product.getCreatedAT());
-    }
-    public String getLastUpdatedTimestamp(Product product){
-        return dateFormatter(product.getLastUpdated());
-    }  
-
-    public List<Product> findProductsByStore(String store){
-        return productRepository.findProductByStore(store);
-    }
 
    ///////////////// Searching products is so fuuuun//////////////////////////////
     public List<Product> searchProducts(String keyword, List<String> stores, List<String> categories) {

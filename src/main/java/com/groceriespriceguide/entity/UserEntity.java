@@ -31,5 +31,3 @@ public class UserEntity {
     private String email;
 }
 
-//    @ManyToMany(mappedBy = "favoredBy")
-//    private Set<Favorites> favorites;
