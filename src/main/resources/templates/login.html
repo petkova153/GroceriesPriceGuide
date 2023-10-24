@@ -26,9 +26,7 @@
 
         <form method="post" action="/login" th:object="${loginRequest}">
 
-            <div th:if="${failed_login == 'failed login'}" class="error-message">
-                <h2 th:text="${failed_login}"></h2>
-            </div>
+            <h4 th:text="${failed_login}"></h4>
 
             <h2>Login</h2>
             <div class="input-box">
