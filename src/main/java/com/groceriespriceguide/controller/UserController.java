@@ -69,19 +69,18 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
                     + exception.getMessage();
         }
     }
-    @GetMapping("/login")
-    public String displayLoginPage() {
-        return "login"; //logIn is the name of the file
-    }
-
-
+//    @GetMapping("/login")
+//    public String displayLoginPage(@RequestParam(name="error", required = false) String error, Model model) {
+//        if (error != null) {
+//            model.addAttribute("failed_login", error);
+//        }
+//        return "login"; //logIn is the name of the file
+//    }
 
     @PostMapping("/login")
     public String handleUserLogin(UserLoginRequest userLoginRequest,
                                   HttpServletResponse response, Model model)  {
-
         try {
-
             UserEntity user = this.userService.verifyUser(userLoginRequest.getUsername(),
                     userLoginRequest.getPassword());
 
@@ -98,12 +97,11 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
             return "redirect:/favorites";
 
         } catch (Exception exception) {
-            String errorMessage = exception.getMessage();
+            String errorMessage  = "Your login details did not match, please try again or REGISTER";
             model.addAttribute("failed_login", errorMessage);
             return "redirect:/login?status=LOGIN_FAILED&error=" + errorMessage;
         }
     }
-
     @GetMapping("/logout")
     public String handleLogout(@CookieValue(value = "loggedInUserId", defaultValue = "")
                                String userId, HttpServletResponse response) {
