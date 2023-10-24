@@ -27,13 +27,6 @@ public class FavoritesController {
         this.userService = userService;
         this.favoriteService = favoriteService;
     }
-//    @GetMapping("/user/{userId}")
-//    public List<Favorites> getFavoriteProductsForUser(@RequestParam("userId") String userId) {
-//        Long userIdLong = Long.parseLong(userId);
-//        UserEntity user = userService.getUserById(userIdLong);
-//        System.out.println(user);
-//        return favoritesService.getFavoriteProductsForUser(user);
-//    }
 
     @PostMapping("/add")
     @ResponseBody
@@ -49,7 +42,7 @@ public class FavoritesController {
             // Add the product to favorites here
             UserEntity user = userService.getUserById(currentUserId);
             Product product = productService.findProductById(productID);
-            Favorites favorite = favoriteService.addToFaves(user, product);
+            favoriteService.addToFaves(user, product);
             response.setStatus("success");
         } catch (Exception ex) {
             response.setStatus("error");

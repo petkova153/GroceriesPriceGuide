@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +19,7 @@ Product {
     private Long productID;
     private String productName;
     private Double productPrice;
-    private String unitOfMeasure;
+    private Double priceChange;
     private String store;
     private String productCategory;
     @Column(unique = true)

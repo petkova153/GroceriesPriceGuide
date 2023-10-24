@@ -2,9 +2,8 @@ package com.groceriespriceguide.services.impl;
 
 import com.groceriespriceguide.entity.UserEntity;
 import com.groceriespriceguide.repository.UserRepository;
+import com.groceriespriceguide.security.PasswordEncoder;
 import com.groceriespriceguide.services.UserService;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

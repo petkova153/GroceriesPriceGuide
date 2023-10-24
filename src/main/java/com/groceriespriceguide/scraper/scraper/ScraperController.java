@@ -81,6 +81,7 @@ public class ScraperController {
     }
 
     String extractNthElement(ElementHandle product, String spanEl, int nthEl) {
+        //to be used with IKI
         final List<ElementHandle> spans = product.querySelectorAll(spanEl);
         int counter = 0;
         for (ElementHandle span : spans) {

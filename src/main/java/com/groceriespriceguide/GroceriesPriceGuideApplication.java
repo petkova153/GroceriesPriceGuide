@@ -13,7 +13,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan({"com.groceriespriceguide.scraper.scheduler",
         "com.groceriespriceguide.scraper.scraper",
         "com.groceriespriceguide.controller",
-        "com.groceriespriceguide.services.impl"
+        "com.groceriespriceguide.services.impl",
+        "com.groceriespriceguide.security"
 })
 @EnableJpaRepositories(basePackages = "com.groceriespriceguide.repository")
 public class GroceriesPriceGuideApplication {

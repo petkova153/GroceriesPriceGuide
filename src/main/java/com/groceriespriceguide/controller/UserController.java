@@ -1,25 +1,17 @@
 package com.groceriespriceguide.controller;
 
-import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.entity.UserEntity;
+import com.groceriespriceguide.security.PasswordEncoder;
 import com.groceriespriceguide.services.FavoriteService;
 import com.groceriespriceguide.services.ProductService;
-import com.groceriespriceguide.services.UserService;
 import com.groceriespriceguide.users.UserLoginRequest;
 import com.groceriespriceguide.services.impl.UserServiceImpl;
-import jakarta.jws.soap.SOAPBinding;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @Controller
 public class UserController {
@@ -27,7 +19,7 @@ public class UserController {
     // collects user information,
     // checks for validity
     // sends and retrieves service information
-    private UserServiceImpl userService;
+    final private UserServiceImpl userService;
     @Autowired 
     //  If you're building an application that will always rely on the Spring ecosystem,
     //  @Autowired is a suitable choice. Seeking Portability:
@@ -37,7 +29,8 @@ public class UserController {
     ProductService productService;
     @Autowired
     FavoriteService favoriteService;
-
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Autowired
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
@@ -62,6 +55,8 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
     @PostMapping("/register")
     public String handleUserRegistration(UserEntity userEntity) {
         try {
+            String encryptedPassword = passwordEncoder.encode(userEntity.getPassword());
+            userEntity.setPassword(encryptedPassword);
             this.userService.createUser(userEntity);
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {

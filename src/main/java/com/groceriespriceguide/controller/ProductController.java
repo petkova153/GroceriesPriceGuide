@@ -35,7 +35,7 @@ public class ProductController {
         List<String> availableCategories = getAvailableCategories();
         model.addAttribute("availableStores", availableStores);
         model.addAttribute("availableCategories", availableCategories);
-        int limitPassed = 0;
+        int limitPassed;
 
         if (userId.isEmpty()) {
             model.addAttribute("userLogged", "not logged");
@@ -103,13 +103,13 @@ public class ProductController {
         int indexBarbora = 0;
         for (Product product : products){
             String storeName = product.getStore();
-            if(storeName.equals("assorti") && indexAssorti <= limitPassed){
+            if(storeName.equals("assorti") && indexAssorti < limitPassed){
                 indexAssorti++;
                 assorti.add(product);
-            } else if (storeName.equals("rimi") && indexRimi <= limitPassed) {
+            } else if (storeName.equals("rimi") && indexRimi < limitPassed) {
                 indexRimi++;
                 rimi.add(product);
-            } else if(storeName.equals("barbora") && indexBarbora <= limitPassed){
+            } else if(storeName.equals("barbora") && indexBarbora < limitPassed){
                 barbora.add(product);
             indexBarbora++;}
         }

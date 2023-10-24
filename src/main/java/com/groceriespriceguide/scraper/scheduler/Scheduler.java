@@ -8,8 +8,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -34,8 +32,7 @@ public class Scheduler {
         this.productService = productService;
         this.scraperController = scraperController;
     }
-    public static final int THOUSAND_SECONDS = 20000000;
-    @Scheduled(fixedDelay = THOUSAND_SECONDS)
+    @Scheduled(cron = "0 0 2 * * ?")
     public void scheduleScraping() {
 
         try {
@@ -74,6 +71,7 @@ public class Scheduler {
 
             }
             }catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -121,6 +119,9 @@ public class Scheduler {
                             existingProduct.setProductPrice(product.getProductPrice());
                             existingProduct.setLastUpdated(new Timestamp(System.currentTimeMillis()));
                             existingProduct.setProductCategory(product.getProductCategory());
+                            if (existingProduct.getProductPrice() != null &&
+                                    product.getProductPrice()!=null)existingProduct.setPriceChange(existingProduct.getProductPrice()-
+                                    product.getProductPrice());
                             productsToUpdate.add(existingProduct);
                         } else {
                             // The product does not exist, persist it
