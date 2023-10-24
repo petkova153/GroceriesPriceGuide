@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 @Controller
 public class UserController {
@@ -59,20 +60,25 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
     return "index";
 }
     @GetMapping("/register")
-    public String displayRegistrationPage() {
+    public String displayRegistrationPage(@RequestParam(name = "error", required = false) String errorReg, Model model) {
+        if (errorReg != null) {
+            System.out.println("Registration error message after re-direct in register page: " + errorReg);
+            model.addAttribute("failed_registration", errorReg);
+        }
         return "register";
     }
 
     @PostMapping("/register")
-    public String handleUserRegistration(UserEntity userEntity) {
+    public String handleUserRegistration(UserEntity userEntity, Model model) {
         try {
             String encryptedPassword = passwordEncoder.encode(userEntity.getPassword());
             userEntity.setPassword(encryptedPassword);
             this.userService.createUser(userEntity);
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {
-            return "redirect:/register?status=REGISTRATION_FAILED&error="
-                    + exception.getMessage();
+            String errorMessageReg = exception.getMessage();
+            model.addAttribute("failed_registration", errorMessageReg);
+            return "redirect:/register?status=REGISTRATION_FAILED&error=" + errorMessageReg;
         }
     }
     @GetMapping("/login")
@@ -117,4 +123,13 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
         response.addCookie(cookie);
         return "redirect:/login?status=LOGOUT_SUCCESS";
     }
+
+//    WIP - to continue KAROLINCHEN
+//    @DeleteMapping("/favorites")
+//    public String deleteUserInFavorites(String username, String city) {
+//
+//        String userToDeleteInFavorites =
+//        this.userService.deleteUser(userToDeleteInFavorites);
+//        return "redirect:/index?status=USER_DELETED";
+//    }
 }

@@ -9,16 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "favorites") // Specify the table name explicitly
+@Table(name = "favorites")
 public class Favorites {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long favoritesId;
-
-//    @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
-//    @JoinColumn(nullable = false, name = "user_id")
-//    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

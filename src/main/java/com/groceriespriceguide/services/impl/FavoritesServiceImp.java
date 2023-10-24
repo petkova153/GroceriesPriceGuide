@@ -54,9 +54,5 @@ public class FavoritesServiceImp implements FavoriteService {
             throw new Exception("Favorite entry not found");
         }
     }
-    public void deleteAllFavorites(UserEntity user){
-        List<Favorites> userFaves = favoritesRepository.findByUser(user);
-        favoritesRepository.deleteAll(userFaves);
-    }
 
 }

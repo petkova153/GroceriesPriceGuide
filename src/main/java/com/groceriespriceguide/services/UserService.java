@@ -8,6 +8,8 @@ public interface UserService {
 
     void createUser(UserEntity userEntity) throws Exception;
 
+    void deleteUser(String username, String city) throws Exception;
+
     UserEntity verifyUser(String username, String password);
 
     UserEntity getUserById(long userId);
