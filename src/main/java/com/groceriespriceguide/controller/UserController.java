@@ -73,18 +73,18 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
 
     @PostMapping("/login")
     public String handleUserLogin(UserLoginRequest userLoginRequest,
-                                  HttpServletResponse response, Model model)  {
+                                  HttpServletResponse response, Model model) {
 
         try {
+            // Hash the user's input password
+            UserEntity user = this.userService.verifyUser(userLoginRequest.getUsername(), userLoginRequest.getPassword());
 
-            UserEntity user = this.userService.verifyUser(userLoginRequest.getUsername(),
-                    userLoginRequest.getPassword());
-
-            if (user == null){
+            if (user == null) {
                 String errorMessage = "Your login details did not match, please try again or REGISTER";
                 model.addAttribute("failed_login", errorMessage);
                 return "redirect:/login?status=LOGIN_FAILED&error=" + errorMessage;
             }
+
             // Create a cookie and save the user ID for the session
             Cookie cookie = new Cookie("loggedInUserId", user.getId().toString());
             cookie.setMaxAge(172_800); // seconds = 48 hours
