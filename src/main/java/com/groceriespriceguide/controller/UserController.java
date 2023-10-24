@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 @Controller
 public class UserController {
@@ -122,4 +123,13 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
         response.addCookie(cookie);
         return "redirect:/login?status=LOGOUT_SUCCESS";
     }
+
+//    WIP - to continue KAROLINCHEN
+//    @DeleteMapping("/favorites")
+//    public String deleteUserInFavorites(String username, String city) {
+//
+//        String userToDeleteInFavorites =
+//        this.userService.deleteUser(userToDeleteInFavorites);
+//        return "redirect:/index?status=USER_DELETED";
+//    }
 }
