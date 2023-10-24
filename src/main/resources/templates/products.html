@@ -19,7 +19,7 @@
 
 <div class="container mt-10">
     <form th:action="@{/products}" method="get" class="filter-group">
-        <div class="filter-section">
+        <div class="filter-section col-lg-1 col-md-2 col-sm-3">
             <label>Show per Shop:</label>
             <select id="products-per-shop" name="limit">
                 <option value="50" th:selected="${limit == 50}">50</option>
@@ -27,48 +27,59 @@
                 <option value="9999" th:selected="${limit == 9999}">All</option>
             </select>
         </div>
-        <div class="filter-section">
+        <div class="filter-section col-lg-1 col-md-2 col-sm-3">
             <label>Select Stores:</label>
             <div th:each="store : ${availableStores}">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="selectedStores" th:value="${store}" th:checked="${selectedStores != null and selectedStores.contains(store)}">
+                    <label>
+                        <input class="form-check-input" type="checkbox" name="selectedStores" th:value="${store}" th:checked="${selectedStores != null and selectedStores.contains(store)}">
+                    </label>
                     <label class="form-check-label" th:for="'store-' + ${store}" th:text="${store}"></label>
                 </div>
             </div>
         </div>
 
-        <div class="filter-section">
+        <div class="filter-section col-lg-2 col-md-3 col-sm-4">
             <label>Select Categories:</label>
             <div th:each="category : ${availableCategories}">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="selectedCategories" th:value="${category}" th:checked="${selectedCategories != null and selectedCategories.contains(category)}">
+                    <label>
+                        <input class="form-check-input" type="checkbox" name="selectedCategories" th:value="${category}" th:checked="${selectedCategories != null and selectedCategories.contains(category)}">
+                    </label>
                     <label class="form-check-label" th:for="'category-' + ${category}" th:text="${category}"></label>
                 </div>
             </div>
         </div>
 
 
-        <div class="filter-section">
+        <div class="filter-section col-lg-2 col-md-3 col-sm-4">
             <label>Search by Name:</label>
-            <input class="form-control" type="text" name="query" placeholder="Search by product name">
+            <label>
+                <input class="form-control" type="text" name="query" placeholder="Search by product name">
+            </label>
         </div>
 
-        <div class="filter-section">
+        <div class="filter-section col-lg-2 col-md-3 col-sm-4">
             <label>Sort by:</label>
-            <select class="form-select" name="sortBy">
-                <option value="name_asc" th:selected="${sortBy == 'name_asc'}">Name (Ascending)</option>
-                <option value="name_desc" th:selected="${sortBy == 'name_desc'}">Name (Descending)</option>
-                <option value="price_asc" th:selected="${sortBy == 'price_asc'}">Price (Low to High)</option>
-                <option value="price_desc" th:selected="${sortBy == 'price_desc'}">Price (High to Low)</option>
-            </select>
+            <label>
+                <select class="form-select" name="sortBy">
+                    <option value="name_asc" th:selected="${sortBy == 'name_asc'}">Name (Ascending)</option>
+                    <option value="name_desc" th:selected="${sortBy == 'name_desc'}">Name (Descending)</option>
+                    <option value="price_asc" th:selected="${sortBy == 'price_asc'}">Price (Low to High)</option>
+                    <option value="price_desc" th:selected="${sortBy == 'price_desc'}">Price (High to Low)</option>
+                </select>
+            </label>
         </div>
 
+    <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="filter-button-section">
             <button type="submit" class="btn btn-primary btn-sm">Filter</button>
         </div>
         <div class="clear-filter-button-section">
             <button type="submit" class="btn btn-secondary btn-sm" name="clearFilters">Clear All Filters</button>
         </div>
+    </div>
+
     </form>
 </div>
 
