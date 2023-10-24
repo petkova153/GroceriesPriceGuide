@@ -2,6 +2,7 @@ package com.groceriespriceguide.controller;
 
 import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.entity.UserEntity;
+import com.groceriespriceguide.security.PasswordEncoder;
 import com.groceriespriceguide.services.FavoriteService;
 import com.groceriespriceguide.services.ProductService;
 import com.groceriespriceguide.services.UserService;
@@ -39,6 +40,9 @@ public class UserController {
     FavoriteService favoriteService;
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
@@ -62,6 +66,8 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
     @PostMapping("/register")
     public String handleUserRegistration(UserEntity userEntity) {
         try {
+            String encryptedPassword = passwordEncoder.encode(userEntity.getPassword());
+            userEntity.setPassword(encryptedPassword);
             this.userService.createUser(userEntity);
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {
