@@ -83,7 +83,6 @@ public class ProductController {
         else{limitPassed = Integer.parseInt(limit);}
 
         products = splitByStore(products, limitPassed);
-        System.out.println(products);
         model.addAttribute("products", products);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("selectedStores", selectedStores);

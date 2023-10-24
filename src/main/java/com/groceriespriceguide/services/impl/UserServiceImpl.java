@@ -25,13 +25,16 @@ public class UserServiceImpl implements UserService {
     public void createUser(UserEntity userEntity) {
             UserEntity checkIfUsernameExists = userRepository.findByUsername(userEntity.getUsername());
             // 1. if username is found to be taken
-            if (checkIfUsernameExists != null)
+            if (checkIfUsernameExists != null){
+                System.out.println("Sorry, the username is taken, try another one");
                 throw new RuntimeException("USERNAME is taken");
-            System.out.println("Sorry, the username is taken, try another one"); // this does not print
+             }// this does not print
             // 2. if email is found to be taken
             UserEntity checkIfEmailExists = userRepository.findByEmail(userEntity.getEmail());
-            if (checkIfEmailExists != null) throw new RuntimeException("EMAIL is taken");
-            System.out.println("Sorry, the email is taken, try another email"); // this does not print
+            if (checkIfEmailExists != null){
+                System.out.println("Sorry, the email is taken, try another email");
+                throw new RuntimeException("EMAIL is taken");
+             }// this does not print
             this.userRepository.save(userEntity);
             System.out.println(userEntity);
         }
