@@ -24,36 +24,28 @@ public class UserServiceImpl implements UserService {
 
     public void createUser(UserEntity userEntity) {
             UserEntity checkIfUsernameExists = userRepository.findByUsername(userEntity.getUsername());
-            // 1. if username is found to be taken
-            if (checkIfUsernameExists != null){
+
+            if (checkIfUsernameExists != null) {
                 System.out.println("Sorry, the username is taken, try another one");
                 throw new RuntimeException("USERNAME is taken");
-             }// this does not print
-            // 2. if email is found to be taken
+            }
+
             UserEntity checkIfEmailExists = userRepository.findByEmail(userEntity.getEmail());
-            if (checkIfEmailExists != null){
+            if (checkIfEmailExists != null) {
                 System.out.println("Sorry, the email is taken, try another email");
                 throw new RuntimeException("EMAIL is taken");
-             }// this does not print
+            }
             this.userRepository.save(userEntity);
-            System.out.println(userEntity);
+            System.out.println("New user was created: " + userEntity);
         }
 
     public UserEntity verifyUser(String username, String plainPassword) {
         UserEntity user = userRepository.findByUsername(username);
-
         if (user != null && passwordEncoder.matches(plainPassword, user.getPassword())) {
             return user; // Passwords match, user is verified
         }
-
         return null; // User not found or password doesn't match
     }
-
-    public List<UserEntity> getAllUsers() {
-        return (ArrayList<UserEntity>)
-                this.userRepository.findAll();
-    }
-
     public UserEntity getUserById(long userId) {
         Optional<UserEntity> user = userRepository.findById(userId);
         if (user.isPresent()) {
@@ -62,10 +54,9 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("User not found for ID: " + userId);
         }
     }
+    //    public List<UserEntity> getAllUsers() {
+//        return (ArrayList<UserEntity>)
+//                this.userRepository.findAll();
+//    }
 }
 
-//  controls the registering,
-//  login In,
-//  viewing Profile,
-//  viewing favorites,
-//  adding favorites.

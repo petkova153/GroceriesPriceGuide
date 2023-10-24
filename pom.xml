@@ -99,8 +99,7 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>5.4.4</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>
@@ -116,6 +115,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

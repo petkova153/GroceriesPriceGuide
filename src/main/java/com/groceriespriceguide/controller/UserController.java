@@ -1,17 +1,26 @@
 package com.groceriespriceguide.controller;
 
+import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.entity.UserEntity;
 import com.groceriespriceguide.security.PasswordEncoder;
 import com.groceriespriceguide.services.FavoriteService;
 import com.groceriespriceguide.services.ProductService;
+import com.groceriespriceguide.services.UserService;
 import com.groceriespriceguide.users.UserLoginRequest;
 import com.groceriespriceguide.services.impl.UserServiceImpl;
+import jakarta.jws.soap.SOAPBinding;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Controller
 public class UserController {
@@ -19,7 +28,7 @@ public class UserController {
     // collects user information,
     // checks for validity
     // sends and retrieves service information
-    final private UserServiceImpl userService;
+    private UserServiceImpl userService;
     @Autowired 
     //  If you're building an application that will always rely on the Spring ecosystem,
     //  @Autowired is a suitable choice. Seeking Portability:
@@ -29,8 +38,10 @@ public class UserController {
     ProductService productService;
     @Autowired
     FavoriteService favoriteService;
+
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @Autowired
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
@@ -65,26 +76,26 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
         }
     }
     @GetMapping("/login")
-    public String displayLoginPage() {
-        return "login"; //logIn is the name of the file
+    public String displayLoginPage(@RequestParam(name="error", required = false) String error, Model model) {
+        if (error != null) {
+            System.out.println("The Log in error message after re-direct in login page: " + error);
+            model.addAttribute("failed_login", error);
+        }
+        return "login"; // returning html file
     }
-
-
 
     @PostMapping("/login")
     public String handleUserLogin(UserLoginRequest userLoginRequest,
-                                  HttpServletResponse response, Model model) {
-
+                                  HttpServletResponse response, Model model)  {
         try {
-            // Hash the user's input password
-            UserEntity user = this.userService.verifyUser(userLoginRequest.getUsername(), userLoginRequest.getPassword());
+            UserEntity user = this.userService.verifyUser(userLoginRequest.getUsername(),
+                    userLoginRequest.getPassword());
 
-            if (user == null) {
+            if (user == null){
                 String errorMessage = "Your login details did not match, please try again or REGISTER";
                 model.addAttribute("failed_login", errorMessage);
                 return "redirect:/login?status=LOGIN_FAILED&error=" + errorMessage;
             }
-
             // Create a cookie and save the user ID for the session
             Cookie cookie = new Cookie("loggedInUserId", user.getId().toString());
             cookie.setMaxAge(172_800); // seconds = 48 hours
@@ -93,12 +104,11 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
             return "redirect:/favorites";
 
         } catch (Exception exception) {
-            String errorMessage = exception.getMessage();
+            String errorMessage  = "Your login details did not match, please try again or REGISTER";
             model.addAttribute("failed_login", errorMessage);
             return "redirect:/login?status=LOGIN_FAILED&error=" + errorMessage;
         }
     }
-
     @GetMapping("/logout")
     public String handleLogout(@CookieValue(value = "loggedInUserId", defaultValue = "")
                                String userId, HttpServletResponse response) {
