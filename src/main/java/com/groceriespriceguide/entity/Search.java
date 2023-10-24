@@ -13,5 +13,5 @@ public class Search {
     private String keyword;
     private List<String> selectedStores;
     private List<String> selectedCategories;
-    //probably irrelevant - check with Florina
+
 }
