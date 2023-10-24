@@ -12,6 +12,9 @@
 <title>Please register</title>
 <div class="form">
     <form method="post" action="/register" th:object="${registerRequest}">
+
+        <h4 th:text="${failed_registration}"></h4>
+
         <h2>Register</h2>
         <div class="input-box">
             <i class="fa fa-user" aria-hidden="true"></i>

@@ -59,20 +59,25 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
     return "index";
 }
     @GetMapping("/register")
-    public String displayRegistrationPage() {
+    public String displayRegistrationPage(@RequestParam(name = "error", required = false) String errorReg, Model model) {
+        if (errorReg != null) {
+            System.out.println("Registration error message after re-direct in register page: " + errorReg);
+            model.addAttribute("failed_registration", errorReg);
+        }
         return "register";
     }
 
     @PostMapping("/register")
-    public String handleUserRegistration(UserEntity userEntity) {
+    public String handleUserRegistration(UserEntity userEntity, Model model) {
         try {
             String encryptedPassword = passwordEncoder.encode(userEntity.getPassword());
             userEntity.setPassword(encryptedPassword);
             this.userService.createUser(userEntity);
             return "redirect:/login?status=REGISTRATION_COMPLETED";
         } catch (Exception exception) {
-            return "redirect:/register?status=REGISTRATION_FAILED&error="
-                    + exception.getMessage();
+            String errorMessageReg = "The USERNAME or PASSWORD is taken, please try again";
+            model.addAttribute("failed_registration", errorMessageReg);
+            return "redirect:/register?status=REGISTRATION_FAILED&error=" + errorMessageReg;
         }
     }
     @GetMapping("/login")
