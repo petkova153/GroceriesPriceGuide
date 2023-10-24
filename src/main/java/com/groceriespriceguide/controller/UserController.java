@@ -69,15 +69,13 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
                     + exception.getMessage();
         }
     }
-
-    // status error
     @GetMapping("/login")
     public String displayLoginPage(@RequestParam(name="error", required = false) String error, Model model) {
         if (error != null) {
             System.out.println("The Log in error message after re-direct in login page: " + error);
             model.addAttribute("failed_login", error);
         }
-        return "login"; //logIn is the name of the file
+        return "login"; // returning html file
     }
 
     @PostMapping("/login")
