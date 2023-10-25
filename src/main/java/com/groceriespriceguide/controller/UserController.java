@@ -148,9 +148,9 @@ String userId,
         }
     }
     catch (Exception e){
-        String errorMessageReg = e.getMessage();
-        model.addAttribute("delete_status", errorMessageReg);
-        return "redirect:/remove_user?status=?error=" + errorMessageReg;
+        String errorMessageDel = e.getMessage();
+        model.addAttribute("delete_status", errorMessageDel);
+        return "redirect:/remove_user?status=?error=" + errorMessageDel;
     }
 }
 
