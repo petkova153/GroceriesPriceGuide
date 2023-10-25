@@ -65,9 +65,6 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("User not found for ID: " + userId);
         }
     }
-    //    public List<UserEntity> getAllUsers() {
-//        return (ArrayList<UserEntity>)
-//                this.userRepository.findAll();
-//    }
+
 }
 

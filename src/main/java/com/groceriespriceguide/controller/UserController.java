@@ -127,9 +127,10 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
 //    WIP - to continue KAROLINCHEN
 //    @DeleteMapping("/favorites")
 //    public String deleteUserInFavorites(String username, String city) {
-//
-//        String userToDeleteInFavorites =
-//        this.userService.deleteUser(userToDeleteInFavorites);
+//        UserEntity user = this.userService.
+//        if (username!=null && city !=null){
+//        this.userService.deleteUser(username,city);
+//        //delete favorites of specific user
 //        return "redirect:/index?status=USER_DELETED";
 //    }
 }
