@@ -46,9 +46,6 @@ public class ProductServicesImpl implements ProductService {
         throw new Exception("Product cannot be found");
     }
 
-    public Product findProductByName(String name){
-        return productRepository.findByProductName(name).get(0);
-    }
 
     public Product getProductByURL(String productURL){
         return productRepository.findByProductUrl(productURL);
