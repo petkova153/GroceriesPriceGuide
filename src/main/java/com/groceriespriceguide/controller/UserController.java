@@ -5,17 +5,11 @@ import com.groceriespriceguide.entity.UserEntity;
 import com.groceriespriceguide.security.PasswordEncoder;
 import com.groceriespriceguide.services.FavoriteService;
 import com.groceriespriceguide.services.ProductService;
-import com.groceriespriceguide.services.UserService;
 import com.groceriespriceguide.users.UserLoginRequest;
 import com.groceriespriceguide.services.impl.UserServiceImpl;
-import jakarta.jws.soap.SOAPBinding;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -125,12 +119,39 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
     }
 
 //    WIP - to continue KAROLINCHEN
-//    @DeleteMapping("/favorites")
-//    public String deleteUserInFavorites(String username, String city) {
-//        UserEntity user = this.userService.
-//        if (username!=null && city !=null){
-//        this.userService.deleteUser(username,city);
-//        //delete favorites of specific user
-//        return "redirect:/index?status=USER_DELETED";
-//    }
+    @GetMapping("/remove_user")
+    public String RemoveUser(){
+        return "/remove_user";
+    }
+@PostMapping("/remove_user")
+public String deleteUser(UserLoginRequest userDeleteRequest, Model model, @CookieValue(value = "loggedInUserId", defaultValue = "")
+String userId,
+        HttpServletResponse response) {
+    System.out.println("username " + userDeleteRequest.getUsername());
+    try {
+        UserEntity user = this.userService.verifyUser(userDeleteRequest.getUsername(), userDeleteRequest.getPassword());
+        System.out.println("user "+ user);
+        if (user != null || userId.equals(user.getId())) {
+            this.favoriteService.deleteAllFavorites(user);
+            this.userService.deleteUser(userDeleteRequest.getUsername(), userDeleteRequest.getPassword());
+
+            //delete favorites of specific user
+            model.addAttribute("delete_status", "success");
+            Cookie cookie = new Cookie("loggedInUserId", null);
+            cookie.setMaxAge(0); // This deletes the cookie
+            response.addCookie(cookie);
+            return "redirect:/products?status=USER_DELETED";
+        }
+        else {
+            model.addAttribute("delete_status", "Wrong information entered");
+            return "redirect:/remove_user?status=WRONG_OR_INSUFFICIENT_INFORMATION";
+        }
+    }
+    catch (Exception e){
+        String errorMessageReg = e.getMessage();
+        model.addAttribute("delete_status", errorMessageReg);
+        return "redirect:/remove_user?status=?error=" + errorMessageReg;
+    }
+}
+
 }

@@ -106,20 +106,27 @@
                                 </div>
                             </td>
                             <td class="col-md-3">
-                                <span th:text="${product.productPrice}"></span>
+<div>
+                                <div th:if="${product.productPrice == null}">
+                                    <span>Out of stock</span>
+                                </div>
+                                <div th:unless="${product.productPrice == null}">
+                                    <span th:text="${product.productPrice}"></span>
+                                </div>
+</div>
                                 <div th:if="${product.priceChange < 0.0}">
                                     <button class="btn btn-success btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
                                         <i class="bi-heart"></i>
                                     </button>
                                 </div>
                                 <div th:unless="${product.priceChange < 0.0}">
-                                    <div th:if="${product.priceChange > 0.0}">
-                                        <button class="btn btn-danger btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
+                                    <div th:if="${product.priceChange == 0.0}">
+                                        <button class="btn btn-warning btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
                                             <i class="bi-heart"></i>
                                         </button>
                                     </div>
-                                    <div th:unless="${product.priceChange > 0.0}">
-                                        <button class="btn btn-warning btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
+                                    <div th:unless="${product.priceChange == 0.0}">
+                                        <button class="btn btn-danger btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
                                             <i class="bi-heart"></i>
                                         </button>
                                     </div>
@@ -149,7 +156,7 @@
                         alert('Product added to favorites!');
                         location.reload();
                     } else {
-                        alert('Failed to add product to favorites. Error: ' + response.message);
+                        alert('Failed to add product to favorites.');
                     }
                 },
                 error: function(xhr, status, error) {

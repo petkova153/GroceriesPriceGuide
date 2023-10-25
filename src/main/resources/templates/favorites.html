@@ -18,6 +18,7 @@
                 <th scope="col">Picture</th>
                 <th scope="col">Name</th>
                 <th scope="col">Category</th>
+
                 <th scope="col">Price</th>
                 <th scope="col">Price change</th>
                 <th scope="col">Store</th>
@@ -33,7 +34,15 @@
                     <a th:text="${favorite.product.productName}" th:href="${favorite.product.productUrl}">Name</a>
                 </td>
                 <td th:text="${favorite.product.productCategory}">Category</td>
-                <td th:text="${favorite.product.productPrice}">Price</td>
+
+                <div th:if="${favorite.product.productPrice == null}">
+                    <td>Out of stock</td>
+                </div>
+                <div th:unless="${favorite.product.productPrice == null}">
+                    <td th:text="${favorite.product.productPrice}">Price</td>
+                </div>
+
+
                 <td th:text="${favorite.product.priceChange}">Price</td>
                 <td th:text="${favorite.product.store}">Store</td>
                 <td>
@@ -46,6 +55,10 @@
 
     </div>
 </div>
+<div class="btn btn-warning">
+    <a href="/remove_user">Delete account</a>
+</div>
+
 </body>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script th:inline="javascript">

@@ -13,4 +13,5 @@ public interface UserService {
     UserEntity verifyUser(String username, String password);
 
     UserEntity getUserById(long userId);
+
 }

@@ -55,4 +55,9 @@ public class FavoritesServiceImp implements FavoriteService {
         }
     }
 
+    public void deleteAllFavorites(UserEntity user){
+        List<Favorites> userFaves = favoritesRepository.findByUser(user);
+        favoritesRepository.deleteAll();
+    }
+
 }

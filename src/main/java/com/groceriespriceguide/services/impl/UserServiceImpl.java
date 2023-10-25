@@ -39,9 +39,9 @@ public class UserServiceImpl implements UserService {
         System.out.println("New user was created: " + userEntity);
     }
 
-    public void deleteUser(String username, String city) {
+    public void deleteUser(String username, String password) {
         UserEntity userToDelete = userRepository.findByUsername(username); // usernames are unique
-        if (userToDelete != null && city.equalsIgnoreCase(userToDelete.getCity())) {
+        if (userToDelete != null && passwordEncoder.matches(password, userToDelete.getPassword())) {
             this.userRepository.delete(userToDelete);
             System.out.println("User DELETED: " + userToDelete);
         } else {

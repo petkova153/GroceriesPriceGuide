@@ -13,4 +13,5 @@ public interface FavoriteService {
     Favorites findByUserAndProduct(UserEntity user, Product product);
     Favorites addToFaves(UserEntity user, Product product) throws Exception;
     void removeFromFavorites(Favorites favoriteToRemove) throws Exception;
+    void deleteAllFavorites(UserEntity user);
 }
