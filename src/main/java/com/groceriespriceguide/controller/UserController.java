@@ -1,6 +1,5 @@
 package com.groceriespriceguide.controller;
 
-import com.groceriespriceguide.entity.Product;
 import com.groceriespriceguide.entity.UserEntity;
 import com.groceriespriceguide.security.PasswordEncoder;
 import com.groceriespriceguide.services.FavoriteService;
@@ -9,31 +8,26 @@ import com.groceriespriceguide.users.UserLoginRequest;
 import com.groceriespriceguide.services.impl.UserServiceImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.xml.bind.SchemaOutputResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.Scanner;
-
 @Controller
 public class UserController {
-
     // collects user information,
     // checks for validity
     // sends and retrieves service information
     private UserServiceImpl userService;
-    @Autowired 
+    @Autowired
     //  If you're building an application that will always rely on the Spring ecosystem,
     //  @Autowired is a suitable choice. Seeking Portability:
     //  If you're aiming to write code that's not tied to a specific framework or container,
     //  or you're working with Java EE, then @Inject is the way to go.Aug 21, 2023
-
     ProductService productService;
     @Autowired
     FavoriteService favoriteService;
-
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -42,17 +36,18 @@ public class UserController {
         this.userService = userService;
     }
 
-@GetMapping("")
-public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defaultValue = "") String userId)
-        {
-    if (userId.isEmpty()) {
-        System.out.println(userId);
-        model.addAttribute("userLogged", "not logged");}
-    else {
-        System.out.println(userId);
-        model.addAttribute("userLogged", "logged");}
-    return "index";
-}
+    @GetMapping("")
+    public String indexPage(Model model, @CookieValue(value = "loggedInUserId", defaultValue = "") String userId) {
+        if (userId.isEmpty()) {
+            System.out.println(userId);
+            model.addAttribute("userLogged", "not logged");
+        } else {
+            System.out.println(userId);
+            model.addAttribute("userLogged", "logged");
+        }
+        return "index";
+    }
+
     @GetMapping("/register")
     public String displayRegistrationPage(@RequestParam(name = "error", required = false) String errorReg, Model model) {
         if (errorReg != null) {
@@ -75,23 +70,24 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
             return "redirect:/register?status=REGISTRATION_FAILED&error=" + errorMessageReg;
         }
     }
+
     @GetMapping("/login")
-    public String displayLoginPage(@RequestParam(name="error", required = false) String error, Model model) {
-        if (error != null) {
-            System.out.println("The Log in error message after re-direct in login page: " + error);
-            model.addAttribute("failed_login", error);
+    public String displayLoginPage(@RequestParam(name = "error", required = false) String errorLogin, Model model) {
+        if (errorLogin != null) {
+            System.out.println("The Log in error message after re-direct in login page: " + errorLogin);
+            model.addAttribute("failed_login", errorLogin);
         }
         return "login"; // returning html file
     }
 
     @PostMapping("/login")
     public String handleUserLogin(UserLoginRequest userLoginRequest,
-                                  HttpServletResponse response, Model model)  {
+                                  HttpServletResponse response, Model model) {
         try {
             UserEntity user = this.userService.verifyUser(userLoginRequest.getUsername(),
                     userLoginRequest.getPassword());
 
-            if (user == null){
+            if (user == null) {
                 String errorMessage = "Your login details did not match, please try again or REGISTER";
                 model.addAttribute("failed_login", errorMessage);
                 return "redirect:/login?status=LOGIN_FAILED&error=" + errorMessage;
@@ -104,54 +100,49 @@ public String indexPage(Model model,@CookieValue(value = "loggedInUserId", defau
             return "redirect:/favorites";
 
         } catch (Exception exception) {
-            String errorMessage  = "Your login details did not match, please try again or REGISTER";
+            String errorMessage = "Your login details did not match, please try again or REGISTER";
             model.addAttribute("failed_login", errorMessage);
             return "redirect:/login?status=LOGIN_FAILED&error=" + errorMessage;
         }
     }
+
     @GetMapping("/logout")
-    public String handleLogout(@CookieValue(value = "loggedInUserId", defaultValue = "")
-                               String userId, HttpServletResponse response) {
+    public String handleLogout(@CookieValue(value = "loggedInUserId", defaultValue = "") String id, HttpServletResponse response) {
         Cookie cookie = new Cookie("loggedInUserId", null);
-        cookie.setMaxAge(0); // This deletes the cookie
-        response.addCookie(cookie);
+        cookie.setMaxAge(0); // This deletes
         return "redirect:/login?status=LOGOUT_SUCCESS";
     }
 
-//    WIP - to continue KAROLINCHEN
     @GetMapping("/remove_user")
-    public String RemoveUser(){
+    public String RemoveUser(@RequestParam(name = "error", required = false) String errorUserDelete, Model model) {
+        if (errorUserDelete != null) {
+            System.out.println("The ERROR message upon an attempt TO DELETE user: " + errorUserDelete);
+            model.addAttribute("delete_status", errorUserDelete);
+        }
         return "/remove_user";
     }
-@PostMapping("/remove_user")
-public String deleteUser(UserLoginRequest userDeleteRequest, Model model, @CookieValue(value = "loggedInUserId", defaultValue = "")
-String userId,
-        HttpServletResponse response) {
-    System.out.println("username " + userDeleteRequest.getUsername());
-    try {
-        UserEntity user = this.userService.verifyUser(userDeleteRequest.getUsername(), userDeleteRequest.getPassword());
-        System.out.println("user "+ user);
-        if (user != null || userId.equals(user.getId())) {
-            this.favoriteService.deleteAllFavorites(user);
-            this.userService.deleteUser(userDeleteRequest.getUsername(), userDeleteRequest.getPassword());
 
-            //delete favorites of specific user
-            model.addAttribute("delete_status", "success");
+    @PostMapping("/remove_user")
+    public String deleteUser(UserLoginRequest userLoginRequest,
+                             @CookieValue(value = "loggedInUserId", defaultValue = "") String id, HttpServletResponse response, Model model) {
+
+        System.out.println("Username received from the client: " + userLoginRequest.getUsername());
+        UserEntity verifiedUser = this.userService.verifyUser(userLoginRequest.getUsername(), userLoginRequest.getPassword());
+        System.out.println("User verification result (found/null): " + verifiedUser);
+        try {
+            if (verifiedUser != null) {
+                this.favoriteService.deleteAllFavorites(verifiedUser);
+            }
+            this.userService.deleteUser(userLoginRequest.getUsername(), userLoginRequest.getPassword());
             Cookie cookie = new Cookie("loggedInUserId", null);
-            cookie.setMaxAge(0); // This deletes the cookie
+            cookie.setMaxAge(0);
             response.addCookie(cookie);
             return "redirect:/products?status=USER_DELETED";
-        }
-        else {
-            model.addAttribute("delete_status", "Wrong information entered");
-            return "redirect:/remove_user?status=WRONG_OR_INSUFFICIENT_INFORMATION";
-        }
-    }
-    catch (Exception e){
-        String errorMessageDel = e.getMessage();
-        model.addAttribute("delete_status", errorMessageDel);
-        return "redirect:/remove_user?status=?error=" + errorMessageDel;
-    }
-}
 
+        } catch (Exception e) {
+            String errorMessageDel = e.getMessage();
+            model.addAttribute("delete_status", errorMessageDel);
+            return "redirect:/remove_user?status=COULD_NOT_DELETE&error=" + errorMessageDel;
+        }
+    }
 }

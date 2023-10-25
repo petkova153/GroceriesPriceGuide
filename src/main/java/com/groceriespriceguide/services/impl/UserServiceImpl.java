@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Spring, please provide us copies of the dependencies
+    // Spring, please provide us with copies of the dependencies
     public UserServiceImpl(final UserRepository userRepository, PasswordEncoder passwordEncoder) {
 
         this.userRepository = userRepository;
@@ -39,16 +39,6 @@ public class UserServiceImpl implements UserService {
         System.out.println("New user was created: " + userEntity);
     }
 
-    public void deleteUser(String username, String password) {
-        UserEntity userToDelete = userRepository.findByUsername(username); // usernames are unique
-        if (userToDelete != null && passwordEncoder.matches(password, userToDelete.getPassword())) {
-            this.userRepository.delete(userToDelete);
-            System.out.println("User DELETED: " + userToDelete);
-        } else {
-            throw new RuntimeException("Sorry but the details you provided did not match, please try again.");
-        }
-    }
-
     public UserEntity verifyUser(String username, String plainPassword) {
         UserEntity user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(plainPassword, user.getPassword())) {
@@ -66,5 +56,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public void deleteUser(String username, String password) {
+        UserEntity userToDelete = userRepository.findByUsername(username);// usernames are unique!
+        if (userToDelete != null && passwordEncoder.matches(password, userToDelete.getPassword())) {
+            this.userRepository.delete(userToDelete);
+            System.out.println("User DELETED: " + userToDelete);
+        } else {
+            throw new RuntimeException("Sorry but the USERNAME and PASSWORD did not match");
+        }
+    }
 }
 

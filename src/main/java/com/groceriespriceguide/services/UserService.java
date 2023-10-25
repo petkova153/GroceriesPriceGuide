@@ -8,7 +8,7 @@ public interface UserService {
 
     void createUser(UserEntity userEntity) throws Exception;
 
-    void deleteUser(String username, String city) throws Exception;
+    void deleteUser(String username, String password) throws Exception;
 
     UserEntity verifyUser(String username, String password);
 
