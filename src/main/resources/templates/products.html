@@ -107,9 +107,23 @@
                             </td>
                             <td class="col-md-3">
                                 <span th:text="${product.productPrice}"></span>
-                                <button class="btn btn-success btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
-                                    <i class="bi-heart"></i>
-                                </button>
+                                <div th:if="${product.priceChange < 0.0}">
+                                    <button class="btn btn-success btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
+                                        <i class="bi-heart"></i>
+                                    </button>
+                                </div>
+                                <div th:unless="${product.priceChange < 0.0}">
+                                    <div th:if="${product.priceChange > 0.0}">
+                                        <button class="btn btn-danger btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
+                                            <i class="bi-heart"></i>
+                                        </button>
+                                    </div>
+                                    <div th:unless="${product.priceChange > 0.0}">
+                                        <button class="btn btn-warning btn-sm addToFavoritesButton custom-button" th:attr="data-product-id=${product.productID}">
+                                            <i class="bi-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         </tbody>

@@ -120,14 +120,16 @@ public class Scheduler {
                             existingProduct.setLastUpdated(new Timestamp(System.currentTimeMillis()));
                             existingProduct.setProductCategory(product.getProductCategory());
                             if (existingProduct.getProductPrice() != null &&
-                                    product.getProductPrice()!=null)existingProduct.setPriceChange(existingProduct.getProductPrice()-
-                                    product.getProductPrice());
+                                    product.getProductPrice()!=null){existingProduct.setPriceChange(existingProduct.getProductPrice()-
+                                    product.getProductPrice());}
+                            else {existingProduct.setPriceChange(0.0);}
                             productsToUpdate.add(existingProduct);
                         } else {
                             // The product does not exist, persist it
                             Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
                             product.setLastUpdated(currentTimestamp);
                             product.setCreatedAT(currentTimestamp);
+                            product.setPriceChange(0.0);
                             productsToAdd.add(product);
                         }
                     }
