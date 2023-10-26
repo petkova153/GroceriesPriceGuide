@@ -110,6 +110,7 @@ public class UserController {
     public String handleLogout(@CookieValue(value = "loggedInUserId", defaultValue = "") String id, HttpServletResponse response) {
         Cookie cookie = new Cookie("loggedInUserId", null);
         cookie.setMaxAge(0); // This deletes
+        response.addCookie(cookie);
         return "redirect:/login?status=LOGOUT_SUCCESS";
     }
 
