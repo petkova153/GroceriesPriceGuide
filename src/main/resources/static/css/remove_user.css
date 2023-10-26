@@ -1,4 +1,14 @@
 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: url(https://fastly.picsum.photos/id/292/3852/2556.jpg?hmac=cPYEh0I48Xpek2DPFLxTBhlZnKVhQCJsbprR-Awl9lo);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
 .form {
     position:absolute;
     top: 60%;
@@ -11,7 +21,6 @@
     padding: 50px;
     box-sizing: border-box;
     margin-bottom: 500px;
-    text-align: center;
 }
 
 .form h2 {

@@ -15,7 +15,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 350px;
-    min-height: 100px;
+    min-height: 200px;
     background-color: #85ad6a;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
     padding: 50px;
@@ -25,15 +25,14 @@ body {
 
 .form h2 {
     color: #fff;
-    margin: 0 0 10px;
+    margin: 0 0 40px;
     padding: 0;
-    min-height: 10px;
-    text-align: center;
 }
 
 .form .input-box {
     position: relative;
     margin: 20px 0;
+    text-align: center;
 }
 
 .form .input-box input {
@@ -60,6 +59,7 @@ body {
     left: 5px;
     font-size: 18px;
     color: #777;
+    text-align: center;
 }
 
 .form .input-box input[type="submit"] {
@@ -69,18 +69,12 @@ body {
     color: #fff;
     font-weight: bold;
     transition: 0.5s;
-    text-align: center; /* Horizontal alignment */
-    display: flex;
-    align-items: center; /* Vertical alignment */
-    justify-content: center;
+    text-align: center;
 }
 
 .form .input-box input[type="submit"]:hover {
-    text-align: center; /* Horizontal alignment */
-    display: flex;
-    align-items: center; /* Vertical alignment */
-    justify-content: center;
     background-color: #777;
+    text-align: center;
 }
 
 .form a {
@@ -90,6 +84,7 @@ body {
     font-weight: bold;
     display: inline-block;
     transition: 0.5s;
+    text-align: center;
 }
 
 .form a:hover {
