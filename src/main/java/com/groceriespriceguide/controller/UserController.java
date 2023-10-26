@@ -134,9 +134,9 @@ public class UserController {
                 this.favoriteService.deleteAllFavorites(verifiedUser);
             }
             this.userService.deleteUser(userLoginRequest.getUsername(), userLoginRequest.getPassword());
-            Cookie cookie = new Cookie("loggedInUserId", null);
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
+            Cookie cookieRemoval = new Cookie("loggedInUserId", null);
+            cookieRemoval.setMaxAge(0);
+            response.addCookie(cookieRemoval);
             return "redirect:/products?status=USER_DELETED";
 
         } catch (Exception e) {

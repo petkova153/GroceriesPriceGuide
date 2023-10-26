@@ -80,6 +80,9 @@ body {
     transition: 0.5s;
     text-align: -webkit-center;
 }
+.center-text {
+    text-align: center;
+}
 
 /*.form a:hover {*/
 /*    color: #ff4987;*/

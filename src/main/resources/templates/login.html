@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="/css/login.css" rel="stylesheet"/>
     <link href="/css/style.css" rel="stylesheet"/>
+
+    <style>
+        .center-text {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 <div>
@@ -25,6 +31,7 @@
         <h4 th:text="${failed_login}"></h4>
 
         <h2>Login</h2>
+
         <div class="input-box">
             <i class="fa fa-user" aria-hidden="true"></i>
             <input type="text" name="username" placeholder="Username" required>
@@ -37,7 +44,7 @@
                    required>
         </div>
         <div class="input-box">
-            <input type="submit" name="sign-in" value="Login">
+            <input type="submit" name="sign-in" value="Login" class="center-text">
         </div>
         <a href="/register">Navigate to register</a>
     </form>
