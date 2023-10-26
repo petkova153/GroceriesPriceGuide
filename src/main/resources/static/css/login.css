@@ -71,12 +71,6 @@ body {
     transition: 0.5s;
     text-align: center;
 }
-
-.form .input-box input[type="submit"]:hover {
-    background-color: #777;
-    text-align: center;
-}
-
 .form a {
     text-decoration: none;
     color: #777;
@@ -84,9 +78,15 @@ body {
     font-weight: bold;
     display: inline-block;
     transition: 0.5s;
-    text-align: center;
+    text-align: -webkit-center;
 }
 
-.form a:hover {
-    color: #ff4987;
-}
+/*.form a:hover {*/
+/*    color: #ff4987;*/
+/*}*/
+
+/*.form .input-box input[type="submit"]:hover {*/
+/*    background-color: #777;*/
+/*    text-align: center;*/
+/*}*/
+

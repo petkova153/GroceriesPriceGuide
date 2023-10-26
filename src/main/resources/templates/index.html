@@ -9,11 +9,12 @@
 </head>
 <body>
 <div>
-<div th:if="${userLogged == 'logged'}">
-    <header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
-</div>
-<div th:unless="${userLogged == 'logged'}">
-    <header th:replace="~{fragments/headers.html :: topSection}"></header>
+    <div th:if="${userLogged == 'logged'}">
+        <header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
+    </div>
+    <div th:unless="${userLogged == 'logged'}">
+        <header th:replace="~{fragments/headers.html :: topSection}"></header>
+    </div>
 </div>
 </div>
 <link href="/css/register.css" rel="stylesheet" />
