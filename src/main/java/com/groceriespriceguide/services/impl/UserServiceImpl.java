@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
             this.userRepository.delete(userToDelete);
             System.out.println("User DELETED: " + userToDelete);
         } else {
-            throw new RuntimeException("Sorry but the USERNAME and PASSWORD did not match");
+            throw new RuntimeException("The USERNAME and PASSWORD did not match, please try again.");
         }
     }
 }
