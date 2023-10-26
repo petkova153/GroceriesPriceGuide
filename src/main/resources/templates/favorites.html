@@ -11,6 +11,8 @@
 <body>
 <header th:replace="~{fragments/headers.html :: topSection-logged-in}"></header>
 
+<h3>Select your favorites from the Products by marking hearts</h3>
+<br>
 
 <div class="scrollable-box" id="favorites-table">
     <div class="table-responsive">
@@ -58,6 +60,10 @@
         </table>
     </div>
 </div>
+<br>
+<h5>Would you like to delete your account and the associated favorites list,
+    please press "Delete Account" button bellow.</h5>
+<br>
 <div class="btn btn-warning">
     <a href="/remove_user">Delete Account</a>
 </div>
