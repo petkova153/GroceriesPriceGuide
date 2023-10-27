@@ -9,6 +9,4 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     UserEntity findByUsername(String username); // to query database table
 
     UserEntity findByEmail(String email);
-
-    UserEntity findByCity(String city);
 }

@@ -32,7 +32,7 @@ public class Scheduler {
         this.productService = productService;
         this.scraperController = scraperController;
     }
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(cron = "0 40 18 * * ?")
     public void scheduleScraping() {
 
         try {

@@ -80,24 +80,6 @@ public class ScraperController {
         return null;
     }
 
-    String extractNthElement(ElementHandle product, String spanEl, int nthEl) {
-        //to be used with IKI
-        final List<ElementHandle> spans = product.querySelectorAll(spanEl);
-        int counter = 0;
-        for (ElementHandle span : spans) {
-            final List<ElementHandle> subSpans = span.querySelectorAll("*");
-            for (ElementHandle e : subSpans)
-            {
-                if (counter <= nthEl) {
-                    counter++;
-                    System.out.println(e.evaluate("el => el.outerHTML", "*").toString());
-                } else {
-                    return e.evaluate("el => el.outerHTML", "*").toString();
-                }
-            }
-        }
-        return null;
-    }
     public Integer getPages(Page page) {
         try{
             int pageURL = 0;

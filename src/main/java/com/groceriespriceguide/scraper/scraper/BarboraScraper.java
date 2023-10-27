@@ -28,8 +28,6 @@ public class BarboraScraper implements ScraperInterface{
         return productList;
     }
 
-
-
     private Product parseProductBarbora(ElementHandle productEntity, String shop, String url) {
         try{
         Product product = new Product();

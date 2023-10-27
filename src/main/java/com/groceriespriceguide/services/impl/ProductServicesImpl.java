@@ -8,8 +8,6 @@ import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.List;
 
@@ -51,13 +49,12 @@ public class ProductServicesImpl implements ProductService {
         return productRepository.findByProductUrl(productURL);
     }
 
-       public Product updateExistingProduct(Product updatedProduct){
+   public void updateExistingProduct(Product updatedProduct){
         try {
-            return productRepository.save(updatedProduct);
+            productRepository.save(updatedProduct);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
-        return null;
     }
 
 

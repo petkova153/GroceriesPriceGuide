@@ -29,7 +29,7 @@ public class FavoritesServiceImp implements FavoriteService {
     }
 
 
-    public Favorites addToFaves(UserEntity user, Product product) throws Exception {
+    public void addToFaves(UserEntity user, Product product) throws Exception {
         if (product != null && user != null) {
             Favorites existingFavorites = favoritesRepository.findByUserAndProduct(user, product);
             if (existingFavorites == null) {
@@ -37,7 +37,7 @@ public class FavoritesServiceImp implements FavoriteService {
                 Favorites favorites = new Favorites();
                 favorites.setProduct(product);
                 favorites.setUser(user);
-                return favoritesRepository.save(favorites);
+                favoritesRepository.save(favorites);
             } else {
                 throw new Exception("Product already exists in Favorites");
             }

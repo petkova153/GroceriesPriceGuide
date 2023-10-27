@@ -8,8 +8,6 @@ import com.groceriespriceguide.users.UserLoginRequest;
 import com.groceriespriceguide.services.impl.UserServiceImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.xml.bind.SchemaOutputResolver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,21 +17,21 @@ public class UserController {
     // collects user information,
     // checks for validity
     // sends and retrieves service information
-    private UserServiceImpl userService;
-    @Autowired
+    final UserServiceImpl userService;
     //  If you're building an application that will always rely on the Spring ecosystem,
     //  @Autowired is a suitable choice. Seeking Portability:
     //  If you're aiming to write code that's not tied to a specific framework or container,
     //  or you're working with Java EE, then @Inject is the way to go.Aug 21, 2023
-    ProductService productService;
-    @Autowired
-    FavoriteService favoriteService;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    final ProductService productService;
+    final FavoriteService favoriteService;
+    final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(final UserServiceImpl userService, final ProductService productService,
+                          final FavoriteService favoriteService, final PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.productService = productService;
+        this.favoriteService = favoriteService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("")

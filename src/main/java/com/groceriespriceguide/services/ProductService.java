@@ -13,8 +13,8 @@ public interface ProductService {
 
     List<Product> getProductData();
     Product findProductById(Long id)throws Exception;
-     Product getProductByURL(String productURL);
-        Product updateExistingProduct(Product newProduct);
+    Product getProductByURL(String productURL);
+    void updateExistingProduct(Product newProduct);
 
     List<Product> searchProducts(String keyword, List<String> stores, List<String> categories);
 

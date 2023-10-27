@@ -8,7 +8,6 @@ import com.groceriespriceguide.services.FavoriteService;
 import com.groceriespriceguide.services.ProductService;
 import com.groceriespriceguide.services.UserService;
 import com.groceriespriceguide.users.ApiResponse;
-import com.groceriespriceguide.users.UserLoginRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

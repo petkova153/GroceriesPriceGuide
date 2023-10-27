@@ -11,7 +11,7 @@ import java.util.List;
 public interface FavoriteService {
     List<Favorites> getFavoriteProductsForUser(UserEntity user);
     Favorites findByUserAndProduct(UserEntity user, Product product);
-    Favorites addToFaves(UserEntity user, Product product) throws Exception;
+    void addToFaves(UserEntity user, Product product) throws Exception;
     void removeFromFavorites(Favorites favoriteToRemove) throws Exception;
     void deleteAllFavorites(UserEntity user);
 }
