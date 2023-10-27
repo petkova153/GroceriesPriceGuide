@@ -72,6 +72,7 @@ public class ProductController {
             // Reset all filter parameters to their default values
             selectedStores = null;
             selectedCategories = null;
+            limit = null;
             selectedName = "";
             sortBy = "name_asc";
             products = productService.getProductData();
